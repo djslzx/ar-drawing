@@ -49,24 +49,33 @@ There are only two players at any given time.  One phone is designated as the dr
 ![Game Server UI Sketches](https://github.com/deejayessel/ar-pictionary/blob/master/20181114_214851-01.jpeg)
 
 ## Key Use Cases
-### Drawing
 #### Drawing a stroke
-1. User draws a stroke on her phone screen.
- 
+*Main Path*
+1. User draws a stroke on her phone screen while keeping her phone stable.
+2. The stroke is drawn onto a plane parallel to the user's phone orientation but at a short distance away. 
+3. The view overlays all existing strokes onto the live camera feed displayed as the background of the app.  
 
-#### Guessing
+*Alternate Path*
+1.1. User holds a finger on her phone screen while moving her phone in 3D space.
+2.1. The stroke is drawn in 3D space as a path of points that corresponds to the position of the user's iPhone through the duration of the held touch gesture.
+3.1. The user releases her finger from the phone screen.
+4.1. Return to Main Path at Step 3.
+
+#### Viewing the scene
+*Main Path*
+1. User moves her iPhone around in space.
+2. iPhone tracks motion and keeps 3D objects in the scene fixed in absolute space.
 
 ## Domain Analysis
-- Chisel: Cuts away a local region
-- Mallet: Flattens a local region
-- Abrade: Smooths the surface of a local region
-- Eraser: Removes regions of a surface within a specified distance of the eraser center
-- Point-eraser: Removes points of a surface within a specified distance of the eraser center
-- Symmetry: Allows symmetrical construction of sculpture model
-- Cloning: Allows copying and pasting of local regions of the sculpture model
+No expert features involved.
 
 ## Architecture
+[//]: # (Describe the major components and data structures for your data model, as well as the top-level controllers and views of your UI. Feel free to use diagrams.)
 
-### Major Frameworks
-- ARKit
-Describe the major components and data structures for your data model, as well as the top-level controllers and views of your UI. Feel free to use diagrams.
+#### Data model
+Strokes in the scene will be represented as a collection of UIBezierPaths.  
+
+#### Controllers and Views
+- ARSCNView as generic view, split off into DrawerView and GuesserView
+- DrawerController, GuesserController
+
