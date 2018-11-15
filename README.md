@@ -16,6 +16,7 @@ There are only two players at any given time.  One phone is designated as the dr
 - Different brush sizes and colors
 - Additional game modes (e.g. drawing competition)
   - Symmetry mode: all drawings have a fixed symmetry that can't be turned off and all subjects are asymmetric
+  - Chaos mode: brush size and color randomly change as the Drawer draws
 - Online multiplayer
   - Players view a simple white room with player stand-ins tracked to iPhone motion
   - Guesses are submitted and checked via text input or voice recognition
