@@ -1,10 +1,10 @@
-# ar-sculpt
-An AR Sculpting/Drawing Toolkit
+# ar-pictionary
+An AR implementation of a drawing guessing game
 
 David J. Lee
 
 ## Vision
-**To develop a general-purpose augmented-reality sculpting application that allows users to easily sculpt or draw 3D objects using intuitive gestures.**  Users will be able to move their phones in intuitive motions to simulate the use of carving or drawing tools, and the augmented reality display will modify and display sculptures situated in the real world.  
+
 
 ## Feature List
 
