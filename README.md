@@ -4,16 +4,31 @@ An augmented reality drawing-guessing game
 David J. Lee
 
 ## Vision
-Players take turns drawing objects randomly selected from a sub-category (or 'theme') of words.  When it is a player's turn to draw, she uses her phone as a 3D brush, moving it around in space to draw a 3D image.  The other players view this 3D image from their respective phones as an object fixed in 3D space (an overlay on their camera feeds), and must attempt to correctly identify the drawn object within a time limit.  
+Players take turns drawing objects randomly selected from a sub-category (or 'theme') of words.  
+When it is a player's turn to draw, she uses her phone as a 3D brush, moving it around in space 
+to draw a 3D image.  The other players view this 3D image from their respective phones as an 
+object fixed in 3D space (an overlay on their camera feeds), and must attempt to correctly 
+identify the drawn object within a time limit.  
 
-The idea is to generate a shared server where players may interact with each other through 3D drawings that persist within rounds.  The first game to be implemented will be a 3D version of Pictionary, but the framework should be relatively easily extensible to include drawing competitions, where players agree upon a topic or reference image and compete to draw the most realistic images.  
+The idea is to generate a shared server where players may interact with each other through 
+3D drawings that persist within rounds.  The first game to be implemented will be a 3D version
+of Pictionary, but the framework should be relatively easily extensible to include drawing 
+competitions, where players agree upon a topic or reference image and compete to draw the 
+most realistic images.  
 
 ### Base Version
-There are only two players at any given time.  One phone is designated as the drawing device (the 'Drawer') and another is designated as the viewing/guessing device (the 'Guesser').  The Drawer can add strokes to the environment and the Guesser can view the environment but cannot modify it.  There is no guess-checking mechanic--the expectation is that players will confirm their guesses verbally, with the Drawer inputting the name of the winning guesser into the score chart.
+There are only two players at any given time.  One phone is designated as the drawing device
+(the 'Drawer') and another is designated as the viewing/guessing device (the 'Guesser').  
+The Drawer can add strokes to the environment and the Guesser can view the environment but 
+cannot modify it.  There is no guess-checking mechanic--the expectation is that players will 
+confirm their guesses verbally, with the Drawer inputting the name of the winning guesser into 
+the score chart.
 
 ### Extensions
-- The game is extended to n players, where n >= 2.  Drawing and guessing are randomly assigned roles that vary from round to round.
+- The game is extended to n players, where n >= 2.  Drawing and guessing are randomly assigned 
+  roles that vary from round to round.
 - Different brush sizes and colors
+- Undo/Redo options (History stack)
 - Additional game modes (e.g. drawing competition)
   - Symmetry mode: all drawings have a fixed symmetry that can't be turned off and all subjects are asymmetric
   - Chaos mode: brush size and color randomly change as the Drawer draws
@@ -24,8 +39,10 @@ There are only two players at any given time.  One phone is designated as the dr
 ## Feature List
 #### Drawing
 - User can draw strokes in their view
-  - Drawing directly on the phone screen adds appropriate strokes to a plane a fixed z away from the user's phone position
-  - Holding a finger on the phone screen and moving the phone in 3D space draws 3D strokes where points along the curve correspond to the path of the phone
+  - Drawing directly on the phone screen adds appropriate strokes to a plane a fixed z away
+    from the user's phone position
+  - Holding a finger on the phone screen and moving the phone in 3D space draws 3D strokes 
+    where points along the curve correspond to the path of the phone
 - User can erase strokes in their view (same motion mechanic as the drawing case)
 - [Extension] User can see markers that show where the Guessers are viewing the scene from
 - [Extension] User can customize their stroke color, thickness, and brush type
@@ -40,7 +57,8 @@ There are only two players at any given time.  One phone is designated as the dr
 - Drawer is given an object to draw
   - [?] Allow Drawer to discard and request a new object?
 - Score tracking
-  - Guessers are rewarded 1 point for every correct guess and Drawers are rewarded p points where 0 < p < 1.  Before balancing, let p = 0.25.
+  - Guessers are rewarded 1 point for every correct guess and Drawers are rewarded p 
+    points where 0 < p < 1.  Before balancing, let p = 0.25.
 
 ## UI Sketches
 #### Drawing
@@ -58,7 +76,8 @@ There are only two players at any given time.  One phone is designated as the dr
 
 *Alternate Path*
 1.1. User holds a finger on her phone screen while moving her phone in 3D space.
-2.1. The stroke is drawn in 3D space as a path of points that corresponds to the position of the user's iPhone through the duration of the held touch gesture.
+2.1. The stroke is drawn in 3D space as a path of points that corresponds to the position of the user's
+     iPhone through the duration of the held touch gesture.
 3.1. The user releases her finger from the phone screen.
 4.1. Return to Main Path at Step 3.
 
@@ -74,9 +93,18 @@ No expert features involved.
 [//]: # (Describe the major components and data structures for your data model, as well as the top-level controllers and views of your UI. Feel free to use diagrams.)
 
 #### Data model
-Strokes in the scene will be represented as a collection of UIBezierPaths.  
+* Drawing canvas: ordered list of ordered list of `SCNVector3`s: `[[SCNVector3]]`
+  * Each array (`[SCNVector3]`) represents a set of 3D points ordered by time of creation; the ordering 
+    implicitly stores edge data
+  * Arrays are ordered by entry time to allow for history tracking
+  * Fed into view to make 3D cylinders only upon creation/deletion, so arrays are good enough 
+    (don't need quick look-up, just some notion of ordering)
+* Game mechanics: 
+  * Player class - name/id, phone position/id, role designation; dictionary of names/ids to Player objects `[String:Player]`
+  * Word generation: database of mappings from topics/themes to string collections, implemented using an 
+    external, persistent database (potentially with web updating)
 
 #### Controllers and Views
-- ARSCNView as generic view, split off into DrawerView and GuesserView
-- DrawerController, GuesserController
-
+- ARSCNView as generic view, split off into DrawerView (drawing-enabled) and GuesserView (drawing-disabled) with respective
+  view controllers
+- `SCNVector3`s rendered as `SCNCylinder`s stored in the view; singleton class for `SCNCylinder` container (Canvas class)
