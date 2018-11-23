@@ -9,11 +9,21 @@
 import Foundation
 import SceneKit
 
-extension SCNVector3 : Equatable {
-  public static func == (lhs: SCNVector3, rhs: SCNVector3) -> Bool {
-    return lhs.x.isEqual(to: rhs.x) &&
-      lhs.y.isEqual(to: rhs.y) &&
-      lhs.z.isEqual(to: rhs.z)
+public struct Point : Equatable {
+  let x : Double
+  let y : Double
+  let z : Double
+  
+  public init(_ x : Double, _ y : Double, _ z : Double) {
+    self.x = x
+    self.y = y
+    self.z = z
+  }
+  
+  public init(_ x : Int, _ y : Int, _ z : Int) {
+    self.x = Double(x)
+    self.y = Double(y)
+    self.z = Double(z)
   }
 }
 
@@ -37,8 +47,6 @@ public class Canvas {
   //  AF(r) = {curve c} such that
   //   l.start-point = <r.startX, r.startY>
   //   l.end-point = <r.endX, r.endY>
-  
-  public typealias Point = SCNVector3
   
   /** The collection of curves stored in the Canvas,
    where each inner array represents a curve of points
@@ -175,5 +183,14 @@ public class Canvas {
     curves.removeLast()
     checkRep()
   }
-  
+
+}
+
+// Allows assertion-checking in add(point:)
+extension SCNVector3 : Equatable {
+  public static func == (lhs: SCNVector3, rhs: SCNVector3) -> Bool {
+    return lhs.x.isEqual(to: rhs.x) &&
+      lhs.y.isEqual(to: rhs.y) &&
+      lhs.z.isEqual(to: rhs.z)
+  }
 }

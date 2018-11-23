@@ -13,15 +13,13 @@ import SceneKit
 class CanvasTests: XCTestCase {
   
   func testInit() {
-    var curves : [[SCNVector3]] = []
+    var curves : [[Point]] = []
     for _ in 0...10 {
-      let curve = Array(0...10).map { SCNVector3($0, $0, $0) }
+      let curve = Array(0...10).map { Point($0, $0, $0) }
       curves.append(curve)
     }
     let canvas = Canvas(curves: curves)
-    for curve in canvas {
-      
-    }
+    
   }
   
   func testExample() {
