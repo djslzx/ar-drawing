@@ -20,7 +20,7 @@ import SceneKit
  **Abstract Invariant**:
  
  */
-public class Canvas : Sequence {
+public class Canvas {
   
   // Representation Invariant:
   //  TODO
@@ -32,51 +32,114 @@ public class Canvas : Sequence {
   
   public typealias Point = SCNVector3
   
-  /** The collection of curves (ordered points) */
+  /** The collection of curves stored in the Canvas,
+   where each inner array represents a curve of points
+   connected in order.
+   */
   private var curves : [[Point]]
   
   /**
    Initializes a Canvas.
    
    **Modifies**: self
-   **Effects**: sets 
+   
+   **Effects**: Sets up an empty Canvas.
+   
    */
   public init() {
     curves = []
     checkRep()
   }
   
+  /**
+   Initializes a Canvas using `curves`.
+   
+   **Modifies**: self
+   
+   **Effects**: Sets up a canvas using data from `curves`.
+   
+   - Parameter curves: A 2-D array of Points (`SCNVector3`)
+   where each constituent 1-D array represents a curve consisting of
+   points that are connected in order.
+   
+   */
   public init(curves: [[Point]]) {
     // TODO: deep copy
     self.curves = curves
   }
   
+  /**
+   Checks the representation invariant.
+   
+   TODO: specify rep invariant
+   
+   */
   private func checkRep() {
     // TODO: Need to specify RI
   }
-
-  subscript(curve: Int) -> [Point] {
-    return curves[curve]
+  
+  /**
+   Returns the curve at `index`.
+   
+   **Requires**: 0 <= `index` < `n` where `n` is the number of
+   curves in the Canvas
+   
+   - Parameter index: The index of the curve to be returned.
+   */
+  subscript(index: Int) -> [Point] {
+    assert(0 <= index && index < curves.count)
+    return curves[index]
   }
   
-  subscript(curve: Int, point: Int) -> Point {
+  /**
+   Returns the j-th point in the i-th curve.
+
+   **Requires**: 0 <= i < `n` && 0 <= j < `m` where `n` is the
+   number of curves in the Canvas and `m` is the number of points
+   in the i-th curve
+   
+   - Parameters:
+   - i: The index of the curve
+   - j: The index of the point in the curve
+   
+   */
+  subscript(i: Int, j: Int) -> Point {
     get {
-      return curves[curve][point]
+      assert(0 <= i && i < curves.count)
+      assert(0 <= j && j < curves[i].count)
+      return curves[i][j]
     }
   }
   
+  /**
+   Adds a curve to the Canvas.
+
+   **Requires**: `curve` is non-empty.
+   
+   **Modifies**: self
+   
+   **Effects**: Adds `curve` to the Canvas.
+   
+   - Parameter curve: The curve to be added to the Canvas.
+
+   */
   public func add(curve : [Point]) {
-    // TODO: deep copy
-    curves.append(curve)
+    assert(!curve.isEmpty)
+    let copy : [Point] = curve.map { return Point($0.x, $0.y, $0.z) }
+    curves.append(copy)
     checkRep()
   }
   
+  /**
+   Removes the last curve in the Canvas (ordered by time of entry).
+   
+   **Modifies**: self
+   
+   **Effects**: Removes the most recently added curve from the Canvas.
+
+   */
   public func remove() {
     curves.removeLast()
   }
-
-  public func makeIterator() -> IndexingIterator<[[Canvas.Point]]> {
-    return curves.makeIterator()
-  }
-
+  
 }

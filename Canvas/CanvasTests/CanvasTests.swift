@@ -19,6 +19,9 @@ class CanvasTests: XCTestCase {
       curves.append(curve)
     }
     let canvas = Canvas(curves: curves)
+    for point in canvas {
+      NSLog(point)
+    }
   }
   
   func testExample() {
