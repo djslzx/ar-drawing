@@ -15,6 +15,8 @@
 		731F57DB21A356A70014A4C4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 731F57D921A356A70014A4C4 /* LaunchScreen.storyboard */; };
 		731F57E621A356A70014A4C4 /* AR_PictionaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F57E521A356A70014A4C4 /* AR_PictionaryTests.swift */; };
 		731F57F121A356A70014A4C4 /* AR_PictionaryUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F57F021A356A70014A4C4 /* AR_PictionaryUITests.swift */; };
+		73BF4F4721A784A60013CFCD /* Canvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73BF4F4621A784A60013CFCD /* Canvas.framework */; };
+		73BF4F4821A784A60013CFCD /* Canvas.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 73BF4F4621A784A60013CFCD /* Canvas.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +36,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		73BF4F4521A784630013CFCD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				73BF4F4821A784A60013CFCD /* Canvas.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		731F57CB21A356A70014A4C4 /* AR Pictionary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AR Pictionary.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		731F57CE21A356A70014A4C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +65,7 @@
 		731F57EC21A356A70014A4C4 /* AR PictionaryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AR PictionaryUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		731F57F021A356A70014A4C4 /* AR_PictionaryUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AR_PictionaryUITests.swift; sourceTree = "<group>"; };
 		731F57F221A356A70014A4C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		73BF4F4621A784A60013CFCD /* Canvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Canvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73BF4F4721A784A60013CFCD /* Canvas.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +101,7 @@
 				731F57E421A356A70014A4C4 /* AR PictionaryTests */,
 				731F57EF21A356A70014A4C4 /* AR PictionaryUITests */,
 				731F57CC21A356A70014A4C4 /* Products */,
+				73BF4F4621A784A60013CFCD /* Canvas.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -138,6 +157,7 @@
 				731F57C721A356A70014A4C4 /* Sources */,
 				731F57C821A356A70014A4C4 /* Frameworks */,
 				731F57C921A356A70014A4C4 /* Resources */,
+				73BF4F4521A784630013CFCD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -439,6 +459,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4V9J92NSNY;
 				INFOPLIST_FILE = "AR Pictionary/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -446,7 +467,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "djsl.AR-Pictionary";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -457,6 +478,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4V9J92NSNY;
 				INFOPLIST_FILE = "AR Pictionary/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -464,7 +486,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "djsl.AR-Pictionary";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
