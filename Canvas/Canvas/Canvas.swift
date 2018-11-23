@@ -9,6 +9,14 @@
 import Foundation
 import SceneKit
 
+extension SCNVector3 : Equatable {
+  public static func == (lhs: SCNVector3, rhs: SCNVector3) -> Bool {
+    return lhs.x.isEqual(to: rhs.x) &&
+      lhs.y.isEqual(to: rhs.y) &&
+      lhs.z.isEqual(to: rhs.z)
+  }
+}
+
 /**
  Represents a collection of curves.
  
@@ -23,7 +31,7 @@ import SceneKit
 public class Canvas {
   
   // Representation Invariant:
-  //  TODO
+  //  All curves are non-empty
   //
   // Abstraction Function:
   //  AF(r) = {curve c} such that
@@ -64,8 +72,11 @@ public class Canvas {
    
    */
   public init(curves: [[Point]]) {
-    // TODO: deep copy
-    self.curves = curves
+    let copy : [[Point]] = curves.map {
+      $0.map { Point($0.x, $0.y, $0.z) }
+    }
+    self.curves = copy
+    checkRep()
   }
   
   /**
@@ -75,7 +86,9 @@ public class Canvas {
    
    */
   private func checkRep() {
-    // TODO: Need to specify RI
+    for curve in curves {
+      assert(!curve.isEmpty)
+    }
   }
   
   /**
@@ -93,7 +106,7 @@ public class Canvas {
   
   /**
    Returns the j-th point in the i-th curve.
-
+   
    **Requires**: 0 <= i < `n` && 0 <= j < `m` where `n` is the
    number of curves in the Canvas and `m` is the number of points
    in the i-th curve
@@ -113,7 +126,7 @@ public class Canvas {
   
   /**
    Adds a curve to the Canvas.
-
+   
    **Requires**: `curve` is non-empty.
    
    **Modifies**: self
@@ -121,7 +134,7 @@ public class Canvas {
    **Effects**: Adds `curve` to the Canvas.
    
    - Parameter curve: The curve to be added to the Canvas.
-
+   
    */
   public func add(curve : [Point]) {
     assert(!curve.isEmpty)
@@ -131,15 +144,36 @@ public class Canvas {
   }
   
   /**
+   Adds a point to the most recently added curve in the canvas.
+   If the Canvas is empty, adds a new curve containing the point.
+   
+   **Modifies**: self
+   
+   **Effects**: Adds a point to a curve in the Canvas.
+   
+   - Parameter point: The point to be added.
+   
+   */
+  public func add(point : Point) {
+    if var last = curves.last {
+      last.append(point)
+      assert(curves.last!.last! == point) // confirm that point has been added
+    } else {
+      curves.append([point])
+    }
+  }
+  
+  /**
    Removes the last curve in the Canvas (ordered by time of entry).
    
    **Modifies**: self
    
    **Effects**: Removes the most recently added curve from the Canvas.
-
+   
    */
   public func remove() {
     curves.removeLast()
+    checkRep()
   }
   
 }
