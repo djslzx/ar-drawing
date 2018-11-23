@@ -17,11 +17,12 @@ import SceneKit
  
  */
 public class Canvas {
+  
   // Representation Invariant:
-  //  ! (startX == endX && startY == endY)
+  //  TODO
   //
   // Abstraction Function:
-  //  AF(r) = a line, l, such that
+  //  AF(r) = {curve c} such that
   //   l.start-point = <r.startX, r.startY>
   //   l.end-point = <r.endX, r.endY>
   
@@ -59,4 +60,5 @@ public class Canvas {
   public func remove() {
     curves.removeLast()
   }
+  
 }
