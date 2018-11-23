@@ -14,24 +14,30 @@ class CanvasTests: XCTestCase {
   
   func testInit() {
     var curves : [[Point]] = []
-    for _ in 0...10 {
-      let curve = Array(0...10).map { Point($0, $0, $0) }
+    for _ in 1...3 {
+      let curve = Array(1...3).map { Point($0, $0, $0) }
       curves.append(curve)
     }
-    let canvas = Canvas(curves: curves)
+    let c1 = Canvas(curves: curves)
     
-  }
-  
-  func testExample() {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-  }
-  
-  func testPerformanceExample() {
-    // This is an example of a performance test case.
-    self.measure {
-      // Put the code you want to measure the time of here.
+    let c2 = Canvas()
+    for curve in curves {
+      c2.add(curve: curve)
     }
+    
+    let c3 = Canvas()
+    for curve in curves {
+      c3.startCurve()
+      for point in curve {
+        c3.append(point: point)
+      }
+    }
+    
+    XCTAssertEqual(c1, c2)
+    XCTAssertEqual(c2, c3)
+    XCTAssertEqual(c3, c1)
   }
+  
+  
   
 }

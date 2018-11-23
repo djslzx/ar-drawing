@@ -9,7 +9,7 @@
 import Foundation
 import SceneKit
 
-public struct Point : Equatable {
+public struct Point : Equatable, CustomDebugStringConvertible {
   let x : Double
   let y : Double
   let z : Double
@@ -25,6 +25,10 @@ public struct Point : Equatable {
     self.y = Double(y)
     self.z = Double(z)
   }
+  
+  public var debugDescription: String {
+    return "(\(self.x), \(self.y), \(self.z))"
+  }
 }
 
 /**
@@ -38,10 +42,10 @@ public struct Point : Equatable {
  **Abstract Invariant**:
  
  */
-public class Canvas {
+public class Canvas : Equatable, CustomDebugStringConvertible {
   
   // Representation Invariant:
-  //  All curves are non-empty
+  //  All curves except the last are non-empty
   //
   // Abstraction Function:
   //  AF(r) = {curve c} such that
@@ -67,6 +71,10 @@ public class Canvas {
     checkRep()
   }
   
+  public var debugDescription: String {
+    return String(reflecting: curves)
+  }
+  
   /**
    Initializes a Canvas using `curves`.
    
@@ -88,13 +96,11 @@ public class Canvas {
   }
   
   /**
-   Checks the representation invariant.
-   
-   TODO: specify rep invariant
-   
+   Checks the representation invariant:
+   - All curves except the final one should be non-empty
    */
   private func checkRep() {
-    for curve in curves {
+    for curve in curves.dropLast() {
       assert(!curve.isEmpty)
     }
   }
@@ -162,12 +168,30 @@ public class Canvas {
    - Parameter point: The point to be added.
    
    */
-  public func add(point : Point) {
-    if var last = curves.last {
+  public func append(point : Point) {
+    if var last = curves.popLast() {
       last.append(point)
+      curves.append(last)
       assert(curves.last!.last! == point) // confirm that point has been added
     } else {
       curves.append([point])
+    }
+    checkRep()
+  }
+  
+  /**
+   Begins a new empty curve.
+   
+   **Modifies**: self
+   
+   **Effects**: Adds an empty curve to the Canvas.  Has no effect if the
+   most recently added curve is also empty.
+   
+   */
+  public func startCurve() {
+    // Add [] if self.curves is empty or self.curves.last is non-empty
+    if !(curves.last?.isEmpty ?? false) {
+      curves.append([])
     }
   }
   
@@ -183,11 +207,19 @@ public class Canvas {
     curves.removeLast()
     checkRep()
   }
+  
+  public static func == (lhs: Canvas, rhs: Canvas) -> Bool {
+    return lhs.curves == rhs.curves
+  }
 
 }
 
 // Allows assertion-checking in add(point:)
-extension SCNVector3 : Equatable {
+extension SCNVector3 : Equatable, CustomDebugStringConvertible {
+  public var debugDescription: String {
+    return "(\(self.x), \(self.y), \(self.z))"
+  }
+  
   public static func == (lhs: SCNVector3, rhs: SCNVector3) -> Bool {
     return lhs.x.isEqual(to: rhs.x) &&
       lhs.y.isEqual(to: rhs.y) &&
