@@ -15,8 +15,12 @@ import SceneKit
  **Specification Properties**:
  - curves: [[Point]] - A set of curves where each curve is a set of points
  
+ **Derived Specification Properties**:
+ 
+ **Abstract Invariant**:
+ 
  */
-public class Canvas {
+public class Canvas : Sequence {
   
   // Representation Invariant:
   //  TODO
@@ -50,6 +54,16 @@ public class Canvas {
   private func checkRep() {
     // TODO: Need to specify RI
   }
+
+  subscript(curve: Int) -> [Point] {
+    return curves[curve]
+  }
+  
+  subscript(curve: Int, point: Int) -> Point {
+    get {
+      return curves[curve][point]
+    }
+  }
   
   public func add(curve : [Point]) {
     // TODO: deep copy
@@ -60,5 +74,9 @@ public class Canvas {
   public func remove() {
     curves.removeLast()
   }
-  
+
+  public func makeIterator() -> IndexingIterator<[[Canvas.Point]]> {
+    return curves.makeIterator()
+  }
+
 }
