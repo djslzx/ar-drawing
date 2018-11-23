@@ -119,11 +119,11 @@
 			isa = PBXGroup;
 			children = (
 				731F57CE21A356A70014A4C4 /* AppDelegate.swift */,
-				731F57D021A356A70014A4C4 /* art.scnassets */,
 				731F57D221A356A70014A4C4 /* ViewController.swift */,
 				731F57D421A356A70014A4C4 /* Main.storyboard */,
-				731F57D721A356A70014A4C4 /* Assets.xcassets */,
 				731F57D921A356A70014A4C4 /* LaunchScreen.storyboard */,
+				731F57D721A356A70014A4C4 /* Assets.xcassets */,
+				731F57D021A356A70014A4C4 /* art.scnassets */,
 				731F57DC21A356A70014A4C4 /* Info.plist */,
 			);
 			path = "AR Pictionary";
