@@ -15,24 +15,40 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   @IBOutlet var sceneView: ARSCNView!
   
-  private let lineRadius : CGFloat = 5.0
+  private let lineRadius : CGFloat = 0.005
   
   /** Model */
   private let canvas = Canvas()
   
+  private var touched : Bool = false
+  
   @IBAction func pressed(_ sender: UILongPressGestureRecognizer) {
     switch sender.state {
     case .began:
-      canvas.startCurve()
+      // canvas.startCurve()
       NSLog("Started curve")
-      fallthrough
-    case .changed:
-      NSLog("Adding to curve")
-      canvas.append(point: Point(0, 0, 0))
+      touched = true
+      drawPoint()
     case .ended:
       NSLog("Ended curve")
+      touched = false
     default:
       break
+    }
+  }
+  
+  private func drawPoint() {
+    DispatchQueue.global().async {
+      [weak self] in
+      DispatchQueue.main.async {
+        if self?.touched ?? false,
+          let pos = self?.sceneView.session.currentFrame?.camera.transform.position() {
+          let pointNode = SCNNode(geometry: SCNSphere(radius: self!.lineRadius))
+          pointNode.position = SCNVector3(pos.x, pos.y, pos.z - 0.2)
+          self?.sceneView.scene.rootNode.addChildNode(pointNode)
+          self?.drawPoint()
+        }
+      }
     }
   }
   
@@ -43,11 +59,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     sceneView.delegate = self
     
     // Show statistics such as fps and timing information
-    sceneView.showsStatistics = false
+    sceneView.showsStatistics = true
     
-    let cubeNode = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
-    cubeNode.position = SCNVector3(0, 0, -0.2) // SceneKit/AR coordinates are in meters
-    sceneView.scene.rootNode.addChildNode(cubeNode)
+    let pointNode = SCNNode(geometry: SCNSphere(radius: 0.01))
+    pointNode.position = SCNVector3(0, 0, -0.2) // SceneKit/AR coordinates are in meters
+    //sceneView.scene.rootNode.addChildNode(pointNode)
   }
   
   private func renderLines() {
@@ -56,14 +72,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       for i in 0..<curve.count-1 {
         let start = curve[i]
         let end = curve[i+1]
-
-        let cylinder = SCNCylinder(radius: lineRadius, height: CGFloat(Point.distance(start, end)))
-        cylinder.radialSegmentCount = 5
-        cylinder.heightSegmentCount = 1
-        let segmentNode = SCNNode(geometry: cylinder)
-        segmentNode.position = Point.midpoint(start, end).vector
-        // segmentNode.rotation =
-        curveNode.addChildNode(segmentNode)
+        
+        // TODO
       }
       sceneView.scene.rootNode.addChildNode(curveNode)
     }
@@ -110,5 +120,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   func sessionInterruptionEnded(_ session: ARSession) {
     // Reset tracking and/or remove existing anchors if consistent tracking is required
     
+  }
+}
+
+extension simd_float4x4 {
+  func position() -> SCNVector3 {
+    return SCNVector3(columns.3.x, columns.3.y, columns.3.z)
   }
 }
