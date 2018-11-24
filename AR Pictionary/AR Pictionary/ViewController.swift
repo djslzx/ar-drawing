@@ -15,7 +15,26 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   @IBOutlet var sceneView: ARSCNView!
   
+  private let lineRadius : CGFloat = 5.0
+  
+  /** Model */
   private let canvas = Canvas()
+  
+  @IBAction func pressed(_ sender: UILongPressGestureRecognizer) {
+    switch sender.state {
+    case .began:
+      canvas.startCurve()
+      NSLog("Started curve")
+      fallthrough
+    case .changed:
+      NSLog("Adding to curve")
+      canvas.append(point: Point(0, 0, 0))
+    case .ended:
+      NSLog("Ended curve")
+    default:
+      break
+    }
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -30,13 +49,27 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     cubeNode.position = SCNVector3(0, 0, -0.2) // SceneKit/AR coordinates are in meters
     sceneView.scene.rootNode.addChildNode(cubeNode)
   }
-
+  
   private func renderLines() {
-    for 
-    
+    for curve in canvas.getCurves() {
+      let curveNode = SCNNode()
+      for i in 0..<curve.count-1 {
+        let start = curve[i]
+        let end = curve[i+1]
+
+        let cylinder = SCNCylinder(radius: lineRadius, height: CGFloat(Point.distance(start, end)))
+        cylinder.radialSegmentCount = 5
+        cylinder.heightSegmentCount = 1
+        let segmentNode = SCNNode(geometry: cylinder)
+        segmentNode.position = Point.midpoint(start, end).vector
+        // segmentNode.rotation =
+        curveNode.addChildNode(segmentNode)
+      }
+      sceneView.scene.rootNode.addChildNode(curveNode)
+    }
   }
   
-  func viewWillAppear(_ animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
     // Create a session configuration

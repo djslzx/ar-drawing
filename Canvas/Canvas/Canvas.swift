@@ -20,18 +20,33 @@ public struct Point : Equatable, CustomDebugStringConvertible {
     self.z = z
   }
   
-  public init(_ x : Int, _ y : Int, _ z : Int) {
-    self.x = Double(x)
-    self.y = Double(y)
-    self.z = Double(z)
+  /** Euclidean distance from `self` to `other` */
+  public static func distance(_ src : Point, _ dst : Point) -> Double {
+    return sqrt(pow(src.x - dst.x, 2) +
+      pow(src.y - dst.y, 2) +
+      pow(src.z - dst.z, 2))
+  }
+  
+  /** Midpoint between `src` to `dst` */
+  public static func midpoint(_ a : Point, _ b : Point) -> Point {
+    return Point((a.x + b.x)/2, (a.y + b.y)/2, (a.z + b.z)/2)
+  }
+  
+  public static func vector(from a : Point, to b : Point) -> SCNVector3 {
+    return SCNVector3(a.x - b.x, a.y - b.y, a.z - b.z)
   }
   
   public var debugDescription: String {
     return "(\(self.x), \(self.y), \(self.z))"
   }
   
+  /** Returns a copy of `self`. */
   public func copy() -> Point {
     return Point(self.x, self.y, self.z)
+  }
+  
+  public var vector : SCNVector3 {
+    return SCNVector3(self.x, self.y, self.z)
   }
 }
 
@@ -151,6 +166,22 @@ public class Canvas : CustomDebugStringConvertible {
   }
   
   /**
+   Begins a new empty curve.
+   
+   **Modifies**: self
+   
+   **Effects**: Adds an empty curve to the Canvas.  Has no effect if the
+   most recently added curve is also empty.
+   
+   */
+  public func startCurve() {
+    // Add [] if self.curves is empty or self.curves.last is non-empty
+    if !(curves.last?.isEmpty ?? false) {
+      curves.append([])
+    }
+  }
+  
+  /**
    Removes the last curve in the Canvas (ordered by time of entry).
    
    **Modifies**: self
@@ -164,6 +195,7 @@ public class Canvas : CustomDebugStringConvertible {
   }
 
   /**
+   - Returns: A copy of the curves in the Canvas.
    */
   public func getCurves() -> [[Point]] {
     return curves.map { $0.map { point in point.copy() } }

@@ -10,6 +10,12 @@ import XCTest
 import SceneKit
 @testable import Canvas
 
+extension Point {
+  public init(_ x : Int, _ y : Int, _ z : Int) {
+    self.init(Double(x), Double(y), Double(z))
+  }
+}
+
 class CanvasTests: XCTestCase {
   
   private func makeCurves(_ numcurves: Int, _ numpoints: Int) -> [[Point]] {
