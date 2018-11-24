@@ -25,7 +25,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   @IBAction func pressed(_ sender: UILongPressGestureRecognizer) {
     switch sender.state {
     case .began:
-      // canvas.startCurve()
       NSLog("Started curve")
       touched = true
       drawPoint()
@@ -42,9 +41,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       [weak self] in
       DispatchQueue.main.async {
         if self?.touched ?? false,
-          let pos = self?.sceneView.session.currentFrame?.camera.transform.position() {
-          let pointNode = SCNNode(geometry: SCNSphere(radius: self!.lineRadius))
-          pointNode.position = SCNVector3(pos.x, pos.y, pos.z - 0.2)
+          let cameraTransform = self?.sceneView.session.currentFrame?.camera.transform
+        {
+          let pointGeometry = SCNSphere(radius: self!.lineRadius)
+          let pointNode = SCNNode(geometry: pointGeometry)
+          // pointGeometry.firstMaterial?.diffuse.contents = UIColor.yellow // Color
+          
+          var translation = matrix_identity_float4x4
+          translation.columns.3.z = -0.3
+          
+          pointNode.simdTransform = matrix_multiply(cameraTransform, translation)
+          // pointNode.position = SCNVector3(pos.x, pos.y, pos.z - 0.2)
+
           self?.sceneView.scene.rootNode.addChildNode(pointNode)
           self?.drawPoint()
         }
@@ -64,19 +72,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     let pointNode = SCNNode(geometry: SCNSphere(radius: 0.01))
     pointNode.position = SCNVector3(0, 0, -0.2) // SceneKit/AR coordinates are in meters
     //sceneView.scene.rootNode.addChildNode(pointNode)
-  }
-  
-  private func renderLines() {
-    for curve in canvas.getCurves() {
-      let curveNode = SCNNode()
-      for i in 0..<curve.count-1 {
-        let start = curve[i]
-        let end = curve[i+1]
-        
-        // TODO
-      }
-      sceneView.scene.rootNode.addChildNode(curveNode)
-    }
   }
   
   override func viewWillAppear(_ animated: Bool) {
