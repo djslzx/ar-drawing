@@ -16,6 +16,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   @IBOutlet var sceneView: ARSCNView!
   
   private let lineRadius : CGFloat = 0.005
+  private let lineColor : UIColor = UIColor.white
   
   /** Model */
   private let canvas = Canvas()
@@ -25,11 +26,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   @IBAction func pressed(_ sender: UILongPressGestureRecognizer) {
     switch sender.state {
     case .began:
-      NSLog("Started curve")
+      assert(touched == false)
       touched = true
       drawPoint()
     case .ended:
-      NSLog("Ended curve")
+      assert(touched == true)
       touched = false
     default:
       break
@@ -45,14 +46,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         {
           let pointGeometry = SCNSphere(radius: self!.lineRadius)
           let pointNode = SCNNode(geometry: pointGeometry)
-          // pointGeometry.firstMaterial?.diffuse.contents = UIColor.yellow // Color
+          pointGeometry.firstMaterial?.diffuse.contents = self?.lineColor
           
+          // Translate point to position in front of camera
           var translation = matrix_identity_float4x4
-          translation.columns.3.z = -0.3
-          
+          translation.columns.3.z = -0.2
           pointNode.simdTransform = matrix_multiply(cameraTransform, translation)
-          // pointNode.position = SCNVector3(pos.x, pos.y, pos.z - 0.2)
 
+          // Add to view
           self?.sceneView.scene.rootNode.addChildNode(pointNode)
           self?.drawPoint()
         }
