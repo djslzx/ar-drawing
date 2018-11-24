@@ -24,57 +24,37 @@ class CanvasTests: XCTestCase {
   func testInit() {
     let c1 = Canvas()
     let c2 = Canvas()
-    XCTAssertEqual(c1, c2)
+    XCTAssertEqual(c1.getCurves(), c2.getCurves())
   }
   
   func testAddCurve() {
-    let curves = makeCurves(3, 5)
+    let curves = makeCurves(5, 5)
     let c1 = Canvas(curves: curves)
     let c2 = Canvas()
     for curve in curves {
       c2.add(curve: curve)
     }
-    XCTAssertEqual(c1,c2)
+    XCTAssertEqual(c1.getCurves(), c2.getCurves())
   }
   
   func testAddPoint() {
-    let curves = makeCurves(3, 5)
+    let curves = makeCurves(1, 5)
     let c1 = Canvas(curves: curves)
     let c2 = Canvas()
-    for curve in curves {
-      c2.startCurve()
-      for point in curve {
-        c2.append(point: point)
-      }
+    for point in curves[0] {
+      c2.append(point: point)
     }
-    XCTAssertEqual(c1, c2)
+    XCTAssertEqual(c1.getCurves(), c2.getCurves())
   }
   
   func testRemove() {
-    let curves = makeCurves(3, 5)
+    let curves = makeCurves(5, 5)
     let c1 = Canvas(curves: curves)
     for _ in 1...curves.count {
       c1.remove()
     }
     let c2 = Canvas()
-    XCTAssertEqual(c1, c2)
+    XCTAssertEqual(c1.getCurves(), c2.getCurves())
   }
   
-  func testSubscriptPoint() {
-    let curves = makeCurves(3, 5)
-    let c = Canvas(curves: curves)
-    for i in 0..<curves.count {
-      for j in 0..<curves[0].count {
-        XCTAssertEqual(curves[i][j], c[i,j])
-      }
-    }
-  }
-  
-  func testSubscriptCurve() {
-    let curves = makeCurves(3, 5)
-    let c = Canvas(curves: curves)
-    for i in 0..<curves.count {
-      XCTAssertEqual(curves[i], c[i])
-    }
-  }
 }

@@ -30,8 +30,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     cubeNode.position = SCNVector3(0, 0, -0.2) // SceneKit/AR coordinates are in meters
     sceneView.scene.rootNode.addChildNode(cubeNode)
   }
+
+  private func renderLines() {
+    for 
+    
+  }
   
-  override func viewWillAppear(_ animated: Bool) {
+  func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
     // Create a session configuration

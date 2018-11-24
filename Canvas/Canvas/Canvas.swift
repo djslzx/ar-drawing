@@ -29,6 +29,10 @@ public struct Point : Equatable, CustomDebugStringConvertible {
   public var debugDescription: String {
     return "(\(self.x), \(self.y), \(self.z))"
   }
+  
+  public func copy() -> Point {
+    return Point(self.x, self.y, self.z)
+  }
 }
 
 /**
@@ -42,7 +46,7 @@ public struct Point : Equatable, CustomDebugStringConvertible {
  **Abstract Invariant**:
  
  */
-public class Canvas : Equatable, CustomDebugStringConvertible {
+public class Canvas : CustomDebugStringConvertible {
   
   // Representation Invariant:
   //  All curves except the last are non-empty
@@ -100,41 +104,8 @@ public class Canvas : Equatable, CustomDebugStringConvertible {
    - All curves except the final one should be non-empty
    */
   private func checkRep() {
-    for curve in curves.dropLast() {
+    for curve in curves {
       assert(!curve.isEmpty)
-    }
-  }
-  
-  /**
-   Returns the curve at `index`.
-   
-   **Requires**: 0 <= `index` < `n` where `n` is the number of
-   curves in the Canvas
-   
-   - Parameter index: The index of the curve to be returned.
-   */
-  subscript(index: Int) -> [Point] {
-    assert(0 <= index && index < curves.count)
-    return curves[index]
-  }
-  
-  /**
-   Returns the j-th point in the i-th curve.
-   
-   **Requires**: 0 <= i < `n` && 0 <= j < `m` where `n` is the
-   number of curves in the Canvas and `m` is the number of points
-   in the i-th curve
-   
-   - Parameters:
-   - i: The index of the curve
-   - j: The index of the point in the curve
-   
-   */
-  subscript(i: Int, j: Int) -> Point {
-    get {
-      assert(0 <= i && i < curves.count)
-      assert(0 <= j && j < curves[i].count)
-      return curves[i][j]
     }
   }
   
@@ -180,22 +151,6 @@ public class Canvas : Equatable, CustomDebugStringConvertible {
   }
   
   /**
-   Begins a new empty curve.
-   
-   **Modifies**: self
-   
-   **Effects**: Adds an empty curve to the Canvas.  Has no effect if the
-   most recently added curve is also empty.
-   
-   */
-  public func startCurve() {
-    // Add [] if self.curves is empty or self.curves.last is non-empty
-    if !(curves.last?.isEmpty ?? false) {
-      curves.append([])
-    }
-  }
-  
-  /**
    Removes the last curve in the Canvas (ordered by time of entry).
    
    **Modifies**: self
@@ -207,11 +162,13 @@ public class Canvas : Equatable, CustomDebugStringConvertible {
     curves.removeLast()
     checkRep()
   }
-  
-  public static func == (lhs: Canvas, rhs: Canvas) -> Bool {
-    return lhs.curves == rhs.curves
-  }
 
+  /**
+   */
+  public func getCurves() -> [[Point]] {
+    return curves.map { $0.map { point in point.copy() } }
+  }
+  
 }
 
 // Allows assertion-checking in add(point:)
