@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7313979021AB802C00F7F01B /* ReticleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7313978F21AB802C00F7F01B /* ReticleView.swift */; };
 		731F57CF21A356A70014A4C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F57CE21A356A70014A4C4 /* AppDelegate.swift */; };
 		731F57D121A356A70014A4C4 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 731F57D021A356A70014A4C4 /* art.scnassets */; };
 		731F57D321A356A70014A4C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F57D221A356A70014A4C4 /* ViewController.swift */; };
@@ -51,6 +52,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7313978F21AB802C00F7F01B /* ReticleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReticleView.swift; sourceTree = "<group>"; };
 		731F57CB21A356A70014A4C4 /* AR Pictionary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AR Pictionary.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		731F57CE21A356A70014A4C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		731F57D021A356A70014A4C4 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 			children = (
 				731F57CE21A356A70014A4C4 /* AppDelegate.swift */,
 				731F57D221A356A70014A4C4 /* ViewController.swift */,
+				7313978F21AB802C00F7F01B /* ReticleView.swift */,
 				731F57D421A356A70014A4C4 /* Main.storyboard */,
 				731F57D921A356A70014A4C4 /* LaunchScreen.storyboard */,
 				731F57D721A356A70014A4C4 /* Assets.xcassets */,
@@ -281,6 +284,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				731F57D321A356A70014A4C4 /* ViewController.swift in Sources */,
+				7313979021AB802C00F7F01B /* ReticleView.swift in Sources */,
 				731F57CF21A356A70014A4C4 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -41,21 +41,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     DispatchQueue.global().async {
       [weak self] in
       DispatchQueue.main.async {
-        if self?.touched ?? false,
-          let cameraTransform = self?.sceneView.session.currentFrame?.camera.transform
+        if let this = self, this.touched,
+          let cameraTransform = this.sceneView.session.currentFrame?.camera.transform
         {
-          let pointGeometry = SCNSphere(radius: self!.lineRadius)
+          let pointGeometry = SCNSphere(radius: this.lineRadius)
           let pointNode = SCNNode(geometry: pointGeometry)
-          pointGeometry.firstMaterial?.diffuse.contents = self?.lineColor
+          pointGeometry.firstMaterial?.diffuse.contents = this.lineColor
           
           // Translate point to position in front of camera
           var translation = matrix_identity_float4x4
           translation.columns.3.z = -0.2
+          translation.columns.3.x += Float(this.lineRadius)/2
           pointNode.simdTransform = matrix_multiply(cameraTransform, translation)
-
+          
           // Add to view
-          self?.sceneView.scene.rootNode.addChildNode(pointNode)
-          self?.drawPoint()
+          this.sceneView.scene.rootNode.addChildNode(pointNode)
+          this.drawPoint()
         }
       }
     }
