@@ -10,63 +10,27 @@ import Foundation
 import SceneKit
 import CoreGraphics
 
-public struct Point : Equatable, CustomDebugStringConvertible {
-  let x : Double
-  let y : Double
-  let z : Double
+extension float3 {
   
-  public init(_ x : Double, _ y : Double, _ z : Double) {
-    self.x = x
-    self.y = y
-    self.z = z
+  public func distance(to dst : float3) -> Float {
+    return sqrt(pow(self.x - dst.x, 2) +
+      pow(self.y - dst.y, 2) +
+      pow(self.z - dst.z, 2))
   }
   
-  /** Euclidean distance from `self` to `other` */
-  public static func distance(_ src : Point, _ dst : Point) -> Double {
-    return sqrt(pow(src.x - dst.x, 2) +
-      pow(src.y - dst.y, 2) +
-      pow(src.z - dst.z, 2))
-  }
-  
-  /** Midpoint between `src` to `dst` */
-  public static func midpoint(_ a : Point, _ b : Point) -> Point {
-    return Point((a.x + b.x)/2, (a.y + b.y)/2, (a.z + b.z)/2)
-  }
-  
-  public static func vector(from a : Point, to b : Point) -> SCNVector3 {
-    return SCNVector3(a.x - b.x, a.y - b.y, a.z - b.z)
-  }
-  
-  public static func path(from a : Point, to b : Point) -> UIBezierPath {
-    let path = UIBezierPath()
-    path.move(to: a.cgpoint)
-    path.addLine(to: b.cgpoint)
-    return path
-  }
-  
-  public var debugDescription: String {
-    return "(\(self.x), \(self.y), \(self.z))"
-  }
-  
-  /** Returns a copy of `self`. */
-  public func copy() -> Point {
-    return Point(self.x, self.y, self.z)
-  }
-  
-  public var vector : SCNVector3 {
-    return SCNVector3(self.x, self.y, self.z)
-  }
-  
-  public var cgpoint : CGPoint {
-    return CGPoint(x: self.x, y: self.y)
+  public func midpoint(with other : float3) -> float3 {
+    return float3((self.x + other.x)/2,
+                  (self.y + other.y)/2,
+                  (self.z + other.z)/2)
   }
 }
+
 
 /**
  Represents a collection of curves.
  
  **Specification Properties**:
- - curves: [[Point]] - A set of curves where each curve is a set of points
+ - curves: [[float3]] - A set of curves where each curve is a set of points
  
  **Derived Specification Properties**:
  
@@ -87,7 +51,7 @@ public class Canvas : CustomDebugStringConvertible {
    where each inner array represents a curve of points
    connected in order.
    */
-  private var curves : [[Point]]
+  private var curves : [[float3]]
   
   /**
    Initializes a Canvas.
@@ -113,14 +77,14 @@ public class Canvas : CustomDebugStringConvertible {
    
    **Effects**: Sets up a canvas using data from `curves`.
    
-   - Parameter curves: A 2-D array of Points (`SCNVector3`)
+   - Parameter curves: A 2-D array of `float3`s
    where each constituent 1-D array represents a curve consisting of
    points that are connected in order.
    
    */
-  public init(curves: [[Point]]) {
-    let copy : [[Point]] = curves.map {
-      $0.map { Point($0.x, $0.y, $0.z) }
+  public init(curves: [[float3]]) {
+    let copy : [[float3]] = curves.map {
+      $0.map { float3($0.x, $0.y, $0.z) }
     }
     self.curves = copy
     checkRep()
@@ -148,9 +112,9 @@ public class Canvas : CustomDebugStringConvertible {
    - Parameter curve: The curve to be added to the Canvas.
    
    */
-  public func add(curve : [Point]) {
+  public func add(curve : [float3]) {
     assert(!curve.isEmpty)
-    let copy : [Point] = curve.map { return Point($0.x, $0.y, $0.z) }
+    let copy : [float3] = curve.map { return float3($0.x, $0.y, $0.z) }
     curves.append(copy)
     checkRep()
   }
@@ -166,7 +130,7 @@ public class Canvas : CustomDebugStringConvertible {
    - Parameter point: The point to be added.
    
    */
-  public func append(point : Point) {
+  public func append(point : float3) {
     if var last = curves.popLast() {
       last.append(point)
       curves.append(last)
@@ -209,14 +173,18 @@ public class Canvas : CustomDebugStringConvertible {
   /**
    - Returns: A copy of the curves in the Canvas.
    */
-  public func getCurves() -> [[Point]] {
-    return curves.map { $0.map { point in point.copy() } }
+  public func getCurves() -> [[float3]] {
+    return curves.map {
+      curve in curve.map {
+        float3(x: $0.x, y: $0.y, z: $0.z)
+      }
+    }
   }
   
   /**
    - Returns: The last line segment added to the Canvas.
    */
-  public func lastSegment() -> (Point, Point)? {
+  public func lastSegment() -> (float3, float3)? {
     if let last = curves.last, last.count >= 2 {
       return (last[last.count - 2], last[last.count - 1])
     } else {
@@ -226,7 +194,7 @@ public class Canvas : CustomDebugStringConvertible {
   
 }
 
-// Allows assertion-checking in add(point:)
+// Allows assertion-checking in append(point:)
 extension SCNVector3 : Equatable, CustomDebugStringConvertible {
   public var debugDescription: String {
     return "(\(self.x), \(self.y), \(self.z))"

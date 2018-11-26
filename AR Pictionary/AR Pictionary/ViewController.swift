@@ -59,14 +59,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       return nil
     }
   }
-  
-  private func position(of matrix: simd_float4x4) -> SCNVector3 {
-    return SCNVector3(matrix.columns.3.x,
-                      matrix.columns.3.y,
-                      matrix.columns.3.z)
-  }
 
   private var lastPoint : SCNVector3?
+  
+  private func renderLines() {
+    for curve in canvas.getCurves() {
+      let source : SCNGeometrySource = SCNGeometrySource(vertices: curve.map { SCNVector3($0.x, $0.y, $0.z) })
+    }
+  }
   
   private func drawPoint() {
     DispatchQueue.global().async {
@@ -82,7 +82,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                                                height: length)
             cylinderGeometry.radialSegmentCount = 5
             let cylinderNode = SCNNode(geometry: cylinderGeometry)
-            cylinderNode.simdTransform = cameraTransform
+            cylinderNode.simdPosition = float3(cameraTransform.position())
             cylinderNode.orientation = cylinderNode.orientation.rotated(x: 0, y: Float.pi/2, z: 0)
             
             // Add to scene
@@ -111,9 +111,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   }
   
   private func clear() {
-    sceneView.scene.rootNode.enumerateChildNodes {
-      (node, _) in node.removeFromParentNode()
-    }
+    sceneView.scene = SCNScene()
+//    sceneView.scene.rootNode.enumerateChildNodes {
+//      (node, _) in node.removeFromParentNode()
+//    }
   }
   
   override func viewDidLoad() {
