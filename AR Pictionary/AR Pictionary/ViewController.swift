@@ -83,6 +83,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             cylinderGeometry.radialSegmentCount = 5
             let cylinderNode = SCNNode(geometry: cylinderGeometry)
             cylinderNode.simdTransform = cameraTransform
+            let rotationMatrix = simd_float4x4(
+              [
+                float4([1, 0 , 0, 0]),
+                float4([0, 0, -1, 0]),
+                float4([0, 1, 0, 0]),
+                float4([0, 0, 0, 1])
+              ])
+            cylinderNode.orientation = SCNVector4(rotationMatrix * float4(cylinderNode.orientation))
             
             // Add to scene
             this.sceneView.scene.rootNode.addChildNode(cylinderNode)
@@ -176,9 +184,19 @@ extension simd_float4x4 {
 }
 
 extension SCNVector3 {
-  func distance(to dst: SCNVector3) -> Float {
+  func distance(to dst : SCNVector3) -> Float {
     return sqrt(pow(self.x - dst.x, 2) +
       pow(self.y - dst.y, 2) +
       pow(self.z - dst.z, 2))
+  }
+  
+  func rotateX(by theta : Float) -> SCNVector3 {
+    let rotationMatrix = simd_float3x3(
+      [
+        float3([1, 0 , 0]),
+        float3([0, cos(theta), -sin(theta)]),
+        float3([0, sin(theta), cos(theta)])
+      ])
+    return SCNVector3(float3(self) * rotationMatrix)
   }
 }
