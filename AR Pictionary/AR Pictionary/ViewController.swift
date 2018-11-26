@@ -83,14 +83,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             cylinderGeometry.radialSegmentCount = 5
             let cylinderNode = SCNNode(geometry: cylinderGeometry)
             cylinderNode.simdTransform = cameraTransform
-            let rotationMatrix = simd_float4x4(
-              [
-                float4([1, 0 , 0, 0]),
-                float4([0, 0, -1, 0]),
-                float4([0, 1, 0, 0]),
-                float4([0, 0, 0, 1])
-              ])
-            cylinderNode.orientation = SCNVector4(rotationMatrix * float4(cylinderNode.orientation))
+            cylinderNode.orientation = cylinderNode.orientation.rotated(x: 0, y: Float.pi/2, z: 0)
             
             // Add to scene
             this.sceneView.scene.rootNode.addChildNode(cylinderNode)
@@ -190,13 +183,41 @@ extension SCNVector3 {
       pow(self.z - dst.z, 2))
   }
   
-  func rotateX(by theta : Float) -> SCNVector3 {
-    let rotationMatrix = simd_float3x3(
+  func rotated(x : Float, y : Float, z : Float) -> SCNVector3 {
+    let matrices : [simd_float3x3] =
       [
-        float3([1, 0 , 0]),
-        float3([0, cos(theta), -sin(theta)]),
-        float3([0, sin(theta), cos(theta)])
-      ])
-    return SCNVector3(float3(self) * rotationMatrix)
+        simd_float3x3(rows:
+          [
+            float3([1, 0 , 0]),
+            float3([0, cos(x), -sin(x)]),
+            float3([0, sin(x), cos(x)])
+          ]),
+        simd_float3x3(rows:
+          [
+            float3([cos(y), 0, sin(y)]),
+            float3([0, 1, 0]),
+            float3([-sin(y), 0, cos(y)])
+          ]),
+        simd_float3x3(rows:
+          [
+            float3([cos(z), -sin(z), 0]),
+            float3([sin(z), cos(z), 0]),
+            float3([0, 0, 1])
+          ]
+        )
+    ]
+    var result : float3 = float3(self)
+    for m in matrices {
+      result = m * result
+    }
+    return SCNVector3(result)
+  }
+}
+
+extension SCNVector4 {
+  func rotated(x : Float, y : Float, z : Float) -> SCNVector4 {
+    let vector = SCNVector3(self.x, self.y, self.z)
+    let rotated = vector.rotated(x: x, y: y, z: z)
+    return SCNVector4(rotated.x, rotated.y, rotated.z, self.w)
   }
 }
