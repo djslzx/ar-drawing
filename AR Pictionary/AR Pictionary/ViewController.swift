@@ -11,6 +11,12 @@ import SceneKit
 import ARKit
 import Canvas
 
+extension CGPoint {
+  public init(_ x : Float, _ y : Float) {
+    self.init(x: Double(x), y: Double(y))
+  }
+}
+
 class ViewController: UIViewController, ARSCNViewDelegate {
   
   @IBOutlet var sceneView: ARSCNView!
@@ -26,39 +32,86 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   @IBAction func pressed(_ sender: UILongPressGestureRecognizer) {
     switch sender.state {
     case .began:
-      assert(touched == false)
       touched = true
+      fallthrough
+    case .changed:
       drawPoint()
     case .ended:
-      assert(touched == true)
       touched = false
     default:
       break
     }
   }
   
+  private let translation : matrix_float4x4 =
+    matrix_float4x4(rows:
+      [
+        float4([1, 0, 0, 0.0025]),
+        float4([0, 1, 0, 0]),
+        float4([0, 0, 1, -0.1]),
+        float4([0, 0, 0, 1])
+      ])
+  
+  private func cameraTransform() -> simd_float4x4? {
+    if let cameraTransform = sceneView.session.currentFrame?.camera.transform {
+      return cameraTransform * translation
+    } else {
+      return nil
+    }
+  }
+  
+  private func position(of matrix: simd_float4x4) -> SCNVector3 {
+    return SCNVector3(matrix.columns.3.x,
+                      matrix.columns.3.y,
+                      matrix.columns.3.z)
+  }
+
+  private var lastPoint : SCNVector3?
+  
   private func drawPoint() {
     DispatchQueue.global().async {
       [weak self] in
       DispatchQueue.main.async {
-        if let this = self, this.touched,
-          let cameraTransform = this.sceneView.session.currentFrame?.camera.transform
+        if let this = self, this.touched, let cameraTransform = this.cameraTransform()
         {
-          let pointGeometry = SCNSphere(radius: this.lineRadius)
-          let pointNode = SCNNode(geometry: pointGeometry)
-          pointGeometry.firstMaterial?.diffuse.contents = this.lineColor
-          
-          // Translate point to position in front of camera
-          var translation = matrix_identity_float4x4
-          translation.columns.3.z = -0.2
-          translation.columns.3.x += Float(this.lineRadius)/2
-          pointNode.simdTransform = matrix_multiply(cameraTransform, translation)
-          
-          // Add to view
-          this.sceneView.scene.rootNode.addChildNode(pointNode)
+          let currentPos = cameraTransform.position()
+          if let previousPos = this.lastPoint {
+            // Make cylinder
+            let length : CGFloat = CGFloat(previousPos.distance(to: currentPos))
+            let cylinderGeometry = SCNCylinder(radius: this.lineRadius,
+                                               height: length)
+            cylinderGeometry.radialSegmentCount = 5
+            let cylinderNode = SCNNode(geometry: cylinderGeometry)
+            cylinderNode.simdTransform = cameraTransform
+            
+            // Add to scene
+            this.sceneView.scene.rootNode.addChildNode(cylinderNode)
+          }
+          this.lastPoint = currentPos
           this.drawPoint()
+        } else {
+          self?.lastPoint = nil
         }
+        
+        //          let pointGeometry = SCNSphere(radius: this.lineRadius)
+        //          let pointNode = SCNNode(geometry: pointGeometry)
+        //          pointGeometry.firstMaterial?.diffuse.contents = this.lineColor
+        
+        // Translate point to position in front of camera
+        // pointNode.simdTransform = cameraTransform
+        // this.sceneView.scene.rootNode.addChildNode(pointNode)
       }
+    }
+  }
+  
+  @IBAction func clear(_ sender: UIButton) {
+    NSLog("Trash pressed")
+    clear()
+  }
+  
+  private func clear() {
+    sceneView.scene.rootNode.enumerateChildNodes {
+      (node, _) in node.removeFromParentNode()
     }
   }
   
@@ -70,10 +123,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // Show statistics such as fps and timing information
     sceneView.showsStatistics = true
-    
-    let pointNode = SCNNode(geometry: SCNSphere(radius: 0.01))
-    pointNode.position = SCNVector3(0, 0, -0.2) // SceneKit/AR coordinates are in meters
-    //sceneView.scene.rootNode.addChildNode(pointNode)
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -123,5 +172,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 extension simd_float4x4 {
   func position() -> SCNVector3 {
     return SCNVector3(columns.3.x, columns.3.y, columns.3.z)
+  }
+}
+
+extension SCNVector3 {
+  func distance(to dst: SCNVector3) -> Float {
+    return sqrt(pow(self.x - dst.x, 2) +
+      pow(self.y - dst.y, 2) +
+      pow(self.z - dst.z, 2))
   }
 }

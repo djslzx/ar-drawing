@@ -8,6 +8,7 @@
 
 import Foundation
 import SceneKit
+import CoreGraphics
 
 public struct Point : Equatable, CustomDebugStringConvertible {
   let x : Double
@@ -36,6 +37,13 @@ public struct Point : Equatable, CustomDebugStringConvertible {
     return SCNVector3(a.x - b.x, a.y - b.y, a.z - b.z)
   }
   
+  public static func path(from a : Point, to b : Point) -> UIBezierPath {
+    let path = UIBezierPath()
+    path.move(to: a.cgpoint)
+    path.addLine(to: b.cgpoint)
+    return path
+  }
+  
   public var debugDescription: String {
     return "(\(self.x), \(self.y), \(self.z))"
   }
@@ -47,6 +55,10 @@ public struct Point : Equatable, CustomDebugStringConvertible {
   
   public var vector : SCNVector3 {
     return SCNVector3(self.x, self.y, self.z)
+  }
+  
+  public var cgpoint : CGPoint {
+    return CGPoint(x: self.x, y: self.y)
   }
 }
 
@@ -199,6 +211,17 @@ public class Canvas : CustomDebugStringConvertible {
    */
   public func getCurves() -> [[Point]] {
     return curves.map { $0.map { point in point.copy() } }
+  }
+  
+  /**
+   - Returns: The last line segment added to the Canvas.
+   */
+  public func lastSegment() -> (Point, Point)? {
+    if let last = curves.last, last.count >= 2 {
+      return (last[last.count - 2], last[last.count - 1])
+    } else {
+      return nil
+    }
   }
   
 }

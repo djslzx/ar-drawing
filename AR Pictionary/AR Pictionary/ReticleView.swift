@@ -11,7 +11,7 @@ import UIKit
 @IBDesignable
 class ReticleView: UIView {
 
-  @IBInspectable public var lineColor : UIColor = UIColor.red
+  @IBInspectable public var lineColor : UIColor = UIColor.lightGray
   @IBInspectable public var lineWidth : CGFloat = 1
   @IBInspectable public var radius : CGFloat = 10
 
