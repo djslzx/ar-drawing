@@ -10,21 +10,90 @@ import Foundation
 import SceneKit
 import CoreGraphics
 
-extension float3 {
+public class Polyline : CustomDebugStringConvertible {
   
-  public func distance(to dst : float3) -> Float {
-    return sqrt(pow(self.x - dst.x, 2) +
-      pow(self.y - dst.y, 2) +
-      pow(self.z - dst.z, 2))
+  public private(set) var vertices : [float3]
+  
+  public var debugDescription: String {
+    return String(reflecting: vertices)
   }
   
-  public func midpoint(with other : float3) -> float3 {
-    return float3((self.x + other.x)/2,
-                  (self.y + other.y)/2,
-                  (self.z + other.z)/2)
+  public init() {
+    vertices = []
+  }
+  
+  public init(vertices : [float3]) {
+    self.vertices = vertices
+  }
+  
+  public init(generator : (Float) -> float3, values : [Float]) {
+    vertices = values.map(generator)
+  }
+  
+  public func add(vertex : float3) {
+    vertices.append(vertex)
+  }
+  
+  public func removeLast() {
+    vertices.removeLast()
+  }
+ 
+  public func lastSegment() -> (float3, float3)? {
+    if vertices.count >= 2 {
+      return (vertices[vertices.count - 2], vertices[vertices.count - 1])
+    } else {
+      return nil
+    }
+  }
+  
+  public func segments() -> Zip2Sequence<ArraySlice<float3>, ArraySlice<float3>> {
+    return zip(vertices[...], vertices[1...])
+  }
+  
+}
+
+public class PolylineGeometry {
+  
+  private var line : Polyline
+  
+  public init() {
+    line = Polyline()
+  }
+  
+  public init(vertices : [float3]) {
+    line = Polyline(vertices: vertices)
+  }
+  
+  public var geometry : SCNGeometrySource {
+    var vertices : [SCNVector3] = []
+    for (u,v) in line.segments() {
+      
+    }
+
+  }
+  
+  private func cylinder(from : float3, to : float3, segmentCount : Int) -> [float3] {
+    let polygon : [float3] = []
+    for i in 0..<segmentCount {
+      let point : float3 = 
+    }
+
+    for i in 0..<nodes.count {
+      add(node: nodes[i], at: CGPoint(x: cos(2.0 * CGFloat.pi * CGFloat(i) / cgCount),
+                                      y: sin(2.0 * CGFloat.pi * CGFloat(i) / cgCount)))
+    }
+    
   }
 }
 
+//public class Spline : CustomDebugStringConvertible {
+//
+//  private var vertices : [float3]
+//
+//  public var debugDescription: String
+//
+//
+//}
 
 /**
  Represents a collection of curves.
@@ -194,15 +263,17 @@ public class Canvas : CustomDebugStringConvertible {
   
 }
 
-// Allows assertion-checking in append(point:)
-extension SCNVector3 : Equatable, CustomDebugStringConvertible {
-  public var debugDescription: String {
-    return "(\(self.x), \(self.y), \(self.z))"
+extension float3 {
+  
+  public func distance(to dst : float3) -> Float {
+    return sqrt(pow(self.x - dst.x, 2) +
+      pow(self.y - dst.y, 2) +
+      pow(self.z - dst.z, 2))
   }
   
-  public static func == (lhs: SCNVector3, rhs: SCNVector3) -> Bool {
-    return lhs.x.isEqual(to: rhs.x) &&
-      lhs.y.isEqual(to: rhs.y) &&
-      lhs.z.isEqual(to: rhs.z)
+  public func midpoint(with other : float3) -> float3 {
+    return float3((self.x + other.x)/2,
+                  (self.y + other.y)/2,
+                  (self.z + other.z)/2)
   }
 }

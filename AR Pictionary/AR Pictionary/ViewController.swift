@@ -112,9 +112,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   private func clear() {
     sceneView.scene = SCNScene()
-//    sceneView.scene.rootNode.enumerateChildNodes {
-//      (node, _) in node.removeFromParentNode()
-//    }
   }
   
   override func viewDidLoad() {
