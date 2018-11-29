@@ -113,34 +113,39 @@ public class PolylineGeometry {
       
       // Initialize first circle using vector from first to second vertex
       var firstCircle : [float3] = rotatedVertices(vertices[0], vertices[1])
-      for i in 1..<vertices.count {
-        let u = vertices[i-1]
-        let v = vertices[i]
+      for i in 1..<vertices.count-1 {
+        let u = vertices[i]
+        let v = vertices[i+1]
 
         // Interleave circle vertices to get cylinder vertices
         let secondCircle : [float3] = rotatedVertices(u, v)
         assert(firstCircle.count == secondCircle.count)
         let cylinderVertices : [float3] = zip(firstCircle, secondCircle).flatMap { [$0,$1] }
 
-        for vertex in firstCircle {
-          let node = self.pointNode(at: u + vertex,
-                                    radius: radius/3,
-                                    color: UIColor.red)
-          parent.addChildNode(node)
-        }
-        for vertex in secondCircle {
-          let node = self.pointNode(at: v + vertex,
-                                    radius: radius/3,
-                                    color: UIColor.blue)
-          parent.addChildNode(node)
-        }
+        NSLog("First circle: \(firstCircle)")
+        NSLog("Second circle: \(secondCircle)")
+        NSLog("Interleaved: \(cylinderVertices)")
+        
+//        for vertex in firstCircle[0...1] {
+//          let node = self.pointNode(at: u + vertex,
+//                                    radius: radius/3,
+//                                    color: UIColor.red)
+//          parent.addChildNode(node)
+//        }
+//        for vertex in secondCircle[0...1] {
+//          let node = self.pointNode(at: v + vertex,
+//                                    radius: radius/3,
+//                                    color: UIColor.blue)
+//          parent.addChildNode(node)
+//        }
         
         // Update firstCircle
         firstCircle = secondCircle
         
         // Construct a cylinder
         let source = SCNGeometrySource(vertices: cylinderVertices.map { SCNVector3($0) })
-        let element = SCNGeometryElement(indices: Array(0..<cylinderVertices.count),
+        let indices = (0...cylinderVertices.count-3).map { UInt8($0) }
+        let element = SCNGeometryElement(indices: indices,
                                          primitiveType: .triangleStrip)
         let geometry = SCNGeometry(sources: [source], elements: [element])
         geometry.firstMaterial?.isDoubleSided = true
@@ -150,17 +155,11 @@ public class PolylineGeometry {
         
         // Add to SCNNode
         let node = SCNNode(geometry: geometry)
-        node.simdPosition = u
+        node.simdPosition = u.midpoint(with: v)
         
         parent.addChildNode(node)
       }
       
-//      // Show vertex positions
-//      for vertex in rotatedVertices + [float3.zero] {
-//        node.addChildNode(self.pointNode(at: 0.002 * vertex,
-//                                         radius: radius/3,
-//                                         color: UIColor.white))
-//      }
       return parent
     }
   }

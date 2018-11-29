@@ -44,7 +44,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       drawPoint()
     case .ended:
       touched = false
-      drawLine()
+      //drawLine()
     default:
       break
     }
@@ -109,7 +109,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
               self?.lines.last?.add(vertex: currentPos)
 
-              let factory = PolylineGeometry().cylinderGenerator(radius: self!.lineRadius)
+              let factory = PolylineGeometry().cylinderGenerator(radius: self!.lineRadius * 0.5)
               let node = factory(previousPos, currentPos)
               self?.rootNode.addChildNode(node)
               self?.previous = currentPos
