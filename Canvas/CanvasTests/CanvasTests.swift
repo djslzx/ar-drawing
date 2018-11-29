@@ -64,3 +64,24 @@ class CanvasTests: XCTestCase {
   }
   
 }
+
+//      func test() -> SCNNode {
+//        func getNode(position : float3, color: UIColor) -> SCNNode{
+//          let geometry = SCNSphere(radius: radius)
+//          let node = SCNNode(geometry: geometry)
+//          node.simdPosition = position
+//          node.geometry?.firstMaterial?.diffuse.contents = color
+//          return node
+//        }
+//
+//        let u_node = getNode(position: u, color: UIColor.white)
+//        let w_node = getNode(position: u + 0.001 * w, color: UIColor.red)
+//        let v_node = getNode(position: u + 0.002 * v-u, color: UIColor.black)
+//
+//        let parent = SCNNode()
+//        parent.addChildNode(u_node)
+//        parent.addChildNode(w_node)
+//        parent.addChildNode(v_node)
+//
+//        return parent
+//      }

@@ -21,7 +21,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   @IBOutlet var sceneView: ARSCNView!
   
-  private let lineRadius : CGFloat = 0.0025
+  private let lineRadius : CGFloat = 0.001
   private let lineColor : UIColor = UIColor.white
   
   /** Model */
@@ -61,7 +61,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   }
 
   private func renderLines() {
-    let factory : (float3, float3) -> SCNNode = PolylineGeometry().generator(width: lineRadius)
+    let factory : (float3, float3) -> SCNNode = PolylineGeometry().cylinderGenerator(radius: lineRadius)
     for line in self.lines {
       let lineNode = SCNNode()
       for (u,v) in line.segments() {
@@ -81,12 +81,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if self?.touched ?? false, let cameraTransform = self?.cameraTransform()
         {
           let currentPos = cameraTransform.translation
-          if let previousPos = self?.previous, currentPos != previousPos {
-            let factory = PolylineGeometry().generator(width: self!.lineRadius)
-            let node = factory(previousPos, currentPos)
-            self?.sceneView.scene.rootNode.addChildNode(node)
+          if let previousPos = self?.previous {
+            
+            // Check that new points are far enough away to be worth drawing
+            if currentPos.distance(to: previousPos) > Float(self!.lineRadius)/2 {
+              //let factory = PolylineGeometry().cylinderGenerator(radius: self!.lineRadius)
+              let factory = PolylineGeometry().circleGenerator(radius: self!.lineRadius, segmentCount: 6)
+              let node = factory(previousPos, currentPos)
+              self?.sceneView.scene.rootNode.addChildNode(node)
+              self?.previous = currentPos
+            }
+          } else {
+            self?.previous = currentPos
           }
-          self?.previous = currentPos
           self?.drawPoint()
         } else {
           self?.previous = nil
@@ -100,12 +107,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
-  @IBAction func clear(_ sender: UIButton) {
-    NSLog("Trash pressed")
-    clear()
+  @IBAction func clearPressed() {
+    clearScene()
   }
   
-  private func clear() {
+  public func clearScene() {
     sceneView.scene = SCNScene()
   }
   

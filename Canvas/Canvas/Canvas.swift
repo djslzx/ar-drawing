@@ -71,40 +71,63 @@ public class PolylineGeometry {
     return (w, phi)
   }
   
-  public func generator(width: CGFloat) -> (float3, float3) -> SCNNode {
-    return { (u : float3, v : float3) -> SCNNode in
-      let cylinder = SCNCylinder(radius: width, height: CGFloat(u.distance(to: v)))
-      cylinder.heightSegmentCount = 1
+  public func circleGenerator(radius: CGFloat, segmentCount : Int) -> (float3, float3) -> SCNNode {
+
+    let range = 0..<segmentCount
+    let circleVertices : [float3] = range.map {
+      let theta  = Float($0)/Float(segmentCount) * 2 * Float.pi
+      return float3(x: cos(theta), y: 0, z: sin(theta))
+    }
+
+    return {
+      (u : float3, v : float3) in
 
       let (w, phi) = self.rotation(u, v)
+      let rotationTransform = simd_float4x4(simd_quatf(angle: phi, axis: w))
       
-      func test() -> SCNNode {
-        func getNode(position : float3, color: UIColor) -> SCNNode{
-          let geometry = SCNSphere(radius: width)
-          let node = SCNNode(geometry: geometry)
-          node.simdPosition = position
-          node.geometry?.firstMaterial?.diffuse.contents = color
-          return node
-        }
-        
-        let u_node = getNode(position: u, color: UIColor.white)
-        let w_node = getNode(position: u + 0.001 * w, color: UIColor.red)
-        let v_node = getNode(position: u + 0.002 * v-u, color: UIColor.black)
-        
-        let parent = SCNNode()
-        parent.addChildNode(u_node)
-        parent.addChildNode(w_node)
-        parent.addChildNode(v_node)
-        
-        return parent
+      let rotatedVertices : [float3] = circleVertices.map {
+        let rotated = float4($0, 1) * rotationTransform
+        return float3(rotated)
       }
-
-      // Rotating and translating by n
-      let node = SCNNode(geometry: cylinder)
-      node.simdPosition = u
-      node.simdLocalRotate(by: simd_quatf(angle: phi, axis: w))
-      //node.simdLocalTranslate(by: simd_float3(SCNVector3(v - u)))
       
+      let source = SCNGeometrySource(vertices: rotatedVertices.map { SCNVector3($0) })
+      let element = SCNGeometryElement(indices: Array(0..<rotatedVertices.count),
+                                       primitiveType: .triangleStrip)
+      let geometry = SCNGeometry(sources: [source], elements: [element])
+
+      let node =  SCNNode() //(geometry: geometry)
+      node.simdPosition = u
+//      let point = SCNNode(geometry: SCNSphere(radius: radius))
+//      point.geometry?.firstMaterial?.diffuse.contents = UIColor.red
+//      node.addChildNode(point)
+//
+//      for vertex in rotatedVertices {
+//        let point = SCNNode(geometry: SCNSphere(radius: radius/2))
+//        point.simdPosition = 0.002 * vertex
+//        node.addChildNode(point)
+//      }
+      
+//      let pointNode = SCNNode(geometry: SCNSphere(radius: radius))
+//      node.addChildNode(pointNode)
+      
+      return node
+    }
+  }
+  
+  public func cylinderGenerator(radius: CGFloat) -> (float3, float3) -> SCNNode {
+    return { (u : float3, v : float3) -> SCNNode in
+      let cylinder = SCNCylinder(radius: radius, height: CGFloat(u.distance(to: v)))
+      cylinder.heightSegmentCount = 1
+
+      // Get rotation axis and angle for the vector from u to v
+      let (w, phi) = self.rotation(u, v)
+      let theta = Float.pi - phi
+    
+      // Rotate cylinder by phi about w
+      let node = SCNNode(geometry: cylinder)
+      node.simdPosition = u //Translate node to position of src node
+      node.simdLocalRotate(by: simd_quatf(angle: theta, axis: w))
+
       return node
     }
   }

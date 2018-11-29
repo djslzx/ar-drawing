@@ -25,6 +25,15 @@
                                     <outletCollection property="gestureRecognizers" destination="rXy-Kr-ZXn" appends="YES" id="mQ9-Lw-IAY"/>
                                 </connections>
                             </arscnView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT">
+                                <rect key="frame" x="15" y="20" width="38" height="32"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="Clear"/>
+                                <connections>
+                                    <action selector="clear" destination="MiC-FE-mti" eventType="touchUpInside" id="0GI-HQ-fhc"/>
+                                    <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="iA7-fz-VV6"/>
+                                </connections>
+                            </button>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pnb-wa-pwq" customClass="ReticleView" customModule="AR_Pictionary" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -40,26 +49,17 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT">
-                                <rect key="frame" x="156.5" y="20" width="62" height="32"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <state key="normal" title="Clear"/>
-                                <connections>
-                                    <action selector="clear:" destination="BV1-FR-VrT" eventType="touchUpInside" id="rzC-1u-R6a"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="BrB-h1-WRS" secondAttribute="leading" id="4SJ-va-gtq"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="BrB-h1-WRS" secondAttribute="top" id="GLH-lR-POt"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
-                            <constraint firstItem="pfE-gP-WbT" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" id="T3G-QI-gfo"/>
+                            <constraint firstItem="pfE-gP-WbT" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" id="I4p-JY-dc9"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
-                            <constraint firstItem="pfE-gP-WbT" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="YxS-5c-yPd"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="drS-F6-K9V"/>
-                            <constraint firstItem="pfE-gP-WbT" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="ps8-Th-2Oa"/>
+                            <constraint firstItem="pfE-gP-WbT" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="hMe-LS-bny"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="slU-QE-bRL"/>
                         </constraints>
@@ -70,6 +70,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
+                <exit id="MiC-FE-mti" userLabel="Exit" sceneMemberID="exit"/>
                 <pongPressGestureRecognizer allowableMovement="0.0" minimumPressDuration="0.0" id="rXy-Kr-ZXn" userLabel="Press Recognizer">
                     <connections>
                         <action selector="pressed:" destination="BV1-FR-VrT" id="CEk-GF-oMk"/>

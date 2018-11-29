@@ -12,19 +12,15 @@ import SceneKit
 public extension float3 {
   
   public var length : Float {
-    return float3(0, 0, 0).distance(to: self)
+    return sqrtf(self.reduce(0) { $0 + powf($1, 2) })
   }
   
   public func distance(to dst : float3) -> Float {
-    return sqrt(pow(self.x - dst.x, 2) +
-      pow(self.y - dst.y, 2) +
-      pow(self.z - dst.z, 2))
+    return (dst - self).length
   }
   
   public func midpoint(with other : float3) -> float3 {
-    return float3((self.x + other.x)/2,
-                  (self.y + other.y)/2,
-                  (self.z + other.z)/2)
+    return (self + other)/2
   }
   
   func rotated(x : Float, y : Float, z : Float) -> float3 {
@@ -52,6 +48,10 @@ public extension float3 {
     ]
     return matrices.reduce(self, *)
   }
+  
+  public init(_ v : float4) {
+    self.init(x: v.x, y: v.y, z: v.z)
+  }
 }
 
 public extension float4 {
@@ -59,6 +59,14 @@ public extension float4 {
     let vector = float3(self.x, self.y, self.z)
     let rotated = vector.rotated(x: x, y: y, z: z)
     return float4(rotated.x, rotated.y, rotated.z, self.w)
+  }
+  
+  public var length : Float {
+    return sqrtf(self.reduce(0) { $0 + powf($1, 2) })
+  }
+  
+  public init(_ v : float3, _ i : Float) {
+    self.init(v.x, v.y, v.z, i)
   }
 }
 
