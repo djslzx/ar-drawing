@@ -3,6 +3,24 @@ An augmented reality drawing-guessing game
 
 David J. Lee
 
+## TODOs:
+- Polylines
+  - [x] SCNCylinder line drawing
+    - [x] Get cylinders to line up correctly
+    - NOTE: too pixellated --> move on to manual mesh specification
+  - [ ] Cylinder mesh line drawing (all points have corresponding circular interfaces; all cylinders are directly connected)
+    - [ ] mathematical model for getting vertices of circle faces
+    - [ ] use SCNGeometryElement and SCNGeometrySource to construct
+- Splines
+  - [ ] abstract implementation (Bezier)
+  - [ ] conversion from polylines to splines and back
+- Shared environment
+
+(Way down the line...)
+- Plane-drawing
+  - [ ] allow user to seed points and display as small SCNSpheres
+  - [ ] allow user to close a face path --> trigger plane generation
+
 ## Vision
 Players take turns drawing objects randomly selected from a sub-category (or 'theme') of words.  
 When it is a player's turn to draw, she uses her phone as a 3D brush, moving it around in space 
