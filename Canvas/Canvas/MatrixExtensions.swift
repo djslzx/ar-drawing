@@ -11,6 +11,8 @@ import SceneKit
 
 public extension float3 {
   
+  public static let zero = float3(0,0,0)
+  
   public var length : Float {
     return sqrtf(self.reduce(0) { $0 + powf($1, 2) })
   }

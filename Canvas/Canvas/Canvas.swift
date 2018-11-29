@@ -71,7 +71,15 @@ public class PolylineGeometry {
     return (w, phi)
   }
   
-  public func circleGenerator(radius: CGFloat, segmentCount : Int) -> (float3, float3) -> SCNNode {
+  public func pointNode(at center: float3, radius : CGFloat, color : UIColor) -> SCNNode {
+    let sphere = SCNSphere(radius: radius)
+    sphere.firstMaterial?.diffuse.contents = color
+    let node = SCNNode(geometry: sphere)
+    node.simdPosition = center
+    return node
+  }
+  
+  public func lineGenerator(radius: CGFloat, segmentCount : Int) -> [float3] -> SCNNode {
 
     let range = 0..<segmentCount
     let circleVertices : [float3] = range.map {
@@ -80,36 +88,38 @@ public class PolylineGeometry {
     }
 
     return {
-      (u : float3, v : float3) in
+      (vertices : [float3]) in
 
+      for i in 0...vertices.count-3 {
+        let a = vertices[i]
+        let b = vertices[i+1]
+        let c = vertices[i+2]
+        
+      }
+
+      // Rotate circleVertices to be perpendicular to vector from u to v
       let (w, phi) = self.rotation(u, v)
       let rotationTransform = simd_float4x4(simd_quatf(angle: phi, axis: w))
-      
       let rotatedVertices : [float3] = circleVertices.map {
         let rotated = float4($0, 1) * rotationTransform
         return float3(rotated)
       }
-      
+
+      // Construct SCNGeometry object
       let source = SCNGeometrySource(vertices: rotatedVertices.map { SCNVector3($0) })
       let element = SCNGeometryElement(indices: Array(0..<rotatedVertices.count),
                                        primitiveType: .triangleStrip)
       let geometry = SCNGeometry(sources: [source], elements: [element])
 
-      let node =  SCNNode() //(geometry: geometry)
+      let node =  SCNNode(geometry: geometry)
       node.simdPosition = u
-//      let point = SCNNode(geometry: SCNSphere(radius: radius))
-//      point.geometry?.firstMaterial?.diffuse.contents = UIColor.red
-//      node.addChildNode(point)
-//
-//      for vertex in rotatedVertices {
-//        let point = SCNNode(geometry: SCNSphere(radius: radius/2))
-//        point.simdPosition = 0.002 * vertex
-//        node.addChildNode(point)
-//      }
       
-//      let pointNode = SCNNode(geometry: SCNSphere(radius: radius))
-//      node.addChildNode(pointNode)
-      
+      // Show vertex positions
+      for vertex in rotatedVertices + [float3.zero] {
+        node.addChildNode(self.pointNode(at: 0.002 * vertex,
+                                         radius: radius/3,
+                                         color: UIColor.white))
+      }
       return node
     }
   }

@@ -86,7 +86,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             // Check that new points are far enough away to be worth drawing
             if currentPos.distance(to: previousPos) > Float(self!.lineRadius)/2 {
               //let factory = PolylineGeometry().cylinderGenerator(radius: self!.lineRadius)
-              let factory = PolylineGeometry().circleGenerator(radius: self!.lineRadius, segmentCount: 6)
+              let factory = PolylineGeometry().cylinderGenerator(radius: self!.lineRadius)
               let node = factory(previousPos, currentPos)
               self?.sceneView.scene.rootNode.addChildNode(node)
               self?.previous = currentPos

@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AR Pictionary/AR Pictionary/ViewController.swift"
-            timestampString = "565213816.050985"
+            timestampString = "565215770.533568"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "40"
@@ -58,12 +58,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Canvas/Canvas/Canvas.swift"
-            timestampString = "565213816.051272"
+            timestampString = "565215770.533862"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
-            landmarkName = "circleGenerator(radius:segmentCount:)"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
+            landmarkName = "lineGenerator(radius:segmentCount:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
