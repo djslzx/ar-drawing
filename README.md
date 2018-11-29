@@ -14,6 +14,7 @@ David J. Lee
 - Splines
   - [ ] abstract implementation (Bezier)
   - [ ] conversion from polylines to splines and back
+  - [ ] allow vector-drawing using Bezier in 3D
 - Shared environment
 
 (Way down the line...)
