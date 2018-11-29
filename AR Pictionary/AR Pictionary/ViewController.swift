@@ -25,7 +25,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   private let lineColor : UIColor = UIColor.white
   
   /** Model */
-  private let canvas = Canvas()
+  private var lines : [Polyline] = []
   
   private var touched : Bool = false
   
