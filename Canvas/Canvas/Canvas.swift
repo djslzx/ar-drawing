@@ -64,9 +64,9 @@ public class PolylineGeometry {
     let (x,y,z) = (n.x, n.y, n.z)
     
     // Rotating cylinder
-    let d = sqrt(pow(x, 2) + pow(y, 2))
-    let phi = atan(d/z)
-    let w = float3(y/d, -x/d, 0)
+    let d = sqrt(pow(x, 2) + pow(z, 2))
+    let phi = atan(d/y)
+    let w = float3(-z/d, 0, x/d)
     
     return (w, phi)
   }
@@ -103,12 +103,8 @@ public class PolylineGeometry {
       let node = SCNNode(geometry: cylinder)
       node.simdPosition = u
       node.simdLocalRotate(by: simd_quatf(angle: phi, axis: w))
-      node.simdLocalRotate(by: simd_quatf(angle: Float.pi/2, axis: v-u))
       //node.simdLocalTranslate(by: simd_float3(SCNVector3(v - u)))
       
-      let final = test()
-      final.addChildNode(node)
-      return final
       return node
     }
   }
