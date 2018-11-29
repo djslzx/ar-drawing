@@ -9,7 +9,7 @@ David J. Lee
     - [x] Get cylinders to line up correctly
     - NOTE: too pixellated --> move on to manual mesh specification
   - [ ] Cylinder mesh line drawing (all points have corresponding circular interfaces; all cylinders are directly connected)
-    - [ ] mathematical model for getting vertices of circle faces
+    - [x] mathematical model for getting vertices of circle faces
     - [ ] use SCNGeometryElement and SCNGeometrySource to construct
 - Splines
   - [ ] abstract implementation (Bezier)
