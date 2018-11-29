@@ -1,5 +1,5 @@
 //
-//  Matrix Extensions.swift
+//  MatrixExtensions.swift
 //  Canvas
 //
 //  Created by 21djl5 on 11/28/18.
@@ -9,10 +9,10 @@
 import Foundation
 import SceneKit
 
-extension float3 {
+public extension float3 {
   
-  public static func - (lhs : float3, rhs : float3) -> float3 {
-    return float3(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z)
+  public var length : Float {
+    return float3(0, 0, 0).distance(to: self)
   }
   
   public func distance(to dst : float3) -> Float {
@@ -26,22 +26,8 @@ extension float3 {
                   (self.y + other.y)/2,
                   (self.z + other.z)/2)
   }
-}
-
-extension simd_float4x4 {
-  func position() -> SCNVector3 {
-    return SCNVector3(columns.3.x, columns.3.y, columns.3.z)
-  }
-}
-
-extension SCNVector3 {
-  func distance(to dst : SCNVector3) -> Float {
-    return sqrt(pow(self.x - dst.x, 2) +
-      pow(self.y - dst.y, 2) +
-      pow(self.z - dst.z, 2))
-  }
   
-  func rotated(x : Float, y : Float, z : Float) -> SCNVector3 {
+  func rotated(x : Float, y : Float, z : Float) -> float3 {
     let matrices : [simd_float3x3] =
       [
         simd_float3x3(rows:
@@ -64,18 +50,20 @@ extension SCNVector3 {
           ]
         )
     ]
-    var result : float3 = float3(self)
-    for m in matrices {
-      result = m * result
-    }
-    return SCNVector3(result)
+    return matrices.reduce(self, *)
   }
 }
 
-extension SCNVector4 {
-  func rotated(x : Float, y : Float, z : Float) -> SCNVector4 {
-    let vector = SCNVector3(self.x, self.y, self.z)
+public extension float4 {
+  func rotated(x : Float, y : Float, z : Float) -> float4 {
+    let vector = float3(self.x, self.y, self.z)
     let rotated = vector.rotated(x: x, y: y, z: z)
-    return SCNVector4(rotated.x, rotated.y, rotated.z, self.w)
+    return float4(rotated.x, rotated.y, rotated.z, self.w)
+  }
+}
+
+public extension simd_float4x4 {
+  var translation : float3 {
+    return float3(columns.3.x, columns.3.y, columns.3.z)
   }
 }

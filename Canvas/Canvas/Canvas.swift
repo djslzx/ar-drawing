@@ -54,28 +54,59 @@ public class Polyline : CustomDebugStringConvertible {
 
 public class PolylineGeometry {
   
-  private var line : Polyline
-  
-  public init(vertices : [float3]) {
-    line = Polyline(vertices: vertices)
+  public init() {
+    // Make Swift compiler happy
   }
   
-  public convenience init() {
-    self.init(vertices: [])
-  }
-  
-  public func geometry(width: CGFloat) -> SCNNode {
-    let parent = SCNNode()
-    for (u, v) in line.segments() {
+  public func generator(width: CGFloat) -> (float3, float3) -> SCNNode {
+    return { (u : float3, v : float3) -> SCNNode in
       let cylinder = SCNCylinder(radius: width, height: CGFloat(u.distance(to: v)))
       cylinder.heightSegmentCount = 1
-      cylinder.radialSegmentCount = 6
+
+      // Vector from u to v
+      let n = v - u
+      let (x,y,z) = (n.x, n.y, n.z)
+
+      // Rotating cylinder
+      let d = sqrt(pow(x, 2) + pow(y,2))
+      let phi = atan(d/z)
+      let w = float3(y/d, -x/d, 0)
+
+      let printphi = ((phi / Float.pi * 180) + 360).truncatingRemainder(dividingBy: 360)
+      NSLog("phi: \(printphi)")
+      NSLog("w: \(w.length)")
       
+      func getNode(position : float3, color: UIColor) -> SCNNode{
+        let geometry = SCNSphere(radius: width)
+        let node = SCNNode(geometry: geometry)
+        node.simdPosition = position
+        node.geometry?.firstMaterial?.diffuse.contents = color
+        return node
+      }
+      
+//      let u_node = getNode(position: u, color: UIColor.white)
+//      let w_node = getNode(position: u + 0.001 * w, color: UIColor.red)
+//      let z_axis = getNode(position: u + 0.002 * float3(0,0,z), color: UIColor.green)
+//
+//      let parent = SCNNode()
+//      parent.addChildNode(u_node)
+//      parent.addChildNode(w_node)
+//      parent.addChildNode(z_axis)
+//
+//      return parent
+
+      // Rotating and translating by n
       let node = SCNNode(geometry: cylinder)
       node.simdPosition = u
       
+      let newnode = SCNNode(geometry: cylinder)
+      newnode.simdLocalRotate(by: simd_quatf(angle: phi, axis: w))
+      newnode.geometry?.firstMaterial?.diffuse.contents = UIColor.red
+      //node.simdLocalRotate(by: simd_quatf(angle: phi, axis: w))
+      node.simdLocalTranslate(by: simd_float3(SCNVector3(n)))
+      
+      return node
     }
-    return parent
   }
 }
 
@@ -88,21 +119,4 @@ public class PolylineGeometry {
 //
 //}
 
-extension float3 {
-  
-  public static func - (lhs : float3, rhs : float3) -> float3 {
-    return float3(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z)
-  }
-  
-  public func distance(to dst : float3) -> Float {
-    return sqrt(pow(self.x - dst.x, 2) +
-      pow(self.y - dst.y, 2) +
-      pow(self.z - dst.z, 2))
-  }
-  
-  public func midpoint(with other : float3) -> float3 {
-    return float3((self.x + other.x)/2,
-                  (self.y + other.y)/2,
-                  (self.z + other.z)/2)
-  }
-}
+

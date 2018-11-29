@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		730ACFA621AF8D41005C2F59 /* MatrixExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730ACFA521AF8D41005C2F59 /* MatrixExtensions.swift */; };
 		73BF4F2421A7764B0013CFCD /* Canvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73BF4F1A21A7764B0013CFCD /* Canvas.framework */; };
 		73BF4F2921A7764B0013CFCD /* CanvasTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73BF4F2821A7764B0013CFCD /* CanvasTests.swift */; };
 		73BF4F2B21A7764B0013CFCD /* Canvas.h in Headers */ = {isa = PBXBuildFile; fileRef = 73BF4F1D21A7764B0013CFCD /* Canvas.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -24,6 +25,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		730ACFA521AF8D41005C2F59 /* MatrixExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixExtensions.swift; sourceTree = "<group>"; };
 		73BF4F1A21A7764B0013CFCD /* Canvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Canvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		73BF4F1D21A7764B0013CFCD /* Canvas.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
 		73BF4F1E21A7764B0013CFCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				73BF4F3421A7765A0013CFCD /* Canvas.swift */,
+				730ACFA521AF8D41005C2F59 /* MatrixExtensions.swift */,
 				73BF4F1E21A7764B0013CFCD /* Info.plist */,
 				73BF4F1D21A7764B0013CFCD /* Canvas.h */,
 			);
@@ -198,6 +201,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				730ACFA621AF8D41005C2F59 /* MatrixExtensions.swift in Sources */,
 				73BF4F3521A7765A0013CFCD /* Canvas.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
