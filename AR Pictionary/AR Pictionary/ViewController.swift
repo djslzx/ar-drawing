@@ -21,7 +21,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   @IBOutlet var sceneView: ARSCNView!
   
-  private let lineRadius : CGFloat = 0.005
+  private let lineRadius : CGFloat = 0.0025
   private let lineColor : UIColor = UIColor.white
   
   /** Model */
@@ -60,47 +60,42 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
 
-  private var lastPoint : SCNVector3?
-  
   private func renderLines() {
-    for curve in canvas.getCurves() {
-      let source : SCNGeometrySource = SCNGeometrySource(vertices: curve.map { SCNVector3($0.x, $0.y, $0.z) })
+    let factory : (float3, float3) -> SCNNode = PolylineGeometry().generator(width: lineRadius)
+    for line in self.lines {
+      let lineNode = SCNNode()
+      for (u,v) in line.segments() {
+        let node = factory(u,v)
+        lineNode.addChildNode(node)
+      }
+      self.sceneView.scene.rootNode.addChildNode(lineNode)
     }
   }
+  
+  private var previous : float3?
   
   private func drawPoint() {
     DispatchQueue.global().async {
       [weak self] in
       DispatchQueue.main.async {
-        if let this = self, this.touched, let cameraTransform = this.cameraTransform()
+        if self?.touched ?? false, let cameraTransform = self?.cameraTransform()
         {
-          let currentPos = cameraTransform.position()
-          if let previousPos = this.lastPoint {
-            // Make cylinder
-            let length : CGFloat = CGFloat(previousPos.distance(to: currentPos))
-            let cylinderGeometry = SCNCylinder(radius: this.lineRadius,
-                                               height: length)
-            cylinderGeometry.radialSegmentCount = 5
-            let cylinderNode = SCNNode(geometry: cylinderGeometry)
-            cylinderNode.simdPosition = float3(cameraTransform.position())
-            cylinderNode.orientation = cylinderNode.orientation.rotated(x: 0, y: Float.pi/2, z: 0)
-            
-            // Add to scene
-            this.sceneView.scene.rootNode.addChildNode(cylinderNode)
+          let currentPos = cameraTransform.translation
+          if let previousPos = self?.previous, currentPos != previousPos {
+            let factory = PolylineGeometry().generator(width: self!.lineRadius)
+            let node = factory(previousPos, currentPos)
+            self?.sceneView.scene.rootNode.addChildNode(node)
           }
-          this.lastPoint = currentPos
-          this.drawPoint()
+          self?.previous = currentPos
+          self?.drawPoint()
         } else {
-          self?.lastPoint = nil
+          self?.previous = nil
         }
         
-        //          let pointGeometry = SCNSphere(radius: this.lineRadius)
-        //          let pointNode = SCNNode(geometry: pointGeometry)
-        //          pointGeometry.firstMaterial?.diffuse.contents = this.lineColor
-        
-        // Translate point to position in front of camera
-        // pointNode.simdTransform = cameraTransform
-        // this.sceneView.scene.rootNode.addChildNode(pointNode)
+//        let pointGeometry = SCNSphere(radius: self!.lineRadius)
+//        let pointNode = SCNNode(geometry: pointGeometry)
+//        pointNode.simdPosition = self!.cameraTransform()!.translation
+//        self?.sceneView.scene.rootNode.addChildNode(pointNode)
       }
     }
   }
@@ -165,57 +160,5 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   func sessionInterruptionEnded(_ session: ARSession) {
     // Reset tracking and/or remove existing anchors if consistent tracking is required
     
-  }
-}
-
-extension simd_float4x4 {
-  func position() -> SCNVector3 {
-    return SCNVector3(columns.3.x, columns.3.y, columns.3.z)
-  }
-}
-
-extension SCNVector3 {
-  func distance(to dst : SCNVector3) -> Float {
-    return sqrt(pow(self.x - dst.x, 2) +
-      pow(self.y - dst.y, 2) +
-      pow(self.z - dst.z, 2))
-  }
-  
-  func rotated(x : Float, y : Float, z : Float) -> SCNVector3 {
-    let matrices : [simd_float3x3] =
-      [
-        simd_float3x3(rows:
-          [
-            float3([1, 0 , 0]),
-            float3([0, cos(x), -sin(x)]),
-            float3([0, sin(x), cos(x)])
-          ]),
-        simd_float3x3(rows:
-          [
-            float3([cos(y), 0, sin(y)]),
-            float3([0, 1, 0]),
-            float3([-sin(y), 0, cos(y)])
-          ]),
-        simd_float3x3(rows:
-          [
-            float3([cos(z), -sin(z), 0]),
-            float3([sin(z), cos(z), 0]),
-            float3([0, 0, 1])
-          ]
-        )
-    ]
-    var result : float3 = float3(self)
-    for m in matrices {
-      result = m * result
-    }
-    return SCNVector3(result)
-  }
-}
-
-extension SCNVector4 {
-  func rotated(x : Float, y : Float, z : Float) -> SCNVector4 {
-    let vector = SCNVector3(self.x, self.y, self.z)
-    let rotated = vector.rotated(x: x, y: y, z: z)
-    return SCNVector4(rotated.x, rotated.y, rotated.z, self.w)
   }
 }
