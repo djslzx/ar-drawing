@@ -58,53 +58,57 @@ public class PolylineGeometry {
     // Make Swift compiler happy
   }
   
+  private func rotation(_ u : float3, _ v : float3) -> (axis : float3, angle : Float) {
+    // Vector from u to v
+    let n = v - u
+    let (x,y,z) = (n.x, n.y, n.z)
+    
+    // Rotating cylinder
+    let d = sqrt(pow(x, 2) + pow(y, 2))
+    let phi = atan(d/z)
+    let w = float3(y/d, -x/d, 0)
+    
+    return (w, phi)
+  }
+  
   public func generator(width: CGFloat) -> (float3, float3) -> SCNNode {
     return { (u : float3, v : float3) -> SCNNode in
       let cylinder = SCNCylinder(radius: width, height: CGFloat(u.distance(to: v)))
       cylinder.heightSegmentCount = 1
 
-      // Vector from u to v
-      let n = v - u
-      let (x,y,z) = (n.x, n.y, n.z)
-
-      // Rotating cylinder
-      let d = sqrt(pow(x, 2) + pow(y,2))
-      let phi = atan(d/z)
-      let w = float3(y/d, -x/d, 0)
-
-      let printphi = ((phi / Float.pi * 180) + 360).truncatingRemainder(dividingBy: 360)
-      NSLog("phi: \(printphi)")
-      NSLog("w: \(w.length)")
+      let (w, phi) = self.rotation(u, v)
       
-      func getNode(position : float3, color: UIColor) -> SCNNode{
-        let geometry = SCNSphere(radius: width)
-        let node = SCNNode(geometry: geometry)
-        node.simdPosition = position
-        node.geometry?.firstMaterial?.diffuse.contents = color
-        return node
+      func test() -> SCNNode {
+        func getNode(position : float3, color: UIColor) -> SCNNode{
+          let geometry = SCNSphere(radius: width)
+          let node = SCNNode(geometry: geometry)
+          node.simdPosition = position
+          node.geometry?.firstMaterial?.diffuse.contents = color
+          return node
+        }
+        
+        let u_node = getNode(position: u, color: UIColor.white)
+        let w_node = getNode(position: u + 0.001 * w, color: UIColor.red)
+        let v_node = getNode(position: u + 0.002 * v-u, color: UIColor.black)
+        
+        let parent = SCNNode()
+        parent.addChildNode(u_node)
+        parent.addChildNode(w_node)
+        parent.addChildNode(v_node)
+        
+        return parent
       }
-      
-//      let u_node = getNode(position: u, color: UIColor.white)
-//      let w_node = getNode(position: u + 0.001 * w, color: UIColor.red)
-//      let z_axis = getNode(position: u + 0.002 * float3(0,0,z), color: UIColor.green)
-//
-//      let parent = SCNNode()
-//      parent.addChildNode(u_node)
-//      parent.addChildNode(w_node)
-//      parent.addChildNode(z_axis)
-//
-//      return parent
 
       // Rotating and translating by n
       let node = SCNNode(geometry: cylinder)
       node.simdPosition = u
+      node.simdLocalRotate(by: simd_quatf(angle: phi, axis: w))
+      node.simdLocalRotate(by: simd_quatf(angle: Float.pi/2, axis: v-u))
+      //node.simdLocalTranslate(by: simd_float3(SCNVector3(v - u)))
       
-      let newnode = SCNNode(geometry: cylinder)
-      newnode.simdLocalRotate(by: simd_quatf(angle: phi, axis: w))
-      newnode.geometry?.firstMaterial?.diffuse.contents = UIColor.red
-      //node.simdLocalRotate(by: simd_quatf(angle: phi, axis: w))
-      node.simdLocalTranslate(by: simd_float3(SCNVector3(n)))
-      
+      let final = test()
+      final.addChildNode(node)
+      return final
       return node
     }
   }
