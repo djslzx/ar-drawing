@@ -54,7 +54,7 @@ public class Polyline : CustomDebugStringConvertible {
   
 }
 
-public class PolylineGeometry {
+public class Geometry {
   
   private static func rotation(_ u : float3, _ v : float3) -> (axis : float3, angle : Float) {
     // Vector from u to v
@@ -75,30 +75,6 @@ public class PolylineGeometry {
     let node = SCNNode(geometry: sphere)
     node.simdPosition = center
     return node
-  }
-  
-  public static func reticleNode(at center: float3, diameter : Float, color : UIColor) -> SCNNode {
-    let template : [(u : float3, v : float3)] = [
-      (float3(1, 0, 0), float3(-1, 0, 0)),
-      (float3(0, 1, 0), float3(0, -1, 0)),
-      (float3(0, 0, 1), float3(0, 0, -1))
-    ]
-    let lines = template.map {
-      return ($0.u * diameter, $0.v * diameter)
-    }
-
-    let parent = SCNNode()
-    for (start, end) in lines {
-      let source = SCNGeometrySource(vertices: [start, end].map { SCNVector3($0) })
-      let element = SCNGeometryElement(indices: [0,1].map { UInt8($0) },
-                                       primitiveType: .line)
-      let lineGeometry = SCNGeometry(sources: [source], elements: [element])
-      lineGeometry.firstMaterial?.diffuse.contents = color
-      let node = SCNNode(geometry: lineGeometry)
-      parent.addChildNode(node)
-    }
-    parent.simdPosition = center
-    return parent
   }
   
   public static func lineGenerator(radius: CGFloat, segmentCount : Int) -> ([float3]) -> SCNNode {
