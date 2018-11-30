@@ -34,12 +34,6 @@ Users select a brush stroke and move their phones around in 3D space to draw 3D 
 The resulting strokes are suspended in 3D space at a fixed location determined at the time of drawing,
 although the world space may be translated if the user desires.
 
-~~Players take turns drawing objects randomly selected from a sub-category (or 'theme') of words.  
-When it is a player's turn to draw, she uses her phone as a 3D brush, moving it around in space 
-to draw a 3D image.  The other players view this 3D image from their respective phones as an 
-object fixed in 3D space (an overlay on their camera feeds), and must attempt to correctly 
-identify the drawn object within a time limit.~~
-
 ### Base Version
 The user can draw smooth lines in 3D space, adjusting simple characteristics like 
 - [ ] Color
