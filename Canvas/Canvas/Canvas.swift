@@ -77,7 +77,7 @@ public class Geometry {
     return node
   }
   
-  public static func lineGenerator(radius: CGFloat, segmentCount : Int) -> ([float3]) -> SCNNode {
+  public static func tubeLineGenerator(radius: CGFloat, segmentCount : Int) -> ([float3]) -> SCNNode {
 
     let range = 0..<segmentCount
     let circleVertices : [float3] = range.map {
@@ -87,7 +87,7 @@ public class Geometry {
 
     // Rotate circleVertices to be perpendicular to vector from u to v
     func rotatedVertices(_ u : float3, _ v : float3) -> [float3] {
-      let (w,phi) = self.rotation(u, v)
+      let (w,phi) = rotation(u, v)
       let rotationTransform = simd_float4x4(simd_quatf(angle: phi, axis: w))
       return circleVertices.map {
         let rotated = float4($0, 1) * rotationTransform
@@ -106,41 +106,24 @@ public class Geometry {
       let parent = SCNNode()
 
       // Construct a set of tubes (uncapped cylinders) and add caps at end
-      
-      // Initialize first circle using vector from first to second vertex
-      var firstCircle : [float3] = rotatedVertices(vertices[0], vertices[1])
+      //var firstCircle : [float3] = rotatedVertices(vertices[0], vertices[1])
       for i in 1..<vertices.count-1 {
-        let u = vertices[i]
-        let v = vertices[i+1]
+        let u = vertices[i-1]
+        let v = vertices[i]
+        let w = vertices[i+1]
 
+        let firstCircle : [float3] = rotatedVertices(u, v)
+        let secondCircle : [float3] = rotatedVertices(v, w).map {
+          $0 + (v - u)
+        }
+        
         // Interleave circle vertices to get cylinder vertices
-        let secondCircle : [float3] = rotatedVertices(u, v)
-        assert(firstCircle.count == secondCircle.count)
-        let cylinderVertices : [float3] = zip(firstCircle, secondCircle).flatMap { [$0,$1] }
-
-        NSLog("First circle: \(firstCircle)")
-        NSLog("Second circle: \(secondCircle)")
-        NSLog("Interleaved: \(cylinderVertices)")
-        
-//        for vertex in firstCircle[0...1] {
-//          let node = self.pointNode(at: u + vertex,
-//                                    radius: radius/3,
-//                                    color: UIColor.red)
-//          parent.addChildNode(node)
-//        }
-//        for vertex in secondCircle[0...1] {
-//          let node = self.pointNode(at: v + vertex,
-//                                    radius: radius/3,
-//                                    color: UIColor.blue)
-//          parent.addChildNode(node)
-//        }
-        
-        // Update firstCircle
-        firstCircle = secondCircle
+        let interleaved : [float3] = zip(firstCircle + Array(firstCircle[0...1]),
+                                         secondCircle + Array(secondCircle[0...1])).flatMap { [$0,$1] }
         
         // Construct a cylinder
-        let source = SCNGeometrySource(vertices: cylinderVertices.map { SCNVector3($0) })
-        let indices = (0...cylinderVertices.count-3).map { UInt8($0) }
+        let source = SCNGeometrySource(vertices: interleaved.map { SCNVector3($0) })
+        let indices = (0...interleaved.count-3).map { UInt8($0) }
         let element = SCNGeometryElement(indices: indices,
                                          primitiveType: .triangleStrip)
         let geometry = SCNGeometry(sources: [source], elements: [element])
@@ -151,11 +134,9 @@ public class Geometry {
         
         // Add to SCNNode
         let node = SCNNode(geometry: geometry)
-        node.simdPosition = u.midpoint(with: v)
-        
+        node.simdPosition = u
         parent.addChildNode(node)
       }
-      
       return parent
     }
   }

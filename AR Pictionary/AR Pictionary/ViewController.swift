@@ -44,7 +44,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       drawPoint()
     case .ended:
       touched = false
-    //drawLine()
+      drawLine()
     default:
       break
     }
@@ -67,21 +67,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
-  private func renderLines() {
-    let factory : (float3, float3) -> SCNNode = Geometry.cylinderGenerator(radius: lineRadius)
-    for line in self.lines {
-      let lineNode = SCNNode()
-      for (u,v) in line.segments() {
-        let node = factory(u,v)
-        lineNode.addChildNode(node)
-      }
-      self.rootNode.addChildNode(lineNode)
-    }
-  }
-  
   private func drawLine() {
-    let factory = Geometry.lineGenerator(radius: lineRadius,
-                                                 segmentCount: lineDetail)
+    let factory = Geometry.tubeLineGenerator(radius: lineRadius, segmentCount: lineDetail)
     if let line = lines.last {
       let lineNode = factory(line.vertices)
       self.rootNode.addChildNode(lineNode)
@@ -114,15 +101,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if currentPos.distance(to: previousPos) > Float(self!.lineRadius)/2 {
           self?.lines.last?.add(vertex: currentPos)
           
-          let reticle = Geometry.reticleNode(at: currentPos,
-                                             diameter: self!.lineRadius * 4,
-                                             lineThickness: self!.lineRadius/10,
-                                             color: UIColor.red)
-          self?.rootNode.addChildNode(reticle)
-          
-//          let factory = Geometry.cylinderGenerator(radius: self!.lineRadius * 0.5)
-//          let node = factory(previousPos, currentPos)
-//          self?.rootNode.addChildNode(node)
+          let factory = Geometry.cylinderGenerator(radius: self!.lineRadius * 0.5)
+          let node = factory(previousPos, currentPos)
+          self?.rootNode.addChildNode(node)
           self?.previous = currentPos
         }
 
