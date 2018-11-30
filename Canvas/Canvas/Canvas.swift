@@ -56,11 +56,7 @@ public class Polyline : CustomDebugStringConvertible {
 
 public class PolylineGeometry {
   
-  public init() {
-    // Make Swift compiler happy
-  }
-  
-  private func rotation(_ u : float3, _ v : float3) -> (axis : float3, angle : Float) {
+  private static func rotation(_ u : float3, _ v : float3) -> (axis : float3, angle : Float) {
     // Vector from u to v
     let n = v - u
     let (x,y,z) = (n.x, n.y, n.z)
@@ -73,7 +69,7 @@ public class PolylineGeometry {
     return (w, phi)
   }
   
-  private func pointNode(at center: float3, radius : CGFloat, color : UIColor) -> SCNNode {
+  private static func pointNode(at center: float3, radius : CGFloat, color : UIColor) -> SCNNode {
     let sphere = SCNSphere(radius: radius)
     sphere.firstMaterial?.diffuse.contents = color
     let node = SCNNode(geometry: sphere)
@@ -81,7 +77,31 @@ public class PolylineGeometry {
     return node
   }
   
-  public func lineGenerator(radius: CGFloat, segmentCount : Int) -> ([float3]) -> SCNNode {
+  public static func reticleNode(at center: float3, diameter : Float, color : UIColor) -> SCNNode {
+    let template : [(u : float3, v : float3)] = [
+      (float3(1, 0, 0), float3(-1, 0, 0)),
+      (float3(0, 1, 0), float3(0, -1, 0)),
+      (float3(0, 0, 1), float3(0, 0, -1))
+    ]
+    let lines = template.map {
+      return ($0.u * diameter, $0.v * diameter)
+    }
+
+    let parent = SCNNode()
+    for (start, end) in lines {
+      let source = SCNGeometrySource(vertices: [start, end].map { SCNVector3($0) })
+      let element = SCNGeometryElement(indices: [0,1].map { UInt8($0) },
+                                       primitiveType: .line)
+      let lineGeometry = SCNGeometry(sources: [source], elements: [element])
+      lineGeometry.firstMaterial?.diffuse.contents = color
+      let node = SCNNode(geometry: lineGeometry)
+      parent.addChildNode(node)
+    }
+    parent.simdPosition = center
+    return parent
+  }
+  
+  public static func lineGenerator(radius: CGFloat, segmentCount : Int) -> ([float3]) -> SCNNode {
 
     let range = 0..<segmentCount
     let circleVertices : [float3] = range.map {
@@ -164,7 +184,7 @@ public class PolylineGeometry {
     }
   }
   
-  public func cylinderGenerator(radius: CGFloat) -> (float3, float3) -> SCNNode {
+  public static func cylinderGenerator(radius: CGFloat) -> (float3, float3) -> SCNNode {
     return { (u : float3, v : float3) -> SCNNode in
       let cylinder = SCNCylinder(radius: radius, height: CGFloat(u.distance(to: v)))
       cylinder.heightSegmentCount = 1

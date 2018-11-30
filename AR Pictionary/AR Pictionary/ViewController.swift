@@ -39,12 +39,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     case .began:
       touched = true
       lines.append(Polyline())
+      setupReticle()
       fallthrough
     case .changed:
       drawPoint()
     case .ended:
       touched = false
-      //drawLine()
+    //drawLine()
     default:
       break
     }
@@ -55,7 +56,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       [
         float4([1, 0, 0, 0.0025]),
         float4([0, 1, 0, 0]),
-        float4([0, 0, 1, -0.1]),
+        float4([0, 0, 1, -0.06]),
         float4([0, 0, 0, 1])
       ])
   
@@ -66,9 +67,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       return nil
     }
   }
-
+  
   private func renderLines() {
-    let factory : (float3, float3) -> SCNNode = PolylineGeometry().cylinderGenerator(radius: lineRadius)
+    let factory : (float3, float3) -> SCNNode = PolylineGeometry.cylinderGenerator(radius: lineRadius)
     for line in self.lines {
       let lineNode = SCNNode()
       for (u,v) in line.segments() {
@@ -80,8 +81,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   }
   
   private func drawLine() {
-    let factory = PolylineGeometry().lineGenerator(radius: lineRadius,
-                                                   segmentCount: lineDetail)
+    let factory = PolylineGeometry.lineGenerator(radius: lineRadius,
+                                                 segmentCount: lineDetail)
     if let line = lines.last {
       let lineNode = factory(line.vertices)
       self.rootNode.addChildNode(lineNode)
@@ -106,10 +107,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             // Check that new points are far enough away to be worth drawing
             if currentPos.distance(to: previousPos) > Float(self!.lineRadius)/2 {
-
+              
               self?.lines.last?.add(vertex: currentPos)
-
-              let factory = PolylineGeometry().cylinderGenerator(radius: self!.lineRadius * 0.5)
+              
+              let factory = PolylineGeometry.cylinderGenerator(radius: self!.lineRadius * 0.5)
               let node = factory(previousPos, currentPos)
               self?.rootNode.addChildNode(node)
               self?.previous = currentPos
@@ -122,10 +123,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
           self?.previous = nil
         }
         
-//        let pointGeometry = SCNSphere(radius: self!.lineRadius)
-//        let pointNode = SCNNode(geometry: pointGeometry)
-//        pointNode.simdPosition = self!.cameraTransform()!.translation
-//        self?.sceneView.scene.rootNode.addChildNode(pointNode)
+        //        let pointGeometry = SCNSphere(radius: self!.lineRadius)
+        //        let pointNode = SCNNode(geometry: pointGeometry)
+        //        pointNode.simdPosition = self!.cameraTransform()!.translation
+        //        self?.sceneView.scene.rootNode.addChildNode(pointNode)
       }
     }
   }
@@ -149,6 +150,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     sceneView.showsStatistics = true
   }
   
+  private func setupReticle() {
+    if let currentPos = self.currentPos {
+      let reticleNode = PolylineGeometry.reticleNode(at: currentPos,
+                                                     diameter: Float(lineRadius),
+                                                     color: UIColor.lightGray)
+      rootNode.addChildNode(reticleNode)
+      //    sceneView.pointOfView?.addChildNode(reticleNode)
+    }
+  }
+  
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
@@ -157,6 +168,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // Run the view's session
     sceneView.session.run(configuration)
+    
+    //setupReticle()
   }
   
   override func viewWillDisappear(_ animated: Bool) {
