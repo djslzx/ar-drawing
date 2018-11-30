@@ -7,11 +7,12 @@ David J. Lee
 - Polylines
   - [x] SCNCylinder line drawing
     - [x] Get cylinders to line up correctly
-    - NOTE: too pixellated --> move on to manual mesh specification
-  - [ ] Cylinder mesh line drawing (all points have corresponding circular interfaces; all cylinders are directly connected)
+    - ~~NOTE: too pixellated --> move on to manual mesh specification~~ No longer pixellated, issue fixed
+  - [x] Cylinder mesh line drawing (all points have corresponding circular interfaces; all cylinders are directly connected)
     - [x] mathematical model for getting vertices of circle faces
     - [x] use SCNGeometryElement and SCNGeometrySource to construct
-    - [ ] get everything working
+    - [x] get everything working
+    - NOTE: not very good at handling sharp turns
 - Splines
   - [ ] abstract implementation (Bezier)
   - [ ] conversion from polylines to splines and back
