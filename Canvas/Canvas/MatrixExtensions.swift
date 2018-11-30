@@ -5,6 +5,8 @@
 //  Created by 21djl5 on 11/28/18.
 //  Copyright © 2018 davidjlee. All rights reserved.
 //
+//  A collection of extensions to a few matrix operation classes.
+//
 
 import Foundation
 import SceneKit
@@ -57,10 +59,9 @@ public extension float3 {
 }
 
 public extension float4 {
-  func rotated(x : Float, y : Float, z : Float) -> float4 {
-    let vector = float3(self.x, self.y, self.z)
-    let rotated = vector.rotated(x: x, y: y, z: z)
-    return float4(rotated.x, rotated.y, rotated.z, self.w)
+  public func rotated(x : Float, y : Float, z : Float) -> float4 {
+    let rotated = float3(self).rotated(x: x, y: y, z: z)
+    return float4(rotated, self.w)
   }
   
   public var length : Float {
@@ -73,7 +74,7 @@ public extension float4 {
 }
 
 public extension simd_float4x4 {
-  var translation : float3 {
+  public var translation : float3 {
     return float3(columns.3.x, columns.3.y, columns.3.z)
   }
 }

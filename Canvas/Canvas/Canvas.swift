@@ -73,7 +73,7 @@ public class PolylineGeometry {
     return (w, phi)
   }
   
-  public func pointNode(at center: float3, radius : CGFloat, color : UIColor) -> SCNNode {
+  private func pointNode(at center: float3, radius : CGFloat, color : UIColor) -> SCNNode {
     let sphere = SCNSphere(radius: radius)
     sphere.firstMaterial?.diffuse.contents = color
     let node = SCNNode(geometry: sphere)
@@ -183,13 +183,66 @@ public class PolylineGeometry {
   }
 }
 
-//public class Spline : CustomDebugStringConvertible {
-//
-//  private var vertices : [float3]
-//
-//  public var debugDescription: String
-//
-//
-//}
+public class Spline {
+  // Using cubic Bezier curves
+  
+  /*
+   P(t) = (1-t)³ P1
+   + 3t(1-t)² P2
+   + 3t²(1-t) P3
+   + t³ P4
+   */
+  
+  private let generator : (Float) -> float3
+  public let minIndex : Float = 0
+  public let maxIndex : Float
+  
+  private static let bernstein = simd_float4x4(rows:
+    [
+      float4(1, -3, 3, -1),
+      float4(0,3,-6,3),
+      float4(0, 0, 3, -3),
+      float4(0, 0, 0, 1)
+    ])
+  
+  public init(vertices: [float3]) {
+    maxIndex = Float(vertices.count-1)
+    
+    func basis(t : Float) -> float4 {
+      return float4(1, t, powf(t, 2), powf(t, 3))
+    }
+
+    generator = { (t : Float) -> float3 in
+      // Can't use instance variables here bc in init
+      assert(0 <= t && t <= Float(vertices.count - 1))
+      
+      // Int : (Float) -> float3
+      var subgenerators : [(Float) -> float3] = []
+      for i in stride(from: 0, to: vertices.count, by: 4) {
+        let geometryMatrix = simd_float4x3(vertices[i],
+                                           vertices[i+1],
+                                           vertices[i+2],
+                                           vertices[i+3])
+        subgenerators.append {
+          return geometryMatrix * Spline.bernstein * basis(t: $0)
+        }
+      }
+      
+      // Deal with remaining; between 0 and 3 leftover points
+      if t > Float(vertices.count - (vertices.count % 4)) {
+        return vertices[Int(t)]
+      }
+      
+      // Package t and feed into corresponding subgenerator
+      // Parametrization: t = 0 at first node, t = n-1 at node n
+      return subgenerators[Int(t/4)](t.remainder(dividingBy: 1))
+    }
+  }
+  
+  public func eval(at t: Float) -> float3 {
+    return generator(t)
+  }
+
+}
 
 
