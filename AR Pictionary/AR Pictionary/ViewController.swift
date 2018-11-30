@@ -131,11 +131,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
+  private var inMiddleOfClearing : Bool = false
+  
   @IBAction func clearPressed() {
-    clear()
+    // Only clear if program isn't already in the middle of clearing
+    // and there are lines to be cleared
+    if !inMiddleOfClearing, lines.count != 0 {
+      DispatchQueue.global().async {
+        [weak self] in
+        self?.inMiddleOfClearing = true
+        self?.clear()
+        self?.inMiddleOfClearing = false
+      }
+    }
   }
   
   public func clear() {
+    NSLog("Clearing")
+    sleep(5)
+    NSLog("Done clearing")
     sceneView.scene = SCNScene()
     lines = []
   }
