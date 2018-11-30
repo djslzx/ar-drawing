@@ -44,16 +44,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       drawPoint()
     case .ended:
       touched = false
-      drawLine()
     default:
       break
     }
   }
   
+  // Calibrate camera transform with center reticle
   private let translation : matrix_float4x4 =
     matrix_float4x4(rows:
       [
-        float4([1, 0, 0, 0.0025]),
+        float4([1, 0, 0, 0.0025 * 0.6]),
         float4([0, 1, 0, 0]),
         float4([0, 0, 1, -0.06]),
         float4([0, 0, 0, 1])

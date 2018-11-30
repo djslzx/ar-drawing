@@ -127,7 +127,7 @@ public class Geometry {
         let element = SCNGeometryElement(indices: indices,
                                          primitiveType: .triangleStrip)
         let geometry = SCNGeometry(sources: [source], elements: [element])
-        geometry.firstMaterial?.isDoubleSided = true
+        //geometry.firstMaterial?.isDoubleSided = true
 
         // FOR TESTING: set line color red
         geometry.firstMaterial?.diffuse.contents = UIColor.red
@@ -158,6 +158,62 @@ public class Geometry {
       return node
     }
   }
+  
+  // Rotate face to be perpendicular to vector v
+  private static func rotatedFace(face : [float3], _ v : float3) -> [float3] {
+    let (w,phi) = rotation(float3(), v)
+    let rotationTransform = simd_float4x4(simd_quatf(angle: phi, axis: w))
+    return face.map {
+      let rotated = float4($0, 1) * rotationTransform
+      return float3(rotated)
+    }
+  }
+  
+  public static func rectangleBrushGenerator(width: CGFloat,
+                                             height: CGFloat,
+                                             color: UIColor) -> (float3, float3) -> SCNNode {
+    let w = Float(width), h = Float(height)
+    let wideBrush : [float3] = [
+      float3(-w, 0, -h),
+      float3(w, 0, -h),
+      float3(-w, 0, h),
+      float3(w, 0, h)
+    ]
+    return faceTubeGenerator(face: wideBrush, color: color)
+  }
+  
+  /**
+   - Parameter face: the x-z plane version of the face to be used in each prism
+   */
+  private static func faceTubeGenerator(face : [float3], color : UIColor) -> (float3, float3) -> SCNNode {
+    return {
+      (u: float3, v: float3) -> SCNNode in
+      
+      /** TODO: Use SCNShape */
+      //let geometry = SCNShape
+
+      let firstFace : [float3] = rotatedFace(face: face, v - u)
+      let secondFace : [float3] = rotatedFace(face: face, v - u).map { $0 + (v - u) }
+      
+      // Interleave circle vertices to get cylinder vertices
+      let interleaved : [float3] = zip(firstFace + Array(firstFace[0...1]),
+                                       secondFace + Array(secondFace[0...1])).flatMap { [$0,$1] }
+      
+      // Construct a cylinder
+      let source = SCNGeometrySource(vertices: interleaved.map { SCNVector3($0) })
+      let indices = (0...interleaved.count-3).map { UInt8($0) }
+      let element = SCNGeometryElement(indices: indices,
+                                       primitiveType: .triangleStrip)
+      let geometry = SCNGeometry(sources: [source], elements: [element])
+      geometry.firstMaterial?.diffuse.contents = color
+      
+      // Add to SCNNode
+      let node = SCNNode(geometry: geometry)
+      node.simdPosition = u
+      return node
+    }
+  }
+  
 }
 
 public class Spline {
