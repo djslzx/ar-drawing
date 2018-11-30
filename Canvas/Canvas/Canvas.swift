@@ -159,6 +159,27 @@ public class Geometry {
     }
   }
   
+  public static func jointedcylinderGenerator(radius: CGFloat) -> (float3, float3, float3) -> SCNNode {
+    assertionFailure("Not implemented")
+    return { (u: float3, v: float3, w: float3) -> SCNNode in
+      let cylinders : [SCNNode] = [(u,v), (v,w)].map(cylinderGenerator(radius: radius))
+
+      //firstTerminal, secondInitial faces
+      let firstTerminal : [float3] = rotatedFace(face: circleVertices(radius: Float(radius)), v - u)
+      let secondInitial : [float3] = rotatedFace(face: circleVertices(radius: Float(radius)), w - v)
+
+      // call bridge() method
+      return SCNNode()
+    }
+  }
+
+  private static func circleVertices(radius : Float, segmentCount : Int = 48) -> [float3] {
+    return (0...segmentCount).map {
+      let theta  = Float($0)/Float(segmentCount) * 2 * Float.pi
+      return float3(x: cos(theta), y: 0, z: sin(theta)) * radius
+    }
+  }
+  
   // Rotate face to be perpendicular to vector v
   private static func rotatedFace(face : [float3], _ v : float3) -> [float3] {
     let (w,phi) = rotation(float3(), v)
@@ -202,6 +223,7 @@ public class Geometry {
       // Construct a cylinder
       let source = SCNGeometrySource(vertices: interleaved.map { SCNVector3($0) })
       let indices = (0...interleaved.count-3).map { UInt8($0) }
+      // TODO: BRIDGE METHOD
       let element = SCNGeometryElement(indices: indices,
                                        primitiveType: .triangleStrip)
       let geometry = SCNGeometry(sources: [source], elements: [element])
