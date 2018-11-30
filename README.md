@@ -10,7 +10,8 @@ David J. Lee
     - NOTE: too pixellated --> move on to manual mesh specification
   - [ ] Cylinder mesh line drawing (all points have corresponding circular interfaces; all cylinders are directly connected)
     - [x] mathematical model for getting vertices of circle faces
-    - [ ] use SCNGeometryElement and SCNGeometrySource to construct
+    - [x] use SCNGeometryElement and SCNGeometrySource to construct
+    - [ ] get everything working
 - Splines
   - [ ] abstract implementation (Bezier)
   - [ ] conversion from polylines to splines and back
