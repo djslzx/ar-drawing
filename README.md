@@ -16,6 +16,9 @@ David J. Lee
   - [ ] abstract implementation (Bezier)
   - [ ] conversion from polylines to splines and back
   - [ ] allow vector-drawing using Bezier in 3D
+- General drawing
+  - [ ] User can erase strokes in their view (same motion mechanic as the drawing case)
+  - [ ] User can customize their stroke color, thickness, and brush type
 - [ ] Shared environment
 - [ ] Export and import data
   - [ ] export into appropriate format (JSON?)
