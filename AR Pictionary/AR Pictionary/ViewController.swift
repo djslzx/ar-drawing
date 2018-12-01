@@ -19,21 +19,40 @@ extension CGPoint {
 
 class ViewController: UIViewController, ARSCNViewDelegate {
   
+  /// AR view
   @IBOutlet var sceneView: ARSCNView!
   
+  /// Computed property to make the AR view's root node more accessible
   private var rootNode : SCNNode {
     return sceneView.scene.rootNode
   }
   
+  /// Line stroke parameters
   private let lineRadius : CGFloat = 0.001
   private let lineColor : UIColor = UIColor.white
   private let lineDetail : Int = 9
   
-  /** Model */
+  /// Model: collection of Polylines
   private var lines : [Polyline] = []
   
+  /// Tracks whether user currently has their finger on the phone screen
+  /// (i.e. whether in active drawing state)
   private var touched : Bool = false
   
+  /**
+   Coordinates response to user screen presses.
+   
+   **Modifies**: lines, touched, sceneView
+   
+   **Effects**:
+   - When user starts pressing the screen, adds a new line to
+      model and draws a point in sceneView.  Sets touched true.
+   - While user is still pressing the screen, draws a point in sceneView
+      and adds to model.
+   - When user is done pressing the screen, sets touched false,
+      ending point-draw queueing.
+   
+   */
   @IBAction func pressed(_ sender: UILongPressGestureRecognizer) {
     switch sender.state {
     case .began:
@@ -49,41 +68,55 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
-  // Calibrate camera transform with center reticle
-  private let translation : matrix_float4x4 =
+  /**
+   Matrix for camera transform that gives the position at which new points
+   should be drawn.
+  */
+  private let deviceToDrawpointTranslation : matrix_float4x4 =
     matrix_float4x4(rows:
       [
-        float4([1, 0, 0, 0.0025 * 0.6]),
+        float4([1, 0, 0, 0.0025 * 0.6]), // compensate for x offset
         float4([0, 1, 0, 0]),
-        float4([0, 0, 1, -0.06]),
+        float4([0, 0, 1, -0.06]), // z-offset draws objects a fixed distance away from device
         float4([0, 0, 0, 1])
       ])
   
-  private func cameraTransform() -> simd_float4x4? {
+  /**
+   - Returns: The position of the device, offset by deviceToDrawpointTranslation,
+      given as a 4x4 matrix.
+   */
+  private var deviceLocationTransform : simd_float4x4? {
     if let cameraTransform = sceneView.session.currentFrame?.camera.transform {
-      return cameraTransform * translation
+      return cameraTransform * deviceToDrawpointTranslation
     } else {
       return nil
     }
   }
   
-  private func drawLine() {
-    let factory = Geometry.tubeLineGenerator(radius: lineRadius, segmentCount: lineDetail)
-    if let line = lines.last {
-      let lineNode = factory(line.vertices)
-      self.rootNode.addChildNode(lineNode)
-    }
-  }
-  
+  /// The current position of the device, given as a 3-component vector
   private var currentPos : float3? {
-    return cameraTransform()?.translation
+    return deviceLocationTransform?.translation
   }
   
+  /// Tracks the location of the most recently drawn point.
   private var previous : float3?
   
+  /**
+    Draws a new point in the sceneView, extending the currently drawn line
+    if one exists.
+   
+   **Modifies**: previous, lines, sceneView
+   
+   **Effects**:
+   - If the user is not actively drawing (touched is false), sets previous to nil
+      and quits.
+   - If this is the first vertex in the line being drawn (previous is nil),
+      sets previous to the current position and recurses.
+   - Otherwise, if the new point is far enough away from the last drawn point
+      (distance > lineRadius/2), then adds a point to the model and view.  Recurses.
+   
+   */
   private func drawPoint() {
-    // TODO: clean up using guard
-    
     DispatchQueue.global().async {
       [weak self] in
       DispatchQueue.main.async {
@@ -113,8 +146,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
+  /// Tracks whether the scene is currently being cleared (in case the user presses
+  /// the clear button multiple times in succession).
   private var inMiddleOfClearing : Bool = false
   
+  /**
+   Responds to the user's 'clear' button press.
+   
+   **Modifies**: inMiddleOfClearing, sceneView
+   
+   **Effects**: sets inMiddleOfClearing to reflect clearing state
+    and clears the scene.
+   
+   */
   @IBAction func clearPressed() {
     // Only clear if program isn't already in the middle of clearing
     // and there are lines to be cleared
@@ -122,13 +166,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       DispatchQueue.global().async {
         [weak self] in
         self?.inMiddleOfClearing = true
-        self?.clear()
+        self?.clearScene()
         self?.inMiddleOfClearing = false
       }
     }
   }
   
-  public func clear() {
+  /// Clears the scene and model.
+  public func clearScene() {
     sceneView.scene = SCNScene()
     lines = []
   }
