@@ -34,6 +34,16 @@
                                     <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="iA7-fz-VV6"/>
                                 </connections>
                             </button>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.5" minValue="-4" maxValue="-2.5" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P">
+                                <rect key="frame" x="128.5" y="597" width="118" height="31"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="114" id="36R-dv-3iq"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="sliderMoved:" destination="BV1-FR-VrT" eventType="valueChanged" id="lzd-mC-gar"/>
+                                </connections>
+                            </slider>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pnb-wa-pwq" customClass="ReticleView" customModule="AR_Pictionary" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -52,16 +62,18 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="BrB-h1-WRS" secondAttribute="leading" id="4SJ-va-gtq"/>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="BrB-h1-WRS" secondAttribute="top" id="GLH-lR-POt"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="BrB-h1-WRS" secondAttribute="leading" id="5Yp-Hw-kMc"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
                             <constraint firstItem="pfE-gP-WbT" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" id="I4p-JY-dc9"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="KBY-5u-WJP"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="drS-F6-K9V"/>
                             <constraint firstItem="pfE-gP-WbT" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="hMe-LS-bny"/>
+                            <constraint firstItem="8I4-qS-92P" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="mWA-It-Dl2"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="Pnb-wa-pwq" secondAttribute="bottom" id="qLj-0w-RQH"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="slU-QE-bRL"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="BrB-h1-WRS" secondAttribute="top" id="sX9-76-ufZ"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="8I4-qS-92P" secondAttribute="bottom" constant="40" id="tOP-ri-mYp"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>

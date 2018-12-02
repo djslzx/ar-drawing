@@ -8,6 +8,9 @@ David J. Lee
   - [x] SCNCylinder line drawing
     - [x] Get cylinders to line up correctly
     - ~~NOTE: too pixellated~~ No longer pixellated, issue fixed
+  - [ ] SCNCylinder cleaning
+    - [ ] Remove intermediate points between parallel straight lines (lower angle bound)
+    - [ ] Insert intermediate points between sharp turns (upper angle bound)
   - [x] Cylinder mesh line drawing (all points have corresponding circular interfaces; all cylinders are directly connected)
     - [x] mathematical model for getting vertices of circle faces
     - [x] use SCNGeometryElement and SCNGeometrySource to construct
@@ -18,12 +21,14 @@ David J. Lee
   - [ ] conversion from polylines to splines and back
   - [ ] allow vector-drawing using Bezier in 3D
 - General drawing
-  - [ ] User can erase strokes in their view (same motion mechanic as the drawing case)
+  - [ ] Undo mechanic
   - [ ] User can customize their stroke color, thickness, and brush type
+- [ ] Plane-drawing
 - [ ] Shared environment
 - [ ] Export and import data
   - [ ] export into appropriate format (JSON?)
   - [ ] import from same format
+- [ ] User guide / popups when tracking quality is bad
 
 (Way down the line...)
 - Plane-drawing

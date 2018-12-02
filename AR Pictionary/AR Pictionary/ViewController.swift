@@ -29,11 +29,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   }
   
   /// Line stroke parameters
-  private let lineRadius : CGFloat = 0.001
+  private var lineRadius : CGFloat = 0.001 // max: 0.01, min: 0.0001
   private let lineColor : UIColor = UIColor.white
   private let lineDetail : Int = 9
   
-  /// Model: collection of Polylines
+    /// Model: collection of Polylines
   private var lines : [Polyline] = []
   
   /// Tracks whether user currently has their finger on the phone screen
@@ -67,6 +67,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     default:
       break
     }
+  }
+  
+  
+  @IBAction func sliderMoved(_ sender: UISlider) {
+    self.lineRadius = CGFloat(powf(10, sender.value))
+    NSLog(String(sender.value))
   }
   
   /**
