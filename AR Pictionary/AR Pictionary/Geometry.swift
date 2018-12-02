@@ -129,6 +129,8 @@ public class Geometry {
    - Parameters:
    - radius: The radius of the cylinders used in the line.
    - segmentCount: The number of radial segments to be used in the cylinders.
+   
+   - Returns: A generator for full line geometries taking a float3 array as input.
    */
   public static func tubeLineGenerator(radius: CGFloat, segmentCount : Int) -> ([float3]) -> SCNNode {
     let circleVertices : [float3] = self.circleVertices(radius: Float(radius),
@@ -171,7 +173,15 @@ public class Geometry {
   }
   
   /**
-   - Returns: A function that generates cylinder geometries between two 3D coordinates.
+   Returns a generator for 3D cylinders.
+   
+   Generates a cylinder connecting a point u to another point v.  Lines composed of such
+   cylinders will have constant thickness but may have cracks at sharp turns (wedges where
+   no cylinders have been drawn).
+
+   - Parameter radius: The radius of each cylinder.
+
+   - Returns: A function that generates cylinder geometries between two points.
    
    */
   public static func cylinderGenerator(radius: CGFloat) -> (float3, float3) -> SCNNode {
@@ -191,6 +201,13 @@ public class Geometry {
     }
   }
   
+  /**
+   Returns a segment-cylinder generator that fills in gaps between cylinders.
+   
+   - Parameter radius: The radius of each cylinder.
+
+   - Returns: A function that generates cylinder geometries between three points.
+   */
   //  public static func jointedcylinderGenerator(radius: CGFloat) -> (float3, float3, float3) -> SCNNode {
   //    assertionFailure("Not implemented")
   //    return { (u: float3, v: float3, w: float3) -> SCNNode in
@@ -205,11 +222,19 @@ public class Geometry {
   //    }
   //  }
   
+  /**
+   - Returns: A generator for a rectangle-faced brush.
+   
+   - Parameters:
+   - width: The width of the brush face (x-y plane).
+   - height: The height of the brush face (x-y plane).
+   - color: The color of the brush.
+   */
   public static func rectangleBrushGenerator(width: CGFloat,
                                              height: CGFloat,
                                              color: UIColor) -> (float3, float3) -> SCNNode {
     let w = Float(width), h = Float(height)
-    let wideBrush : [float3] = [
+    let wideBrush : [float3] = [ // corner vertices
       float3(-w, 0, -h),
       float3(w, 0, -h),
       float3(-w, 0, h),
@@ -219,14 +244,16 @@ public class Geometry {
   }
   
   /**
-   - Parameter face: the x-z plane version of the face to be used in each prism
+   - Returns: A generator for prisms of the specified face.
+
+   - Parameters:
+   - face: The face to be used in generating brush-prisms as defined in the x-z plane.
+   - color: The color of the brush.
    */
   private static func faceTubeGenerator(face : [float3], color : UIColor) -> (float3, float3) -> SCNNode {
     assert(!face.isEmpty)
-    return {
-      (u: float3, v: float3) -> SCNNode in
+    return { (u: float3, v: float3) -> SCNNode in
       
-      // Generate geometry using SCNShape
       let geometry = SCNShape(path: path(of: face),
                               extrusionDepth: CGFloat(u.distance(to: v)))
       geometry.firstMaterial?.diffuse.contents = color
