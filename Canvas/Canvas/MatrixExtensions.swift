@@ -25,6 +25,10 @@ public extension float3 {
     return (self + other)/2
   }
   
+  public var flattened : CGPoint {
+    return CGPoint(x: CGFloat(self.x), y: CGFloat(self.y))
+  }
+  
   func rotated(x : Float, y : Float, z : Float) -> float3 {
     let matrices : [simd_float3x3] =
       [
