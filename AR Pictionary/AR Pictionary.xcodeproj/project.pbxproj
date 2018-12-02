@@ -18,6 +18,7 @@
 		731F57F121A356A70014A4C4 /* AR_PictionaryUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F57F021A356A70014A4C4 /* AR_PictionaryUITests.swift */; };
 		73BF4F4721A784A60013CFCD /* Canvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73BF4F4621A784A60013CFCD /* Canvas.framework */; };
 		73BF4F4821A784A60013CFCD /* Canvas.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 73BF4F4621A784A60013CFCD /* Canvas.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8B973F3621B35A7C00D30A15 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B973F3521B35A7C00D30A15 /* Geometry.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		731F57F021A356A70014A4C4 /* AR_PictionaryUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AR_PictionaryUITests.swift; sourceTree = "<group>"; };
 		731F57F221A356A70014A4C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		73BF4F4621A784A60013CFCD /* Canvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Canvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B973F3521B35A7C00D30A15 /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +124,7 @@
 			children = (
 				731F57CE21A356A70014A4C4 /* AppDelegate.swift */,
 				731F57D221A356A70014A4C4 /* ViewController.swift */,
+				8B973F3521B35A7C00D30A15 /* Geometry.swift */,
 				7313978F21AB802C00F7F01B /* ReticleView.swift */,
 				731F57D421A356A70014A4C4 /* Main.storyboard */,
 				731F57D921A356A70014A4C4 /* LaunchScreen.storyboard */,
@@ -284,6 +287,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				731F57D321A356A70014A4C4 /* ViewController.swift in Sources */,
+				8B973F3621B35A7C00D30A15 /* Geometry.swift in Sources */,
 				7313979021AB802C00F7F01B /* ReticleView.swift in Sources */,
 				731F57CF21A356A70014A4C4 /* AppDelegate.swift in Sources */,
 			);

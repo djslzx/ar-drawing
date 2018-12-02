@@ -17,6 +17,7 @@ extension CGPoint {
   }
 }
 
+/// Controls the AR view and updates the model.
 class ViewController: UIViewController, ARSCNViewDelegate {
   
   /// AR view

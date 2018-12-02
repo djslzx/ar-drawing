@@ -10,36 +10,84 @@ import Foundation
 import SceneKit
 import CoreGraphics
 
+/**
+ Represents a sequence of line segments where each consecutive pair of segments
+ shares a point.
+ 
+ */
 public class Polyline : CustomDebugStringConvertible {
   
+  /// The vertices of the line segments in the Polyline.
   public private(set) var vertices : [float3]
   
   public var debugDescription: String {
     return String(reflecting: vertices)
   }
   
+  /**
+   Initializes a new Polyline.
+   
+   - Parameter vertices: The sequence of 3-component vectors to be used
+      as the endpoints of the line segments in the Polyline.
+   */
   public init(vertices : [float3]) {
     self.vertices = vertices
-    NSLog("Created new PolyLine")
   }
   
+  /** Initializes an empty Polyline. */
   public convenience init() {
     self.init(vertices: [])
   }
   
+  /**
+   Initializes a Polyline using a generating function.
+   
+   -**Requires**: the generator is defined on the values provided
+   
+   - Parameters:
+   - generator: The generating function used to compute the values of the vertices
+      in the Polyline.
+   - values: The values fed into the generator to derive vertex values.
+   
+   */
   public convenience init(generator : (Float) -> float3, values : [Float]) {
     self.init(vertices: values.map(generator))
   }
   
+  /**
+   Adds a vertex to the end of the Polyline.
+   
+   **Modifies**: self
+
+   **Effects**: The input vertex is added to self.
+
+   - Parameter vertex: The vertex to be added.
+   
+   */
   public func add(vertex : float3) {
     vertices.append(vertex)
-    NSLog("Added new vertex: \(vertex)")
   }
   
-  public func removeLast() {
-    vertices.removeLast()
+  /**
+   Removes the last vertex in the Polyline.
+   
+   **Modifies**: self
+   
+   **Effects**: Removes the last vertex in self if one exists.
+    Exits otherwise.
+   
+   */
+  public func drop() {
+    if !vertices.isEmpty {
+      vertices.removeLast()
+    }
   }
   
+  /**
+   - Returns: The last line segment in the Polyline.
+  
+   Useful when converting the Polyline into a viewable format segment by segment.
+   */
   public func lastSegment() -> (float3, float3)? {
     if vertices.count >= 2 {
       return (vertices[vertices.count - 2], vertices[vertices.count - 1])
@@ -47,195 +95,6 @@ public class Polyline : CustomDebugStringConvertible {
       return nil
     }
   }
-  
-  public func segments() -> Zip2Sequence<ArraySlice<float3>, ArraySlice<float3>> {
-    return zip(vertices[...], vertices[1...])
-  }
-  
-}
-
-public class Geometry {
-  
-  private static func rotation(_ u : float3, _ v : float3) -> (axis : float3, angle : Float) {
-    // Vector from u to v
-    let n = v - u
-    let (x,y,z) = (n.x, n.y, n.z)
-    
-    // Rotating cylinder
-    let d = sqrt(pow(x, 2) + pow(z, 2))
-    let phi = atan(d/y)
-    let w = float3(-z/d, 0, x/d)
-    
-    return (w, phi)
-  }
-  
-  private static func pointNode(at center: float3, radius : CGFloat, color : UIColor) -> SCNNode {
-    let sphere = SCNSphere(radius: radius)
-    sphere.firstMaterial?.diffuse.contents = color
-    let node = SCNNode(geometry: sphere)
-    node.simdPosition = center
-    return node
-  }
-  
-  public static func tubeLineGenerator(radius: CGFloat, segmentCount : Int) -> ([float3]) -> SCNNode {
-
-    let range = 0..<segmentCount
-    let circleVertices : [float3] = range.map {
-      let theta  = Float($0)/Float(segmentCount) * 2 * Float.pi
-      return float3(x: cos(theta), y: 0, z: sin(theta)) * Float(radius)
-    }
-
-    // Rotate circleVertices to be perpendicular to vector from u to v
-    func rotatedVertices(_ u : float3, _ v : float3) -> [float3] {
-      let (w,phi) = rotation(u, v)
-      let rotationTransform = simd_float4x4(simd_quatf(angle: phi, axis: w))
-      return circleVertices.map {
-        let rotated = float4($0, 1) * rotationTransform
-        return float3(rotated)
-      }
-    }
-    
-    return {
-      (vertices : [float3]) in
-
-      guard vertices.count >= 2 else {
-        return SCNNode()
-      }
-      
-      // The parent node of all nodes generated in the loop; to be returned
-      let parent = SCNNode()
-
-      // Construct a set of tubes (uncapped cylinders) and add caps at end
-      //var firstCircle : [float3] = rotatedVertices(vertices[0], vertices[1])
-      for i in 1..<vertices.count-1 {
-        let u = vertices[i-1]
-        let v = vertices[i]
-        let w = vertices[i+1]
-
-        let firstCircle : [float3] = rotatedVertices(u, v)
-        let secondCircle : [float3] = rotatedVertices(v, w).map {
-          $0 + (v - u)
-        }
-        
-        // Interleave circle vertices to get cylinder vertices
-        let interleaved : [float3] = zip(firstCircle + Array(firstCircle[0...1]),
-                                         secondCircle + Array(secondCircle[0...1])).flatMap { [$0,$1] }
-        
-        // Construct a cylinder
-        let source = SCNGeometrySource(vertices: interleaved.map { SCNVector3($0) })
-        let indices = (0...interleaved.count-3).map { UInt8($0) }
-        let element = SCNGeometryElement(indices: indices,
-                                         primitiveType: .triangleStrip)
-        let geometry = SCNGeometry(sources: [source], elements: [element])
-        //geometry.firstMaterial?.isDoubleSided = true
-
-        // FOR TESTING: set line color red
-        geometry.firstMaterial?.diffuse.contents = UIColor.red
-        
-        // Add to SCNNode
-        let node = SCNNode(geometry: geometry)
-        node.simdPosition = u
-        parent.addChildNode(node)
-      }
-      return parent
-    }
-  }
-  
-  public static func cylinderGenerator(radius: CGFloat) -> (float3, float3) -> SCNNode {
-    return { (u : float3, v : float3) -> SCNNode in
-      let cylinder = SCNCylinder(radius: radius, height: CGFloat(u.distance(to: v)))
-      cylinder.heightSegmentCount = 1
-
-      // Get rotation axis and angle for the vector from u to v
-      let (w, phi) = self.rotation(u, v)
-      let theta = Float.pi - phi
-    
-      // Rotate cylinder by phi about w
-      let node = SCNNode(geometry: cylinder)
-      node.simdPosition = u.midpoint(with: v) //Translate node to position of src node
-      node.simdLocalRotate(by: simd_quatf(angle: theta, axis: w))
-
-      return node
-    }
-  }
-  
-  public static func jointedcylinderGenerator(radius: CGFloat) -> (float3, float3, float3) -> SCNNode {
-    assertionFailure("Not implemented")
-    return { (u: float3, v: float3, w: float3) -> SCNNode in
-      let cylinders : [SCNNode] = [(u,v), (v,w)].map(cylinderGenerator(radius: radius))
-
-      //firstTerminal, secondInitial faces
-      let firstTerminal : [float3] = rotatedFace(face: circleVertices(radius: Float(radius)), v - u)
-      let secondInitial : [float3] = rotatedFace(face: circleVertices(radius: Float(radius)), w - v)
-
-      // call bridge() method
-      return SCNNode()
-    }
-  }
-
-  private static func circleVertices(radius : Float, segmentCount : Int = 48) -> [float3] {
-    return (0...segmentCount).map {
-      let theta  = Float($0)/Float(segmentCount) * 2 * Float.pi
-      return float3(x: cos(theta), y: 0, z: sin(theta)) * radius
-    }
-  }
-  
-  // Rotate face to be perpendicular to vector v
-  private static func rotatedFace(face : [float3], _ v : float3) -> [float3] {
-    let (w,phi) = rotation(float3(), v)
-    let rotationTransform = simd_float4x4(simd_quatf(angle: phi, axis: w))
-    return face.map {
-      let rotated = float4($0, 1) * rotationTransform
-      return float3(rotated)
-    }
-  }
-  
-  public static func rectangleBrushGenerator(width: CGFloat,
-                                             height: CGFloat,
-                                             color: UIColor) -> (float3, float3) -> SCNNode {
-    let w = Float(width), h = Float(height)
-    let wideBrush : [float3] = [
-      float3(-w, 0, -h),
-      float3(w, 0, -h),
-      float3(-w, 0, h),
-      float3(w, 0, h)
-    ]
-    return faceTubeGenerator(face: wideBrush, color: color)
-  }
-  
-  /**
-   - Parameter face: the x-z plane version of the face to be used in each prism
-   */
-  private static func faceTubeGenerator(face : [float3], color : UIColor) -> (float3, float3) -> SCNNode {
-    return {
-      (u: float3, v: float3) -> SCNNode in
-      
-      /** TODO: Use SCNShape */
-      //let geometry = SCNShape
-
-      let firstFace : [float3] = rotatedFace(face: face, v - u)
-      let secondFace : [float3] = rotatedFace(face: face, v - u).map { $0 + (v - u) }
-      
-      // Interleave circle vertices to get cylinder vertices
-      let interleaved : [float3] = zip(firstFace + Array(firstFace[0...1]),
-                                       secondFace + Array(secondFace[0...1])).flatMap { [$0,$1] }
-      
-      // Construct a cylinder
-      let source = SCNGeometrySource(vertices: interleaved.map { SCNVector3($0) })
-      let indices = (0...interleaved.count-3).map { UInt8($0) }
-      // TODO: BRIDGE METHOD
-      let element = SCNGeometryElement(indices: indices,
-                                       primitiveType: .triangleStrip)
-      let geometry = SCNGeometry(sources: [source], elements: [element])
-      geometry.firstMaterial?.diffuse.contents = color
-      
-      // Add to SCNNode
-      let node = SCNNode(geometry: geometry)
-      node.simdPosition = u
-      return node
-    }
-  }
-  
 }
 
 public class Spline {
