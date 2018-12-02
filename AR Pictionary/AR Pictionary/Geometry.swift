@@ -248,6 +248,35 @@ public class Geometry {
   }
   
   /**
+   - Returns: A generator for cylinders that have pulsing radii.
+   
+   - Parameters:
+   - maxRadius: The maximum cylinder radius.
+   - minRadius: The minimum cylinder radius.
+   - color: The color of the brush.
+   */
+  public static func pulseBrushGenerator(maxRadius: CGFloat,
+                                         minRadius: CGFloat,
+                                         frequency: Float,
+                                         color: UIColor) -> (float3, float3) -> SCNNode {
+    func calcRadius(time: Double) -> CGFloat {
+      return CGFloat(pow(sin(time), 2)) * (maxRadius - minRadius) + minRadius
+    }
+
+    var t : Double = 0
+    func incrementTime(_ u: float3, _ v: float3) {
+      t += Double(u.distance(to: v) * frequency) * Double.pi
+    }
+    
+    return { (u: float3, v: float3) -> SCNNode in
+      let generator = cylinderGenerator(radius: calcRadius(time: t))
+      incrementTime(u,v)
+      NSLog(String(t))
+      return generator(u,v)
+    }
+  }
+  
+  /**
    - Returns: A generator for prisms with smoothing between prisms.
    
    - Parameters:
@@ -266,32 +295,6 @@ public class Geometry {
 
       // Add to SCNNode
       let node = SCNNode(geometry: pipe)
-      node.simdPosition = u
-      return node
-    }
-  }
-  
-  /**
-   - Returns: A generator for prisms of the specified face.
-
-   - Parameters:
-   - face: The face to be used in generating brush-prisms as defined in the x-z plane.
-   - color: The color of the brush.
-   */
-  private static func tubeGenerator(face : [float3], color : UIColor) -> (float3, float3) -> SCNNode {
-    assert(!face.isEmpty)
-    return { (u: float3, v: float3) -> SCNNode in
-
-      let firstFace : [float3] = rotatedFace(face: face, v - u)
-      let secondFace : [float3] = rotatedFace(face: face, v - u).map { $0 + (v - u) }
-
-      let geometry = interleavedGeometry(face1: firstFace, face2: secondFace)
-
-      geometry.firstMaterial?.isDoubleSided = true
-      geometry.firstMaterial?.diffuse.contents = color
-
-      // Add to SCNNode
-      let node = SCNNode(geometry: geometry)
       node.simdPosition = u
       return node
     }

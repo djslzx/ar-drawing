@@ -28,23 +28,36 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     return sceneView.scene.rootNode
   }
   
-  /// Brush factory type
-  private var brushType : Brush = Brush.edgeCylinder
-
-  // TODO:
-  enum Brush {
-    case edgeCylinder
-    case lineCylinder
-    case edgeFlat
+  private var factory2 : ((float3, float3) -> SCNNode)? {
+    didSet {
+      if factory2 != nil {
+        factory3 = nil
+      }
+    }
+  }
+  private var factory3 : ((float3, float3, float3) -> SCNNode)? {
+    didSet {
+      if factory3 != nil {
+        factory2 = nil
+      }
+    }
   }
   
   /// Responds to user brush type changes
   @IBAction func brushChanged(_ sender: UISegmentedControl) {
     switch sender.titleForSegment(at: sender.selectedSegmentIndex) {
+    case "Curve":
+      factory2 = Geometry.cylinderGenerator(radius: lineRadius)
     case "Flat":
-      brushType = Brush.edgeFlat
+      factory3 = Geometry.flatBrushGenerator(width: lineRadius * 4,
+                                            color: lineColor)
+    case "Pulse":
+      factory2 = Geometry.pulseBrushGenerator(maxRadius: lineRadius * 10,
+                                             minRadius: lineRadius / 2,
+                                             frequency: 40,
+                                             color: lineColor)
     default:
-      brushType = Brush.edgeCylinder
+      factory2 = Geometry.cylinderGenerator(radius: lineRadius)
     }
   }
   
@@ -164,20 +177,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if currentPos.distance(to: previousPos) > Float(self!.lineRadius)/2 {
           self?.lines.last?.add(vertex: currentPos)
           
-          // Get brush factory depending on brush type
-          switch self!.brushType {
-          case Brush.edgeFlat:
-            if let grandPos = self?.grandPos {
-              let factory = Geometry.flatBrushGenerator(width: self!.lineRadius * 4,
-                                                        color: self!.lineColor)
-              let node = factory(grandPos, previousPos, currentPos)
-              self?.rootNode.addChildNode(node)
-            }
-          default:
-            let factory = Geometry.cylinderGenerator(radius: self!.lineRadius)
-            let node = factory(previousPos, currentPos)
+          let node : SCNNode
+          if let factory2 = self?.factory2 {
+            node = factory2(previousPos, currentPos)
+            self?.rootNode.addChildNode(node)
+          } else if let factory3 = self?.factory3, let grandPos = self?.grandPos {
+            node = factory3(grandPos, previousPos, currentPos)
             self?.rootNode.addChildNode(node)
           }
+
           self?.grandPos = self?.previous
           self?.previous = currentPos
         }
@@ -228,6 +236,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // Show statistics such as fps and timing information
     sceneView.showsStatistics = true
+    
+    factory2 = Geometry.cylinderGenerator(radius: lineRadius)
   }
   
   override func viewWillAppear(_ animated: Bool) {

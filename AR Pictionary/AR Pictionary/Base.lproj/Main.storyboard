@@ -29,7 +29,6 @@
                                 <rect key="frame" x="25" y="25" width="38" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="29" id="4bq-pQ-MlX"/>
-                                    <constraint firstAttribute="width" constant="38" id="ot1-Xk-B2I"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal" title="Clear"/>
@@ -38,16 +37,16 @@
                                     <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="iA7-fz-VV6"/>
                                 </connections>
                             </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
                                 <rect key="frame" x="150" y="25" width="200" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="0pE-df-74g"/>
                                     <constraint firstAttribute="height" constant="28" id="gDU-gg-uFk"/>
                                 </constraints>
                                 <segments>
-                                    <segment title="Line"/>
+                                    <segment title="Curve"/>
                                     <segment title="Flat"/>
-                                    <segment title="Dotted"/>
+                                    <segment title="Pulse"/>
                                 </segments>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
