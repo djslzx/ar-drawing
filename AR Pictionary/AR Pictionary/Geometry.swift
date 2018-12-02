@@ -259,7 +259,7 @@ public class Geometry {
     return { (u: float3, v: float3, w: float3) -> SCNNode in
       
       let firstFace : [float3] = rotatedFace(face: face, v - u)
-      let secondFace : [float3] = rotatedFace(face: face, v - u).map { $0 + (v - u) }
+      let secondFace : [float3] = rotatedFace(face: face, w - v).map { $0 + (v - u) }
 
       let pipe = interleavedGeometry(face1: firstFace, face2: secondFace)
       pipe.firstMaterial?.diffuse.contents = color
