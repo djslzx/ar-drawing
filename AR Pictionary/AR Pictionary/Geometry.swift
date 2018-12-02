@@ -238,13 +238,37 @@ public class Geometry {
    - color: The color of the brush.
    */
   public static func flatBrushGenerator(width: CGFloat,
-                                        color: UIColor) -> (float3, float3) -> SCNNode {
+                                        color: UIColor) -> (float3, float3, float3) -> SCNNode {
     let w = Float(width)
     let wideBrush : [float3] = [ // corner vertices
       float3(w, 0, 0),
       float3(-w, 0, 0)
     ]
-    return faceTubeGenerator(face: wideBrush, color: color)
+    return smoothTubeGenerator(face: wideBrush, color: color)
+  }
+  
+  /**
+   - Returns: A generator for prisms with smoothing between prisms.
+   
+   - Parameters:
+   - face: The face to be used in generating brush-prisms as defined in the x-z plane.
+   - color: The color of the brush.
+   */
+  private static func smoothTubeGenerator(face : [float3], color : UIColor) -> (float3, float3, float3) -> SCNNode {
+    assert(!face.isEmpty)
+    return { (u: float3, v: float3, w: float3) -> SCNNode in
+      
+      let firstFace : [float3] = rotatedFace(face: face, v - u)
+      let secondFace : [float3] = rotatedFace(face: face, v - u).map { $0 + (v - u) }
+
+      let pipe = interleavedGeometry(face1: firstFace, face2: secondFace)
+      pipe.firstMaterial?.diffuse.contents = color
+
+      // Add to SCNNode
+      let node = SCNNode(geometry: pipe)
+      node.simdPosition = u
+      return node
+    }
   }
   
   /**
@@ -254,7 +278,7 @@ public class Geometry {
    - face: The face to be used in generating brush-prisms as defined in the x-z plane.
    - color: The color of the brush.
    */
-  private static func faceTubeGenerator(face : [float3], color : UIColor) -> (float3, float3) -> SCNNode {
+  private static func tubeGenerator(face : [float3], color : UIColor) -> (float3, float3) -> SCNNode {
     assert(!face.isEmpty)
     return { (u: float3, v: float3) -> SCNNode in
 
@@ -262,9 +286,7 @@ public class Geometry {
       let secondFace : [float3] = rotatedFace(face: face, v - u).map { $0 + (v - u) }
 
       let geometry = interleavedGeometry(face1: firstFace, face2: secondFace)
-      
-//      let geometry = SCNShape(path: path(of: face),
-//                              extrusionDepth: CGFloat(u.distance(to: v)))
+
       geometry.firstMaterial?.isDoubleSided = true
       geometry.firstMaterial?.diffuse.contents = color
 

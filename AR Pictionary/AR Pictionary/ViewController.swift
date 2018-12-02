@@ -29,7 +29,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   }
   
   /// Brush factory type
-  private var factoryType : Brush = Brush.edgeCylinder
+  private var brushType : Brush = Brush.edgeCylinder
 
   // TODO:
   enum Brush {
@@ -42,9 +42,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   @IBAction func brushChanged(_ sender: UISegmentedControl) {
     switch sender.titleForSegment(at: sender.selectedSegmentIndex) {
     case "Flat":
-      factoryType = Brush.edgeFlat
+      brushType = Brush.edgeFlat
     default:
-      factoryType = Brush.edgeCylinder
+      brushType = Brush.edgeCylinder
     }
   }
   
@@ -127,6 +127,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   /// Tracks the location of the most recently drawn point.
   private var previous : float3?
   
+  /// Tracks the location of the point drawn before self.previous.
+  private var grandPos : float3?
+  
   /**
     Draws a new point in the sceneView, extending the currently drawn line
     if one exists.
@@ -148,6 +151,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       DispatchQueue.main.async {
         guard self?.touched ?? false, let currentPos = self?.currentPos else {
           self?.previous = nil
+          self?.grandPos = nil
           return
         }
         guard let previousPos = self?.previous else {
@@ -160,18 +164,21 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if currentPos.distance(to: previousPos) > Float(self!.lineRadius)/2 {
           self?.lines.last?.add(vertex: currentPos)
           
-          let factory : (float3, float3) -> SCNNode
-          switch self!.factoryType {
-          case Brush.edgeCylinder:
-            factory = Geometry.cylinderGenerator(radius: self!.lineRadius)
+          // Get brush factory depending on brush type
+          switch self!.brushType {
           case Brush.edgeFlat:
-            factory = Geometry.flatBrushGenerator(width: self!.lineRadius * 4,
-                                                  color: self!.lineColor)
+            if let grandPos = self?.grandPos {
+              let factory = Geometry.flatBrushGenerator(width: self!.lineRadius * 4,
+                                                        color: self!.lineColor)
+              let node = factory(grandPos, previousPos, currentPos)
+              self?.rootNode.addChildNode(node)
+            }
           default:
-            factory = Geometry.cylinderGenerator(radius: self!.lineRadius)
+            let factory = Geometry.cylinderGenerator(radius: self!.lineRadius)
+            let node = factory(previousPos, currentPos)
+            self?.rootNode.addChildNode(node)
           }
-          let node = factory(previousPos, currentPos)
-          self?.rootNode.addChildNode(node)
+          self?.grandPos = self?.previous
           self?.previous = currentPos
         }
 
