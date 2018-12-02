@@ -28,12 +28,34 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     return sceneView.scene.rootNode
   }
   
+  /// Brush factory type
+  private var factoryType : Brush = Brush.edgeCylinder
+
+  // TODO:
+  enum Brush {
+    case edgeCylinder
+    case lineCylinder
+    case rectPrism
+  }
+  
+  /// Responds to user brush type changes
+  @IBAction func brushChanged(_ sender: UISegmentedControl) {
+    switch sender.titleForSegment(at: sender.selectedSegmentIndex) {
+    case "Line":
+      factoryType = Brush.edgeCylinder
+    case "Flat":
+      factoryType = Brush.rectPrism
+    default:
+      factoryType = Brush.edgeCylinder
+    }
+  }
+  
   /// Line stroke parameters
-  private var lineRadius : CGFloat = 0.001 // max: 0.01, min: 0.0001
+  private var lineRadius : CGFloat = CGFloat(powf(10, -3.75))
   private let lineColor : UIColor = UIColor.white
   private let lineDetail : Int = 9
   
-    /// Model: collection of Polylines
+  /// Model: collection of Polylines
   private var lines : [Polyline] = []
   
   /// Tracks whether user currently has their finger on the phone screen
@@ -69,10 +91,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
-  
+  /// Updates the lineRadius when the user moves the slider
   @IBAction func sliderMoved(_ sender: UISlider) {
     self.lineRadius = CGFloat(powf(10, sender.value))
-    NSLog(String(sender.value))
   }
   
   /**
@@ -141,7 +162,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if currentPos.distance(to: previousPos) > Float(self!.lineRadius)/2 {
           self?.lines.last?.add(vertex: currentPos)
           
-          let factory = Geometry.cylinderGenerator(radius: self!.lineRadius * 0.5)
+          let factory : (float3, float3) -> SCNNode
+          switch self!.factoryType {
+          case Brush.edgeCylinder:
+            factory = Geometry.cylinderGenerator(radius: self!.lineRadius)
+          case Brush.rectPrism:
+            factory = Geometry.rectangleBrushGenerator(width: self!.lineRadius * 2,
+                                                           height: self!.lineRadius/2,
+                                                           color: self!.lineColor)
+          default:
+            factory = Geometry.cylinderGenerator(radius: self!.lineRadius)
+          }
           let node = factory(previousPos, currentPos)
           self?.rootNode.addChildNode(node)
           self?.previous = currentPos

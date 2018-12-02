@@ -26,7 +26,11 @@
                                 </connections>
                             </arscnView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT">
-                                <rect key="frame" x="15" y="20" width="38" height="32"/>
+                                <rect key="frame" x="25" y="25" width="38" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="29" id="4bq-pQ-MlX"/>
+                                    <constraint firstAttribute="width" constant="38" id="ot1-Xk-B2I"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal" title="Clear"/>
                                 <connections>
@@ -34,7 +38,21 @@
                                     <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="iA7-fz-VV6"/>
                                 </connections>
                             </button>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.5" minValue="-4" maxValue="-2.5" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
+                                <rect key="frame" x="137.5" y="25" width="100" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="0pE-df-74g"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Line" width="49"/>
+                                    <segment title="Flat"/>
+                                </segments>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="brushChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="MdV-4z-UPY"/>
+                                </connections>
+                            </segmentedControl>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.75" minValue="-4.5" maxValue="-2.75" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P">
                                 <rect key="frame" x="128.5" y="597" width="118" height="31"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -64,13 +82,15 @@
                         <constraints>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="BrB-h1-WRS" secondAttribute="leading" id="5Yp-Hw-kMc"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
-                            <constraint firstItem="pfE-gP-WbT" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" id="I4p-JY-dc9"/>
+                            <constraint firstItem="pfE-gP-WbT" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="I4p-JY-dc9"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="KBY-5u-WJP"/>
+                            <constraint firstItem="OpT-kM-KxR" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="NIl-FD-gKh"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
-                            <constraint firstItem="pfE-gP-WbT" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="hMe-LS-bny"/>
+                            <constraint firstItem="pfE-gP-WbT" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="25" id="hMe-LS-bny"/>
                             <constraint firstItem="8I4-qS-92P" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="mWA-It-Dl2"/>
                             <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="Pnb-wa-pwq" secondAttribute="bottom" id="qLj-0w-RQH"/>
+                            <constraint firstItem="OpT-kM-KxR" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="qM7-CE-Ae3"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="BrB-h1-WRS" secondAttribute="top" id="sX9-76-ufZ"/>
                             <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="8I4-qS-92P" secondAttribute="bottom" constant="40" id="tOP-ri-mYp"/>

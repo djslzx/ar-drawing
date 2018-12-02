@@ -4,6 +4,11 @@ An augmented reality drawing environment
 David J. Lee
 
 ## TODOs:
+- Drawing extensions:
+ - [ ] Undo
+ - [x] Thickness adjustment
+ - [ ] Color adjustment
+
 - Polylines
   - [x] SCNCylinder line drawing
     - [x] Get cylinders to line up correctly
