@@ -35,16 +35,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   enum Brush {
     case edgeCylinder
     case lineCylinder
-    case rectPrism
+    case edgeFlat
   }
   
   /// Responds to user brush type changes
   @IBAction func brushChanged(_ sender: UISegmentedControl) {
     switch sender.titleForSegment(at: sender.selectedSegmentIndex) {
-    case "Line":
-      factoryType = Brush.edgeCylinder
     case "Flat":
-      factoryType = Brush.rectPrism
+      factoryType = Brush.edgeFlat
     default:
       factoryType = Brush.edgeCylinder
     }
@@ -166,10 +164,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
           switch self!.factoryType {
           case Brush.edgeCylinder:
             factory = Geometry.cylinderGenerator(radius: self!.lineRadius)
-          case Brush.rectPrism:
-            factory = Geometry.rectangleBrushGenerator(width: self!.lineRadius * 2,
-                                                           height: self!.lineRadius/2,
-                                                           color: self!.lineColor)
+          case Brush.edgeFlat:
+            factory = Geometry.flatBrushGenerator(width: self!.lineRadius * 4,
+                                                  color: self!.lineColor)
           default:
             factory = Geometry.cylinderGenerator(radius: self!.lineRadius)
           }

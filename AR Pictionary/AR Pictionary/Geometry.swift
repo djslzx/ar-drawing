@@ -231,22 +231,18 @@ public class Geometry {
     }
   
   /**
-   - Returns: A generator for a rectangle-faced brush.
+   - Returns: A generator for a flat brush.
    
    - Parameters:
    - width: The width of the brush face (x-y plane).
-   - height: The height of the brush face (x-y plane).
    - color: The color of the brush.
    */
-  public static func rectangleBrushGenerator(width: CGFloat,
-                                             height: CGFloat,
-                                             color: UIColor) -> (float3, float3) -> SCNNode {
-    let w = Float(width), h = Float(height)
+  public static func flatBrushGenerator(width: CGFloat,
+                                        color: UIColor) -> (float3, float3) -> SCNNode {
+    let w = Float(width)
     let wideBrush : [float3] = [ // corner vertices
-      float3(-w, 0, -h),
-      float3(w, 0, -h),
-      float3(-w, 0, h),
-      float3(w, 0, h)
+      float3(w, 0, 0),
+      float3(-w, 0, 0)
     ]
     return faceTubeGenerator(face: wideBrush, color: color)
   }
@@ -261,17 +257,20 @@ public class Geometry {
   private static func faceTubeGenerator(face : [float3], color : UIColor) -> (float3, float3) -> SCNNode {
     assert(!face.isEmpty)
     return { (u: float3, v: float3) -> SCNNode in
+
+      let firstFace : [float3] = rotatedFace(face: face, v - u)
+      let secondFace : [float3] = rotatedFace(face: face, v - u).map { $0 + (v - u) }
+
+      let geometry = interleavedGeometry(face1: firstFace, face2: secondFace)
       
-      let geometry = SCNShape(path: path(of: face),
-                              extrusionDepth: CGFloat(u.distance(to: v)))
+//      let geometry = SCNShape(path: path(of: face),
+//                              extrusionDepth: CGFloat(u.distance(to: v)))
+      geometry.firstMaterial?.isDoubleSided = true
       geometry.firstMaterial?.diffuse.contents = color
 
-      let (w,phi) = rotation(u, v)
-      
       // Add to SCNNode
       let node = SCNNode(geometry: geometry)
       node.simdPosition = u
-      node.simdLocalRotate(by: simd_quatf(angle: phi, axis: w))
       return node
     }
   }
