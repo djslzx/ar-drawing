@@ -3,6 +3,9 @@ An augmented reality drawing environment
 
 David J. Lee
 
+## Demo
+![Demo.gif](https://github.com/deejayessel/ar-drawing/blob/master/flat_brush_test.gif)
+
 ## TODOs:
 - Drawing extensions:
  - [ ] Undo
