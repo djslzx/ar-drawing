@@ -43,30 +43,39 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
-  enum Input {
+  enum Brush {
     case curve
     case flat
+    case flatRainbow
     case pulse
   }
 
-  private var factoryType : Input?
+  private var factoryType : Brush?
   
   /// Responds to user brush type changes
   @IBAction func brushChanged(_ sender: UISegmentedControl) {
     switch sender.titleForSegment(at: sender.selectedSegmentIndex) {
-    case "Flat":
+    case "Flat": factoryType = .flat
+    case "Rainbow": factoryType = .flatRainbow
+    default: factoryType = .curve // use by default
+    }
+    setUpFactory()
+  }
+  
+  private func setUpFactory() {
+    switch factoryType! {
+    case Brush.curve:
+      factory2 = Geometry.cylinderGenerator(radius: lineRadius, color: lineColor)
+    case Brush.flat:
       factory3 = Geometry.flatBrushGenerator(width: lineRadius * kflat,
-                                            color: lineColor)
-      factoryType = Input.flat
-    case "Pulse":
-      factory2 = Geometry.pulseBrushGenerator(maxRadius: lineRadius * kPulseMax,
-                                             minRadius: lineRadius * kPulseMin,
-                                             frequency: kPulseFrequency,
                                              color: lineColor)
-      factoryType = Input.pulse
-    default: // Curve default
-      factory2 = Geometry.cylinderGenerator(radius: lineRadius)
-      factoryType = Input.curve
+    case Brush.pulse:
+      factory2 = Geometry.pulseBrushGenerator(maxRadius: lineRadius * kPulseMax,
+                                              minRadius: lineRadius * kPulseMin,
+                                              frequency: kPulseFrequency,
+                                              color: lineColor)
+    case Brush.flatRainbow:
+      factory3 = Geometry.flatRainbowGenerator(width: lineRadius * kflat)
     }
   }
   
@@ -74,25 +83,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   private var lineRadius : CGFloat = CGFloat(powf(10, -3.75)) {
     // When lineRadius updates, update factories that require it
     didSet {
-      if let factoryType = self.factoryType {
-        switch factoryType {
-        case Input.flat:
-          factory3 = Geometry.flatBrushGenerator(width: lineRadius * kflat,
-                                                 color: lineColor)
-        case Input.pulse:
-          factory2 = Geometry.pulseBrushGenerator(maxRadius: lineRadius * kPulseMax,
-                                                  minRadius: lineRadius * kPulseMin,
-                                                  frequency: kPulseFrequency,
-                                                  color: lineColor)
-        default:
-          NSLog("Entered default lineRadius didSet")
-          factory2 = Geometry.cylinderGenerator(radius: lineRadius)
-        }
-      }
+      setUpFactory()
     }
   }
-
-  private let lineColor : UIColor = UIColor.white
+  private var lineColor : UIColor = UIColor.white
   private let lineDetail : Int = 9
   
   /// Constant factory multipliers
@@ -272,8 +266,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // Show statistics such as fps and timing information
     sceneView.showsStatistics = true
     
-    factory2 = Geometry.cylinderGenerator(radius: lineRadius)
-    factoryType = Input.curve
+    factory2 = Geometry.cylinderGenerator(radius: lineRadius, color: lineColor)
+    factoryType = Brush.curve
   }
   
   override func viewWillAppear(_ animated: Bool) {

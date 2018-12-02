@@ -183,11 +183,12 @@ public class Geometry {
    - Returns: A function that generates cylinder geometries between two points.
    
    */
-  public static func cylinderGenerator(radius: CGFloat) -> (float3, float3) -> SCNNode {
+  public static func cylinderGenerator(radius: CGFloat, color: UIColor) -> (float3, float3) -> SCNNode {
     return { (u : float3, v : float3) -> SCNNode in
       let cylinder = SCNCylinder(radius: radius, height: CGFloat(u.distance(to: v)))
       cylinder.heightSegmentCount = 1
-      
+      cylinder.firstMaterial?.diffuse.contents = color
+
       // Get rotation axis and angle for the vector from u to v
       let (w, phi) = self.rotation(u, v)
       
@@ -207,10 +208,10 @@ public class Geometry {
 
    - Returns: A function that generates cylinder geometries between three points.
    */
-    public static func jointedcylinderGenerator(radius: CGFloat) -> (float3, float3, float3) -> SCNNode {
+  public static func jointedcylinderGenerator(radius: CGFloat, color: UIColor) -> (float3, float3, float3) -> SCNNode {
       assertionFailure("Not implemented")
       return { (u: float3, v: float3, w: float3) -> SCNNode in
-        let cylinderNodes : [SCNNode] = [(u,v), (v,w)].map(cylinderGenerator(radius: radius))
+        let cylinderNodes : [SCNNode] = [(u,v), (v,w)].map(cylinderGenerator(radius: radius, color: color))
   
         // terminal face of first cylinder, initial face of second cylinder
         let firstTerminal : [float3] = rotatedFace(face: circleVertices(radius: Float(radius)), v - u)
@@ -247,6 +248,32 @@ public class Geometry {
     return smoothTubeGenerator(face: wideBrush, color: color)
   }
   
+  public static func flatRainbowGenerator(width: CGFloat) -> (float3, float3, float3) -> SCNNode {
+    var hue : CGFloat = 0
+    func incrementHue() {
+      hue = (hue + 0.01).truncatingRemainder(dividingBy: 1)
+    }
+    return { (u: float3, v: float3, w: float3) -> SCNNode in
+      let color = UIColor(hue: hue, saturation: 0.5, brightness: 1, alpha: 1)
+      let generator = flatBrushGenerator(width: width, color: color)
+      incrementHue()
+      return generator(u,v,w)
+    }
+  }
+  
+  public static func cylinderRainbowGenerator(radius: CGFloat) -> (float3, float3) -> SCNNode {
+    var hue : CGFloat = 0
+    func incrementHue() {
+      hue = (hue + 0.01).truncatingRemainder(dividingBy: 1)
+    }
+    return { (u: float3, v: float3) -> SCNNode in
+      let color = UIColor(hue: hue, saturation: 0.5, brightness: 1, alpha: 1)
+      let generator = cylinderGenerator(radius: radius, color: color)
+      incrementHue()
+      return generator(u,v)
+    }
+  }
+  
   /**
    - Returns: A generator for cylinders that have pulsing radii.
    
@@ -269,9 +296,8 @@ public class Geometry {
     }
     
     return { (u: float3, v: float3) -> SCNNode in
-      let generator = cylinderGenerator(radius: calcRadius(time: t))
+      let generator = cylinderGenerator(radius: calcRadius(time: t), color: color)
       incrementTime(u,v)
-      NSLog(String(t))
       return generator(u,v)
     }
   }
