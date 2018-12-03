@@ -9,21 +9,38 @@ David J. Lee
 ## TODOs:
 - Drawing extensions:
  - [ ] Undo
- - [x] Thickness adjustment
  - [ ] Color adjustment
-
+  - [ ] Provide good brush swatches (pastels? or lighter colors for better background contrast) 
+    instead of color wheel/picker
+ - [x] Thickness adjustment
+- [ ] Depth of field (better z-sensing) mode/button
+- Architecture:
+ - [ ] Swap from inputs like `(float3, float3)` to matrices (`float2x3`)
+ - [ ] Generalize `factoryX`
+ - [ ] Generalize brushes
+  - [ ] color closure instead of UIColor parameter
+   - Color class?
+  - Brush class?
+ - [ ] Output bezier with variable-grained discretization
+ - [ ] Polish `Input` enum
+  - Continuous v discrete tools:
+    - Continuous: brushes (flat, poly, bezier)
+    - Discrete/Seeding: straight-line-drawing, plane-drawing
+     - Add 
+- [ ] Branching-geometry factories (trees, lightning)
+ 
 - Polylines
   - [x] SCNCylinder line drawing
-    - [x] Get cylinders to line up correctly
-    - ~~NOTE: too pixellated~~ No longer pixellated, issue fixed
+   - [x] Get cylinders to line up correctly
+   - ~~NOTE: too pixellated~~ No longer pixellated, issue fixed
   - [ ] SCNCylinder cleaning
-    - [ ] Remove intermediate points between parallel straight lines (lower angle bound)
-    - [ ] Insert intermediate points between sharp turns (upper angle bound)
+   - [ ] Remove intermediate points between parallel straight lines (lower angle bound)
+   - [ ] Insert intermediate points between sharp turns (upper angle bound)
   - [x] Cylinder mesh line drawing (all points have corresponding circular interfaces; all cylinders are directly connected)
-    - [x] mathematical model for getting vertices of circle faces
-    - [x] use SCNGeometryElement and SCNGeometrySource to construct
-    - [x] get everything working
-    - NOTE: not very good at handling sharp turns
+   - [x] mathematical model for getting vertices of circle faces
+   - [x] use SCNGeometryElement and SCNGeometrySource to construct
+   - [x] get everything working
+   - NOTE: not very good at handling sharp turns
 - Splines
   - [ ] abstract implementation (Bezier)
   - [ ] conversion from polylines to splines and back
@@ -115,15 +132,15 @@ The user can draw smooth lines in 3D space, adjusting simple characteristics lik
 
 #### Data model
 * `Spline`s and `Polyline`s
-  * Polyline: collection of straight line segments
-  * Spline: Bezier curves
-    * Input a Polyline
-    * Smooth line, define parametrization
+ * Polyline: collection of straight line segments
+ * Spline: Bezier curves
+  * Input a Polyline
+  * Smooth line, define parametrization
 * `PolylineGeometry` (factory)
 * Drawing canvas: ordered list of lines `[Polyline]`
-  * Lines are ordered by entry time to allow for history tracking
-  * Fed into view to make 3D cylinders only upon creation/deletion, so arrays are good enough 
-    (don't need quick look-up, just some notion of ordering)
+ * Lines are ordered by entry time to allow for history tracking
+ * Fed into view to make 3D cylinders only upon creation/deletion, so arrays are good enough 
+   (don't need quick look-up, just some notion of ordering)
 
 #### Controllers and Views
 - ARSCNView
