@@ -62,7 +62,7 @@ public class Geometry {
   // Rotate face to be perpendicular to vector v
   private static func rotatedFace(face : [float3], _ v : float3) -> [float3] {
     let (w,phi) = rotation(float3(), v)
-    let rotationTransform = simd_float4x4(simd_quatf(angle: phi, axis: w))
+    let rotationTransform = float4x4(simd_quatf(angle: phi, axis: w))
     return face.map {
       let rotated = float4($0, 1) * rotationTransform
       return float3(rotated)
@@ -271,6 +271,38 @@ public class Geometry {
       let generator = cylinderGenerator(radius: radius, color: color)
       incrementHue()
       return generator(u,v)
+    }
+  }
+  
+  /**
+   Returns a smoothed curve generator using Bezier curves.  Generator takes a 3x4 matrix,
+   equivalent to 4 float3's.
+   
+   */
+  public static func bezierCurveGenerator(radius: CGFloat, color: UIColor) -> (float4x3) -> SCNNode {
+    func basis(t : Float) -> float4 { // needs to be here so generator can use in init
+      return float4(1, t, powf(t, 2), powf(t, 3))
+    }
+    let splineMatrix = float4x4(rows: [float4(1, -3, 3, -1),
+                                       float4(0,3,-6,3),
+                                       float4(0, 0, 3, -3),
+                                       float4(0, 0, 0, 1)])
+
+    return { (matrix: float4x3) -> SCNNode in
+      let parametrization = { (t: Float) -> float3 in
+        let result = matrix * splineMatrix * basis(t: t)
+        NSLog("t = \(t): \(result)")
+        return result
+      }
+      
+      let parent = SCNNode()
+      let vertices = stride(from: 0.0, to: 4.0, by: 1.0).map(parametrization)
+      let cylinderGenerator = self.cylinderGenerator(radius: radius, color: color)
+      for i in 0...vertices.count-2 {
+        let cylinderNode = cylinderGenerator(vertices[i], vertices[i+1])
+        parent.addChildNode(cylinderNode)
+      }
+      return parent
     }
   }
   

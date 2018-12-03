@@ -26,7 +26,7 @@
                                 </connections>
                             </arscnView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT">
-                                <rect key="frame" x="25" y="25" width="38" height="29"/>
+                                <rect key="frame" x="15" y="25" width="38" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="29" id="4bq-pQ-MlX"/>
                                 </constraints>
@@ -37,16 +37,17 @@
                                     <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="iA7-fz-VV6"/>
                                 </connections>
                             </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
-                                <rect key="frame" x="150" y="25" width="200" height="29"/>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
+                                <rect key="frame" x="140" y="25" width="220" height="29"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="a5u-Wj-bX7"/>
+                                    <constraint firstAttribute="width" constant="220" id="a5u-Wj-bX7"/>
                                     <constraint firstAttribute="height" constant="28" id="gDU-gg-uFk"/>
                                 </constraints>
                                 <segments>
                                     <segment title="Curve"/>
                                     <segment title="Flat"/>
                                     <segment title="Rainbow"/>
+                                    <segment title="Bezier"/>
                                 </segments>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
@@ -81,14 +82,14 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="OpT-kM-KxR" secondAttribute="trailing" constant="25" id="2gA-9Q-Zv1"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="OpT-kM-KxR" secondAttribute="trailing" constant="15" id="2gA-9Q-Zv1"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="BrB-h1-WRS" secondAttribute="leading" id="5Yp-Hw-kMc"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
                             <constraint firstItem="pfE-gP-WbT" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="I4p-JY-dc9"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="KBY-5u-WJP"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
-                            <constraint firstItem="pfE-gP-WbT" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="25" id="hMe-LS-bny"/>
+                            <constraint firstItem="pfE-gP-WbT" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="hMe-LS-bny"/>
                             <constraint firstItem="8I4-qS-92P" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="mWA-It-Dl2"/>
                             <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="Pnb-wa-pwq" secondAttribute="bottom" id="qLj-0w-RQH"/>
                             <constraint firstItem="OpT-kM-KxR" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="qM7-CE-Ae3"/>

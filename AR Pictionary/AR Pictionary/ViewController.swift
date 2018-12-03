@@ -32,6 +32,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     didSet {
       if factory2 != nil {
         factory3 = nil
+        factory4 = nil
       }
     }
   }
@@ -39,6 +40,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     didSet {
       if factory3 != nil {
         factory2 = nil
+        factory4 = nil
+      }
+    }
+  }
+  private var factory4: ((float4x3) -> SCNNode)? {
+    didSet {
+      if factory4 != nil {
+        factory2 = nil
+        factory3 = nil
       }
     }
   }
@@ -48,6 +58,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     case flat
     case flatRainbow
     case pulse
+    case bezier
   }
 
   private var factoryType : Brush?
@@ -57,6 +68,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     switch sender.titleForSegment(at: sender.selectedSegmentIndex) {
     case "Flat": factoryType = .flat
     case "Rainbow": factoryType = .flatRainbow
+    case "Bezier": factoryType = .bezier
     default: factoryType = .curve // use by default
     }
     setUpFactory()
@@ -69,6 +81,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     case Brush.flat:
       factory3 = Geometry.flatBrushGenerator(width: lineRadius * kflat,
                                              color: lineColor)
+    case Brush.bezier:
+      factory4 = Geometry.bezierCurveGenerator(radius: lineRadius, color: lineColor)
     case Brush.pulse:
       factory2 = Geometry.pulseBrushGenerator(maxRadius: lineRadius * kPulseMax,
                                               minRadius: lineRadius * kPulseMin,
@@ -172,6 +186,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   /// Tracks the location of the point drawn before self.previous.
   private var grandPos : float3?
   
+  /// Tracks the location of the point drawn before self.grandPos.
+  private var greatGrandPos : float3?
+  
   /**
     Draws a new point in the sceneView, extending the currently drawn line
     if one exists.
@@ -213,8 +230,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
           } else if let factory3 = self?.factory3, let grandPos = self?.grandPos {
             node = factory3(grandPos, previousPos, currentPos)
             self?.rootNode.addChildNode(node)
+          } else if let factory4 = self?.factory4,
+            let grandPos = self?.grandPos,
+            let greatGrandPos = self?.greatGrandPos {
+            node = factory4(float4x3(greatGrandPos, grandPos, previousPos, currentPos))
+            self?.rootNode.addChildNode(node)
           }
 
+          self?.greatGrandPos = self?.grandPos
           self?.grandPos = self?.previous
           self?.previous = currentPos
         }

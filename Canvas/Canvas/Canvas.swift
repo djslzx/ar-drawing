@@ -28,7 +28,7 @@ public class Polyline : CustomDebugStringConvertible {
    Initializes a new Polyline.
    
    - Parameter vertices: The sequence of 3-component vectors to be used
-      as the endpoints of the line segments in the Polyline.
+   as the endpoints of the line segments in the Polyline.
    */
   public init(vertices : [float3]) {
     self.vertices = vertices
@@ -46,7 +46,7 @@ public class Polyline : CustomDebugStringConvertible {
    
    - Parameters:
    - generator: The generating function used to compute the values of the vertices
-      in the Polyline.
+   in the Polyline.
    - values: The values fed into the generator to derive vertex values.
    
    */
@@ -58,9 +58,9 @@ public class Polyline : CustomDebugStringConvertible {
    Adds a vertex to the end of the Polyline.
    
    **Modifies**: self
-
+   
    **Effects**: The input vertex is added to self.
-
+   
    - Parameter vertex: The vertex to be added.
    
    */
@@ -74,7 +74,7 @@ public class Polyline : CustomDebugStringConvertible {
    **Modifies**: self
    
    **Effects**: Removes the last vertex in self if one exists.
-    Exits otherwise.
+   Exits otherwise.
    
    */
   public func drop() {
@@ -85,7 +85,7 @@ public class Polyline : CustomDebugStringConvertible {
   
   /**
    - Returns: The last line segment in the Polyline.
-  
+   
    Useful when converting the Polyline into a viewable format segment by segment.
    */
   public func lastSegment() -> (float3, float3)? {
@@ -120,12 +120,13 @@ public class Spline {
     ])
   
   public init(vertices: [float3]) {
-    maxIndex = Float(vertices.count-1)
-    
-    func basis(t : Float) -> float4 {
+
+    func basis(t : Float) -> float4 { // needs to be here so generator can use in init
       return float4(1, t, powf(t, 2), powf(t, 3))
     }
 
+    maxIndex = Float(vertices.count-1)
+    
     generator = { (t : Float) -> float3 in
       // Can't use instance variables here bc in init
       assert(0 <= t && t <= Float(vertices.count - 1))
@@ -133,10 +134,10 @@ public class Spline {
       // Int : (Float) -> float3
       var subgenerators : [(Float) -> float3] = []
       for i in stride(from: 0, to: vertices.count, by: 4) {
-        let geometryMatrix = simd_float4x3(vertices[i],
-                                           vertices[i+1],
-                                           vertices[i+2],
-                                           vertices[i+3])
+        let geometryMatrix = float4x3(vertices[i],
+                                      vertices[i+1],
+                                      vertices[i+2],
+                                      vertices[i+3])
         subgenerators.append {
           return geometryMatrix * Spline.bernstein * basis(t: $0)
         }
@@ -156,7 +157,7 @@ public class Spline {
   public func eval(at t: Float) -> float3 {
     return generator(t)
   }
-
+  
 }
 
 
