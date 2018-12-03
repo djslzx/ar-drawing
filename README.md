@@ -28,7 +28,6 @@ David J. Lee
     - Discrete/Seeding: straight-line-drawing, plane-drawing
      - Add 
 - [ ] Branching-geometry factories (trees, lightning)
- 
 - Polylines
   - [x] SCNCylinder line drawing
    - [x] Get cylinders to line up correctly
