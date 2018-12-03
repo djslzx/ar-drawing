@@ -8,25 +8,25 @@ David J. Lee
 
 ## TODOs:
 - Drawing extensions:
- - [ ] Undo
- - [ ] Color adjustment
-  - [ ] Provide good brush swatches (pastels? or lighter colors for better background contrast) 
-    instead of color wheel/picker
- - [x] Thickness adjustment
-- [ ] Depth of field (better z-sensing) mode/button
+  - [ ] **Undo**
+   - Undo drawing of the last curve (or section of curve if it's a massive one)
+  - [ ] **Color adjustment**
+   - [ ] Provide good brush swatches (pastels? or lighter colors for better background contrast) 
+     instead of color wheel/picker
+  - [x] Thickness adjustment
+ - [ ] **Depth of field (better z-sensing) mode/button**
 - Architecture:
- - [ ] Swap from inputs like `(float3, float3)` to matrices (`float2x3`)
- - [ ] Generalize `factoryX`
- - [ ] Generalize brushes
-  - [ ] color closure instead of UIColor parameter
-   - Color class?
-  - Brush class?
- - [ ] Output bezier with variable-grained discretization
- - [ ] Polish `Input` enum
-  - Continuous v discrete tools:
+  - [ ] Swap from inputs like `(float3, float3)` to matrices (`float2x3`)
+  - [ ] Generalize `factoryX`
+  - [ ] Generalize brushes
+    - [ ] color closure instead of UIColor parameter
+     - Color class?
+   - Brush class?
+  - [ ] Output bezier with variable-grained discretization
+  - [ ] Polish `Input` enum
+   - Continuous v discrete tools:
     - Continuous: brushes (flat, poly, bezier)
     - Discrete/Seeding: straight-line-drawing, plane-drawing
-     - Add 
 - [ ] Branching-geometry factories (trees, lightning)
 - Polylines
   - [x] SCNCylinder line drawing
