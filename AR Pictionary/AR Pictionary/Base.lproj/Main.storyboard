@@ -46,9 +46,7 @@
                                 <segments>
                                     <segment title="Curve"/>
                                     <segment title="Flat"/>
-                                    <segment title="Rainbow"/>
                                     <segment title="Bezier"/>
-                                    <segment title="Pulse"/>
                                 </segments>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>

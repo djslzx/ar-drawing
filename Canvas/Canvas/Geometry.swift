@@ -195,8 +195,8 @@ public class Geometry {
     return { (m: [float3], context: Context) -> SCNNode in
       let w = Float(context.lineRadius)
       let wideBrush : [float3] = [ // corner vertices
-        float3(w, 0, 0),
-        float3(-w, 0, 0)
+        float3(-w, 0, 0),
+        float3(w, 0, 0)
       ]
       return smoothTubeGenerator(face: wideBrush)(m, context)
     }
@@ -289,6 +289,7 @@ public class Geometry {
   private static func smoothTubeGenerator(face : [float3]) -> ([float3], Context) -> SCNNode {
     assert(!face.isEmpty)
     return { (m: [float3], context: Context) -> SCNNode in
+      NSLog("Entered smoothTubeGenerator")
       assert(m.count >= 3)
       let u = m[m.count-1], v = m[m.count-2], w = m[m.count-3]
 
@@ -300,6 +301,7 @@ public class Geometry {
       // Add to SCNNode
       let node = SCNNode(geometry: pipe)
       node.simdPosition = u
+      NSLog(String(node.simdPosition.debugDescription))
       return node
     }
   }

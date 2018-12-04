@@ -74,10 +74,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     switch sender.state {
     case .began:
       touched = true
-      fallthrough
-    case .changed:
+      NSLog("Began pressed")
       drawPoint()
     case .ended:
+      NSLog("Ended pressed")
       touched = false
       lines.append(Polyline())
     //TODO:
@@ -121,15 +121,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     return deviceLocationTransform?.translation
   }
   
-  /// Tracks the location of the most recently drawn point.
-  private var previous : float3?
-  
-  /// Tracks the location of the point drawn before self.previous.
-  private var grandPos : float3?
-  
-  /// Tracks the location of the point drawn before self.grandPos.
-  private var greatGrandPos : float3?
-  
   /**
     Draws a new point in the sceneView, extending the currently drawn line
     if one exists.
@@ -149,29 +140,23 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     DispatchQueue.global().async {
       [weak self] in
       DispatchQueue.main.async {
+
+        // Ensure that draw method should still be active and current position
+        // is capturing correctly
         guard self?.touched ?? false, let currentPos = self?.currentPos else {
-          self?.previous = nil
-          self?.grandPos = nil
-          self?.greatGrandPos = nil
           return
         }
-        guard let previousPos = self?.lines.last else {
-          self?.previous = currentPos
-          self?.drawPoint()
-          return
-        }
-        
-        // Check that new points are far enough away to be worth drawing
-        if currentPos.distance(to: previousPos) > Float(self!.context.lineRadius)/2 {
-          self?.lines.last?.add(vertex: currentPos)
-          
-          if let vertices = self?.lines.last?.vertices,
-            let pen = self?.pen,
-            let context = self?.context,
-            vertices.count >= pen.count {
-            let node = pen.apply(vertices: vertices, context: context)
-            self?.rootNode.addChildNode(node)
-          }
+
+        self?.lines.last?.add(vertex: currentPos)
+
+        if let vertices = self?.lines.last?.vertices,
+          let pen = self?.pen,
+          vertices.count >= pen.count,
+          let context = self?.context
+        {
+          NSLog("Drawing")
+          let node = pen.apply(vertices: vertices, context: context)
+          self?.rootNode.addChildNode(node)
         }
 
         // Repeat
@@ -181,7 +166,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   }
   
   /// Tracks whether the scene is currently being cleared (in case the user presses
-  /// the clear button multiple times in succession).
+  /// the clear button multiple times in s                           uccession).
   private var inMiddleOfClearing : Bool = false
   
   /**
@@ -208,8 +193,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   /// Clears the scene and model.
   public func clearScene() {
+    NSLog("Clearing scene")
     sceneView.scene = SCNScene()
-    lines = []
+    lines = [Polyline()]
   }
   
   override func viewDidLoad() {
