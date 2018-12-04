@@ -12,6 +12,7 @@
 		73BF4F2921A7764B0013CFCD /* CanvasTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73BF4F2821A7764B0013CFCD /* CanvasTests.swift */; };
 		73BF4F2B21A7764B0013CFCD /* Canvas.h in Headers */ = {isa = PBXBuildFile; fileRef = 73BF4F1D21A7764B0013CFCD /* Canvas.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		73BF4F3521A7765A0013CFCD /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73BF4F3421A7765A0013CFCD /* Canvas.swift */; };
+		8B3122DF21B6DA3D00148964 /* Pen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3122DE21B6DA3D00148964 /* Pen.swift */; };
 		8BC92ACD21B58D0300402211 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC92ACC21B58D0300402211 /* Geometry.swift */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +35,7 @@
 		73BF4F2821A7764B0013CFCD /* CanvasTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasTests.swift; sourceTree = "<group>"; };
 		73BF4F2A21A7764B0013CFCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		73BF4F3421A7765A0013CFCD /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
+		8B3122DE21B6DA3D00148964 /* Pen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pen.swift; sourceTree = "<group>"; };
 		8BC92ACC21B58D0300402211 /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -79,6 +81,7 @@
 			children = (
 				73BF4F3421A7765A0013CFCD /* Canvas.swift */,
 				8BC92ACC21B58D0300402211 /* Geometry.swift */,
+				8B3122DE21B6DA3D00148964 /* Pen.swift */,
 				730ACFA521AF8D41005C2F59 /* MatrixExtensions.swift */,
 				73BF4F1E21A7764B0013CFCD /* Info.plist */,
 				73BF4F1D21A7764B0013CFCD /* Canvas.h */,
@@ -207,6 +210,7 @@
 				730ACFA621AF8D41005C2F59 /* MatrixExtensions.swift in Sources */,
 				8BC92ACD21B58D0300402211 /* Geometry.swift in Sources */,
 				73BF4F3521A7765A0013CFCD /* Canvas.swift in Sources */,
+				8B3122DF21B6DA3D00148964 /* Pen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
