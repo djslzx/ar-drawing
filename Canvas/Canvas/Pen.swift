@@ -20,20 +20,18 @@ public class Pen {
   }
 
   public func apply(vertices: [float3], context : Context) -> SCNNode {
-    return fn(vertices, context)
+    let node = fn(vertices, context)
+    // Set color and style
+    node.enumerateChildNodes { (child, _) in
+      child.geometry?.firstMaterial?.diffuse.contents = context.color
+    }
   }
 }
 
-public class Context {
-  private let color : UIColor
-  private let lineThickness : CGFloat
-  private let lineDetail : Int
-
-  public init(color: UIColor, lineThickness: CGFloat, lineDetail: Int) {
-    self.color = color
-    self.lineThickness = lineThickness
-    self.lineDetail = lineDetail
-  }
+public struct Context {
+  let color : UIColor
+  let lineThickness : CGFloat
+  let lineDetail : Int
 }
 
 public class ContextUpdater {

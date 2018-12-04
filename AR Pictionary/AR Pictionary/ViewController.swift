@@ -28,6 +28,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     return sceneView.scene.rootNode
   }
   
+  private var context : Context = Context(color: UIColor.white,
+                                          lineThickness: CGFloat(powf(10, -3.75)),
+                                          lineDetail: 9)
+  
+  private let pens : [String : Pen] = [
+    "Curve" : Pen(count: 2, Geometry.cylinderGenerator(context))
+  ]
+
+  private var pen : Pen =
+  
   private var factory2 : ((float3, float3) -> SCNNode)? {
     didSet {
       if factory2 != nil {
