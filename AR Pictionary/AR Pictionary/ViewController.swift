@@ -69,6 +69,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     case "Flat": factoryType = .flat
     case "Rainbow": factoryType = .flatRainbow
     case "Bezier": factoryType = .bezier
+    case "Pulse": factoryType = .pulse
     default: factoryType = .curve // use by default
     }
     setUpFactory()
@@ -82,7 +83,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       factory3 = Geometry.flatBrushGenerator(width: lineRadius * kflat,
                                              color: lineColor)
     case Brush.bezier:
-      factory4 = Geometry.bezierCurveGenerator(radius: lineRadius, color: lineColor)
+      factory4 = Geometry.bezierCurveGenerator(radius: lineRadius,
+                                               granularity: bezierGranularity,
+                                               color: lineColor)
     case Brush.pulse:
       factory2 = Geometry.pulseBrushGenerator(maxRadius: lineRadius * kPulseMax,
                                               minRadius: lineRadius * kPulseMin,
@@ -102,6 +105,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   }
   private var lineColor : UIColor = UIColor.white
   private let lineDetail : Int = 9
+
+  private let bezierGranularity : Int = 20
   
   /// Constant factory multipliers
   private let kflat : CGFloat = 4
@@ -211,6 +216,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         guard self?.touched ?? false, let currentPos = self?.currentPos else {
           self?.previous = nil
           self?.grandPos = nil
+          self?.greatGrandPos = nil
           return
         }
         guard let previousPos = self?.previous else {
@@ -231,6 +237,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             node = factory3(grandPos, previousPos, currentPos)
             self?.rootNode.addChildNode(node)
           } else if let factory4 = self?.factory4,
+            let vertexCount = self?.lines.last?.vertices.count,
+            (vertexCount - 1) % 3 == 0,
             let grandPos = self?.grandPos,
             let greatGrandPos = self?.greatGrandPos {
             node = factory4(float4x3(greatGrandPos, grandPos, previousPos, currentPos))

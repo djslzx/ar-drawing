@@ -279,7 +279,7 @@ public class Geometry {
    equivalent to 4 float3's.
    
    */
-  public static func bezierCurveGenerator(radius: CGFloat, color: UIColor) -> (float4x3) -> SCNNode {
+  public static func bezierCurveGenerator(radius: CGFloat, granularity: Int, color: UIColor) -> (float4x3) -> SCNNode {
     func basis(t : Float) -> float4 { // needs to be here so generator can use in init
       return float4(1, t, powf(t, 2), powf(t, 3))
     }
@@ -289,14 +289,14 @@ public class Geometry {
                                        float4(0, 0, 0, 1)])
 
     return { (matrix: float4x3) -> SCNNode in
+      let m = matrix * splineMatrix
       let parametrization = { (t: Float) -> float3 in
-        let result = matrix * splineMatrix * basis(t: t)
-        NSLog("t = \(t): \(result)")
+        let result = m * basis(t: t)
         return result
       }
       
       let parent = SCNNode()
-      let vertices = stride(from: 0.0, to: 4.0, by: 1.0).map(parametrization)
+      let vertices = stride(from: 0.0, to: Float(granularity), by: 1.0).map(parametrization)
       let cylinderGenerator = self.cylinderGenerator(radius: radius, color: color)
       for i in 0...vertices.count-2 {
         let cylinderNode = cylinderGenerator(vertices[i], vertices[i+1])
