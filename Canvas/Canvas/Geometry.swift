@@ -34,7 +34,7 @@ public class Geometry {
     let phi = atan(d/y)
     let w = float3(-z/d, 0, x/d)
     
-    return (w, Float.pi - phi) //TODO: see if Float.pi - phi works better
+    return (w, Float.pi - phi) // make phi start at top
   }
   
   /**
@@ -129,13 +129,15 @@ public class Geometry {
    - Returns: A function that generates cylinder geometries between two points.
    
    */
-  public static func cylinderGenerator(radius: CGFloat) -> ([float3]) -> SCNNode {
-    return { (m: [float3]) -> SCNNode in
+  public static func cylinderGenerator() -> ([float3], Context) -> SCNNode {
+    return { (m: [float3], context: Context) -> SCNNode in
       assert(m.count >= 2)
       let u = m[m.count-1], v = m[m.count-2]
       
-      let cylinder = SCNCylinder(radius: radius, height: CGFloat(u.distance(to: v)))
+      let cylinder = SCNCylinder(radius: context.lineRadius,
+                                 height: CGFloat(u.distance(to: v)))
       cylinder.heightSegmentCount = 1
+      cylinder.firstMaterial?.diffuse.contents = context.color
 
       // Get rotation axis and angle for the vector from u to v
       let (w, phi) = self.rotation(u, v)
@@ -156,16 +158,17 @@ public class Geometry {
    
    - Returns: A function that generates cylinder geometries between three points.
    */
-  public static func jointedcylinderGenerator(radius: CGFloat) -> ([float3]) -> SCNNode {
-    return { (m: [float3]) -> SCNNode in
+  public static func jointedcylinderGenerator() -> ([float3], Context) -> SCNNode {
+    return { (m: [float3], context: Context) -> SCNNode in
       assert(m.count >= 3)
       let u = m[m.count-1], v = m[m.count-2], w = m[m.count-3]
       
-      let cylinderNodes : [SCNNode] = [[u,v], [v,w]].map(cylinderGenerator(radius: radius))
+      let cylinderGenerator = self.cylinderGenerator()
+      let cylinderNodes : [SCNNode] = [[u,v], [v,w]].map { cylinderGenerator($0,context) }
       
       // terminal face of first cylinder, initial face of second cylinder
-      let firstTerminal : [float3] = rotatedFace(face: circleVertices(radius: Float(radius)), v - u)
-      let secondInitial : [float3] = rotatedFace(face: circleVertices(radius: Float(radius)), w - v)
+      let firstTerminal : [float3] = rotatedFace(face: circleVertices(radius: Float(context.lineRadius)), v - u)
+      let secondInitial : [float3] = rotatedFace(face: circleVertices(radius: Float(context.lineRadius)), w - v)
       
       // ankle joint
       let ankleGeometry = interleavedGeometry(face1: firstTerminal, face2: secondInitial)
@@ -174,6 +177,7 @@ public class Geometry {
       
       let parent = SCNNode()
       for node in cylinderNodes + [ankleNode] {
+        node.geometry?.firstMaterial?.diffuse.contents = context.color
         parent.addChildNode(node)
       }
       return parent
@@ -187,13 +191,15 @@ public class Geometry {
    - width: The width of the brush face (x-y plane).
    - color: The color of the brush.
    */
-  public static func flatBrushGenerator(width: CGFloat) -> ([float3]) -> SCNNode {
-    let w = Float(width)
-    let wideBrush : [float3] = [ // corner vertices
-      float3(w, 0, 0),
-      float3(-w, 0, 0)
-    ]
-    return smoothTubeGenerator(face: wideBrush)
+  public static func flatBrushGenerator() -> ([float3], Context) -> SCNNode {
+    return { (m: [float3], context: Context) -> SCNNode in
+      let w = Float(context.lineRadius)
+      let wideBrush : [float3] = [ // corner vertices
+        float3(w, 0, 0),
+        float3(-w, 0, 0)
+      ]
+      return smoothTubeGenerator(face: wideBrush)(m, context)
+    }
   }
   
 //  public static func flatRainbowGenerator(width: CGFloat) -> (float3, float3, float3) -> SCNNode {
@@ -214,7 +220,7 @@ public class Geometry {
    equivalent to 4 float3's.
    
    */
-  public static func bezierCurveGenerator(radius: CGFloat, granularity: Int) -> ([float3]) -> SCNNode {
+  public static func bezierCurveGenerator() -> ([float3], Context) -> SCNNode {
     func basis(t : Float) -> float4 { // needs to be here so generator can use in init
       return float4(1, t, powf(t, 2), powf(t, 3))
     }
@@ -223,7 +229,7 @@ public class Geometry {
                                        float4(0, 0, 3, -3),
                                        float4(0, 0, 0, 1)])
 
-    return { (m: [float3]) -> SCNNode in
+    return { (m: [float3], context: Context) -> SCNNode in
       assert(m.count >= 4)
       let matrix = float4x3(Array(m.suffix(4))) * splineMatrix
       let parametrization = { (t: Float) -> float3 in
@@ -232,10 +238,10 @@ public class Geometry {
       }
       
       let parent = SCNNode()
-      let vertices = stride(from: 0.0, to: Float(granularity), by: 1.0).map(parametrization)
-      let cylinderGenerator = self.cylinderGenerator(radius: radius)
+      let vertices = stride(from: 0.0, to: Float(context.detail), by: 1.0).map(parametrization)
+      let cylinderGenerator = self.cylinderGenerator()
       for i in 0...vertices.count-2 {
-        let cylinderNode = cylinderGenerator(Array(vertices[i...i+1]))
+        let cylinderNode = cylinderGenerator(Array(vertices[i...i+1]), context)
         parent.addChildNode(cylinderNode)
       }
       return parent
@@ -250,22 +256,26 @@ public class Geometry {
    - minRadius: The minimum cylinder radius.
    - color: The color of the brush.
    */
-  public static func pulseBrushGenerator(maxRadius: CGFloat,
-                                         minRadius: CGFloat,
-                                         frequency: Float) -> ([float3]) -> SCNNode {
-    func calcRadius(time: Double) -> CGFloat {
+  public static func pulseBrushGenerator() -> ([float3], Context) -> SCNNode {
+    func calcRadius(time: Double, maxRadius: CGFloat, minRadius: CGFloat) -> CGFloat {
       return CGFloat(pow(sin(time), 2)) * (maxRadius - minRadius) + minRadius
     }
 
     var t : Double = 0
     func incrementTime(_ u: float3, _ v: float3) {
-      t += Double(u.distance(to: v) * frequency) * Double.pi
+      t += Double(u.distance(to: v) * 45) * Double.pi
     }
     
-    return { (m: [float3]) -> SCNNode in
-      let generator = cylinderGenerator(radius: calcRadius(time: t))
+    return { (m: [float3], context: Context) -> SCNNode in
+      assert(m.count >= 2)
+      let generator = cylinderGenerator()
+      let newContext = Context(color: context.color,
+                               lineRadius: calcRadius(time: t,
+                                                      maxRadius: context.lineRadius * 5,
+                                                      minRadius: context.lineRadius * 0.5),
+                               detail: context.detail)
       incrementTime(m[0], m[1])
-      return generator(m)
+      return generator(m, newContext)
     }
   }
   
@@ -276,17 +286,17 @@ public class Geometry {
    - face: The face to be used in generating brush-prisms as defined in the x-z plane.
    - color: The color of the brush.
    */
-  private static func smoothTubeGenerator(face : [float3]) -> ([float3]) -> SCNNode {
+  private static func smoothTubeGenerator(face : [float3]) -> ([float3], Context) -> SCNNode {
     assert(!face.isEmpty)
-    return { (m: [float3]) -> SCNNode in
+    return { (m: [float3], context: Context) -> SCNNode in
       assert(m.count >= 3)
       let u = m[m.count-1], v = m[m.count-2], w = m[m.count-3]
 
       let firstFace : [float3] = rotatedFace(face: face, v - u)
       let secondFace : [float3] = rotatedFace(face: face, w - v).map { $0 + (v - u) }
-
       let pipe = interleavedGeometry(face1: firstFace, face2: secondFace)
-
+      pipe.firstMaterial?.diffuse.contents = context.color
+      
       // Add to SCNNode
       let node = SCNNode(geometry: pipe)
       node.simdPosition = u

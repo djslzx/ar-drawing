@@ -11,7 +11,7 @@ import SceneKit
 import CoreGraphics
 
 public class Pen {
-  let count : Int /// The number of point parameters
+  public let count : Int /// The number of point parameters
   private let fn : ([float3], Context) -> SCNNode
   
   public init(count: Int, _ fn: @escaping ([float3], Context) -> SCNNode) {
@@ -20,18 +20,22 @@ public class Pen {
   }
 
   public func apply(vertices: [float3], context : Context) -> SCNNode {
-    let node = fn(vertices, context)
-    // Set color and style
-    node.enumerateChildNodes { (child, _) in
-      child.geometry?.firstMaterial?.diffuse.contents = context.color
-    }
+    return fn(Array(vertices.suffix(count)), context)
   }
 }
 
 public struct Context {
-  let color : UIColor
-  let lineThickness : CGFloat
-  let lineDetail : Int
+  public var color : UIColor
+  public var lineRadius : CGFloat
+  public var detail : Int
+  
+  public init(color: UIColor = UIColor.white,
+              lineRadius: CGFloat = CGFloat(powf(10, 3.75)),
+              detail: Int = 16) {
+    self.color = color
+    self.lineRadius = lineRadius
+    self.detail = detail
+  }
 }
 
 public class ContextUpdater {
