@@ -30,7 +30,7 @@ public struct Context {
   public var detail : Int
   
   public init(color: UIColor = UIColor.white,
-              lineRadius: CGFloat = CGFloat(powf(10, 3.75)),
+              lineRadius: CGFloat = CGFloat(powf(10, -3.75)),
               detail: Int = 16) {
     self.color = color
     self.lineRadius = lineRadius
@@ -67,34 +67,6 @@ public class RainbowUpdater : ContextUpdater {
     var newContext = context
     newContext.color = UIColor(hue: self.hue, saturation: 0.5,
                                brightness: 1, alpha: 1)
-    return newContext
-  }
-}
-
-/**
-  A ContextUPdater that changes the context's line radius every time
-  update() is called.
- 
- */
-public class PulseUpdater : ContextUpdater {
-
-  private var t : Double = 0
-  private let maxRadius : CGFloat
-  private let minRadius : CGFloat
-  
-  public init(context: Context) {
-    maxRadius = context.lineRadius * 10
-    minRadius = context.lineRadius * 0.5
-  }
-
-  private func radius(_ time: Double) -> CGFloat {
-    return CGFloat(pow(sin(time), 2)) * (maxRadius - minRadius) + minRadius
-  }
-
-  public override func update(context: Context) -> Context {
-    var newContext = context
-    newContext.lineRadius = radius(t)
-    t += 0.25
     return newContext
   }
 }

@@ -46,7 +46,7 @@
                                 <segments>
                                     <segment title="Curve"/>
                                     <segment title="Flat"/>
-                                    <segment title="Bezier"/>
+                                    <segment title="Bezier" enabled="NO"/>
                                 </segments>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
@@ -54,14 +54,13 @@
                                 </connections>
                             </segmentedControl>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="I5i-sC-Qu8">
-                                <rect key="frame" x="160" y="63" width="200" height="29"/>
+                                <rect key="frame" x="227" y="63" width="133" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="otd-Id-KUc"/>
                                 </constraints>
                                 <segments>
                                     <segment title="Vanilla"/>
                                     <segment title="Rainbow"/>
-                                    <segment title="Pulse"/>
                                 </segments>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>

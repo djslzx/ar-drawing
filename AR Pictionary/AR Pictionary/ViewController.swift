@@ -35,30 +35,31 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     "Bezier" : Pen(count: 4, Geometry.bezierCurveGenerator()),
   ]
 
-  /// Current pen being used
-  private var pen : Pen = Pen(count: 2, Geometry.cylinderGenerator())
+  /// Dictionary of available ContextUpdaters
+  private let contextUpdaters : [String: ContextUpdater] = [
+    "Vanilla" : ContextUpdater(),
+    "Rainbow" : RainbowUpdater()
+  ]
   
-  /// Pen color/lineRadius context default
+  /// Current pen and context
+  private var pen : Pen = Pen(count: 2, Geometry.cylinderGenerator())
   private var context : Context = Context(color: UIColor.white,
                                           lineRadius: CGFloat(powf(10, -3.75)),
                                           detail: 9)
-
 
   /// Stores current contextUpdater
   private var updater : ContextUpdater = ContextUpdater()
 
   /// Responds to user context changes
   @IBAction func contextUpdaterChanged(_ sender: UISegmentedControl) {
-    switch sender.titleForSegment(at: sender.selectedSegmentIndex) {
-    case "Rainbow": updater = RainbowUpdater()
-    case "Pulse": updater = PulseUpdater(context: context)
-    default: updater = ContextUpdater()
-    }
+    updater = contextUpdaters[sender.titleForSegment(at: sender.selectedSegmentIndex)!] ??
+      contextUpdaters["Vanilla"]!
   }
 
   /// Responds to user brush type changes
   @IBAction func brushChanged(_ sender: UISegmentedControl) {
-    pen = pens[sender.titleForSegment(at: sender.selectedSegmentIndex)!]!
+    pen = pens[sender.titleForSegment(at: sender.selectedSegmentIndex)!] ??
+      pens["Curve"]!
   }
   
   /// Model: collection of Polylines
@@ -169,7 +170,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Ensure that points aren't too close together
         if previous.distance(to: currentPos) >= Float(self!.context.lineRadius) {
           self?.lines.last?.add(vertex: currentPos)
-          
+          self?.context = self!.updater.update(context: self!.context)
+
           if let vertices = self?.lines.last?.vertices,
             let pen = self?.pen,
             vertices.count >= pen.count,
@@ -177,7 +179,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
           {
             let node = pen.apply(vertices: vertices, context: context)
             self?.rootNode.addChildNode(node)
-            self?.context = self!.updater.update(context: context)
           }
         }
         // Repeat
