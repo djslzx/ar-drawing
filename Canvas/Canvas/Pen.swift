@@ -41,16 +41,11 @@ public struct Context {
 /**
  A protocol for context updates.
  */
-protocol ContextUpdater {
-  func update(context: Context) -> Context
-}
-
-/**
-  A ContextUpdater that makes no changes to the input context.
- 
- */
-public class EmptyUpdater : ContextUpdater {
-  func update(context: Context) -> Context {
+// TODO: Use protocol?
+public class ContextUpdater {
+  public init() {}
+  
+  public func update(context: Context) -> Context {
     return context
   }
 }
@@ -67,7 +62,7 @@ public class RainbowUpdater : ContextUpdater {
     hue = (hue + 0.01).truncatingRemainder(dividingBy: 1)
   }
 
-  func update(context: Context) -> Context {
+  public override func update(context: Context) -> Context {
     incrementHue()
     var newContext = context
     newContext.color = UIColor(hue: self.hue, saturation: 0.5,
@@ -84,21 +79,22 @@ public class RainbowUpdater : ContextUpdater {
 public class PulseUpdater : ContextUpdater {
 
   private var t : Double = 0
+  private let maxRadius : CGFloat
+  private let minRadius : CGFloat
   
-  private func incrementTime() {
-    t += 0.01
+  public init(context: Context) {
+    maxRadius = context.lineRadius * 10
+    minRadius = context.lineRadius * 0.5
   }
-  
-  private func radius(time: Double, maxRadius: CGFloat, minRadius: CGFloat) -> CGFloat {
+
+  private func radius(_ time: Double) -> CGFloat {
     return CGFloat(pow(sin(time), 2)) * (maxRadius - minRadius) + minRadius
   }
 
-  func update(context: Context) -> Context {
+  public override func update(context: Context) -> Context {
     var newContext = context
-    newContext.lineRadius = radius(time: t,
-                                   maxRadius: context.lineRadius * 5,
-                                   minRadius: context.lineRadius * 0.5)
-    incrementTime()
+    newContext.lineRadius = radius(t)
+    t += 0.25
     return newContext
   }
 }

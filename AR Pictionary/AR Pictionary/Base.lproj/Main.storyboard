@@ -53,6 +53,21 @@
                                     <action selector="brushChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="MdV-4z-UPY"/>
                                 </connections>
                             </segmentedControl>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="I5i-sC-Qu8">
+                                <rect key="frame" x="160" y="63" width="200" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="otd-Id-KUc"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Vanilla"/>
+                                    <segment title="Rainbow"/>
+                                    <segment title="Pulse"/>
+                                </segments>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="contextUpdaterChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="q4d-qD-Qjw"/>
+                                </connections>
+                            </segmentedControl>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.75" minValue="-4.5" maxValue="-2.75" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P">
                                 <rect key="frame" x="128.5" y="597" width="118" height="31"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -82,10 +97,12 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="OpT-kM-KxR" secondAttribute="trailing" constant="15" id="2gA-9Q-Zv1"/>
+                            <constraint firstItem="I5i-sC-Qu8" firstAttribute="top" secondItem="OpT-kM-KxR" secondAttribute="bottom" constant="10" id="3et-wi-rpj"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="BrB-h1-WRS" secondAttribute="leading" id="5Yp-Hw-kMc"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
                             <constraint firstItem="pfE-gP-WbT" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="I4p-JY-dc9"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="KBY-5u-WJP"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="I5i-sC-Qu8" secondAttribute="trailing" constant="15" id="LEw-5n-ZcJ"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
                             <constraint firstItem="pfE-gP-WbT" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="hMe-LS-bny"/>

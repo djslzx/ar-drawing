@@ -33,17 +33,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     "Curve" : Pen(count: 2, Geometry.cylinderGenerator()),
     "Flat" : Pen(count: 3, Geometry.flatBrushGenerator()),
     "Bezier" : Pen(count: 4, Geometry.bezierCurveGenerator()),
-    "Pulse" : Pen(count: 2, Geometry.pulseBrushGenerator()),
-    "Jointed" : Pen(count: 3, Geometry.jointedcylinderGenerator())
   ]
 
   /// Current pen being used
   private var pen : Pen = Pen(count: 2, Geometry.cylinderGenerator())
   
-  /// Pen color/lineRadius context
+  /// Pen color/lineRadius context default
   private var context : Context = Context(color: UIColor.white,
                                           lineRadius: CGFloat(powf(10, -3.75)),
                                           detail: 9)
+
+
+  /// Stores current contextUpdater
+  private var updater : ContextUpdater = ContextUpdater()
+
+  /// Responds to user context changes
+  @IBAction func contextUpdaterChanged(_ sender: UISegmentedControl) {
+    switch sender.titleForSegment(at: sender.selectedSegmentIndex) {
+    case "Rainbow": updater = RainbowUpdater()
+    case "Pulse": updater = PulseUpdater(context: context)
+    default: updater = ContextUpdater()
+    }
+  }
 
   /// Responds to user brush type changes
   @IBAction func brushChanged(_ sender: UISegmentedControl) {
@@ -165,8 +176,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let context = self?.context
           {
             let node = pen.apply(vertices: vertices, context: context)
-            NSLog(String(reflecting: node))
             self?.rootNode.addChildNode(node)
+            self?.context = self!.updater.update(context: context)
           }
         }
         // Repeat
