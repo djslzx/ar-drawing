@@ -28,91 +28,27 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     return sceneView.scene.rootNode
   }
   
-  private var factory2 : ((float3, float3) -> SCNNode)? {
-    didSet {
-      if factory2 != nil {
-        factory3 = nil
-        factory4 = nil
-      }
-    }
-  }
-  private var factory3 : ((float3, float3, float3) -> SCNNode)? {
-    didSet {
-      if factory3 != nil {
-        factory2 = nil
-        factory4 = nil
-      }
-    }
-  }
-  private var factory4: ((float4x3) -> SCNNode)? {
-    didSet {
-      if factory4 != nil {
-        factory2 = nil
-        factory3 = nil
-      }
-    }
-  }
-  
-  enum Brush {
-    case curve
-    case flat
-    case flatRainbow
-    case pulse
-    case bezier
-  }
+  /// Dictionary of available Pens
+  private let pens : [String : Pen] = [
+    "Curve" : Pen(count: 2, Geometry.cylinderGenerator()),
+    "Flat" : Pen(count: 3, Geometry.flatBrushGenerator()),
+    "Bezier" : Pen(count: 4, Geometry.bezierCurveGenerator()),
+    "Pulse" : Pen(count: 2, Geometry.pulseBrushGenerator()),
+    "Jointed" : Pen(count: 3, Geometry.jointedcylinderGenerator())
+  ]
 
-  private var factoryType : Brush?
+  /// Current pen being used
+  private var pen : Pen = Pen(count: 2, Geometry.cylinderGenerator())
   
+  /// Pen color/lineRadius context
+  private var context : Context = Context(color: UIColor.white,
+                                          lineRadius: CGFloat(powf(10, -3.75)),
+                                          detail: 9)
+
   /// Responds to user brush type changes
   @IBAction func brushChanged(_ sender: UISegmentedControl) {
-    switch sender.titleForSegment(at: sender.selectedSegmentIndex) {
-    case "Flat": factoryType = .flat
-    case "Rainbow": factoryType = .flatRainbow
-    case "Bezier": factoryType = .bezier
-    case "Pulse": factoryType = .pulse
-    default: factoryType = .curve // use by default
-    }
-    setUpFactory()
+    pen = pens[sender.titleForSegment(at: sender.selectedSegmentIndex)!]!
   }
-  
-  private func setUpFactory() {
-    switch factoryType! {
-    case Brush.curve:
-      factory2 = Geometry.cylinderGenerator(radius: lineRadius, color: lineColor)
-    case Brush.flat:
-      factory3 = Geometry.flatBrushGenerator(width: lineRadius * kflat,
-                                             color: lineColor)
-    case Brush.bezier:
-      factory4 = Geometry.bezierCurveGenerator(radius: lineRadius,
-                                               granularity: bezierGranularity,
-                                               color: lineColor)
-    case Brush.pulse:
-      factory2 = Geometry.pulseBrushGenerator(maxRadius: lineRadius * kPulseMax,
-                                              minRadius: lineRadius * kPulseMin,
-                                              frequency: kPulseFrequency,
-                                              color: lineColor)
-    case Brush.flatRainbow:
-      factory3 = Geometry.flatRainbowGenerator(width: lineRadius * kflat)
-    }
-  }
-  
-  /// Line stroke parameters
-  private var lineRadius : CGFloat = CGFloat(powf(10, -3.75)) {
-    // When lineRadius updates, update factories that require it
-    didSet {
-      setUpFactory()
-    }
-  }
-  private var lineColor : UIColor = UIColor.white
-  private let lineDetail : Int = 9
-
-  private let bezierGranularity : Int = 20
-  
-  /// Constant factory multipliers
-  private let kflat : CGFloat = 4
-  private let kPulseMin : CGFloat = 0.5
-  private let kPulseMax : CGFloat = 10
-  private let kPulseFrequency : Float = 45
   
   /// Model: collection of Polylines
   private var lines : [Polyline] = []
@@ -139,12 +75,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     switch sender.state {
     case .began:
       touched = true
-      lines.append(Polyline())
-      fallthrough
-    case .changed:
+      NSLog("Began pressed")
       drawPoint()
     case .ended:
+      NSLog("Ended pressed")
       touched = false
+      lines.append(Polyline())
+    //TODO:
     default:
       break
     }
@@ -152,7 +89,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   /// Updates the lineRadius when the user moves the slider
   @IBAction func sliderMoved(_ sender: UISlider) {
-    self.lineRadius = CGFloat(powf(10, sender.value))
+    context.lineRadius = CGFloat(powf(10, sender.value))
   }
   
   /**
@@ -185,15 +122,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     return deviceLocationTransform?.translation
   }
   
-  /// Tracks the location of the most recently drawn point.
-  private var previous : float3?
-  
-  /// Tracks the location of the point drawn before self.previous.
-  private var grandPos : float3?
-  
-  /// Tracks the location of the point drawn before self.grandPos.
-  private var greatGrandPos : float3?
-  
   /**
     Draws a new point in the sceneView, extending the currently drawn line
     if one exists.
@@ -213,43 +141,34 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     DispatchQueue.global().async {
       [weak self] in
       DispatchQueue.main.async {
+
+        // Ensure that draw method should still be active and current position
+        // is capturing correctly
         guard self?.touched ?? false, let currentPos = self?.currentPos else {
-          self?.previous = nil
-          self?.grandPos = nil
-          self?.greatGrandPos = nil
           return
         }
-        guard let previousPos = self?.previous else {
-          self?.previous = currentPos
+
+        // Handle case where line is just starting to be drawn
+        guard let previous = self?.lines.last?.vertices.last else {
+          self?.lines.last?.add(vertex: currentPos)
           self?.drawPoint()
           return
         }
         
-        // Check that new points are far enough away to be worth drawing
-        if currentPos.distance(to: previousPos) > Float(self!.lineRadius)/2 {
+        // Ensure that points aren't too close together
+        if previous.distance(to: currentPos) >= Float(self!.context.lineRadius) {
           self?.lines.last?.add(vertex: currentPos)
           
-          let node : SCNNode
-          if let factory2 = self?.factory2 {
-            node = factory2(previousPos, currentPos)
-            self?.rootNode.addChildNode(node)
-          } else if let factory3 = self?.factory3, let grandPos = self?.grandPos {
-            node = factory3(grandPos, previousPos, currentPos)
-            self?.rootNode.addChildNode(node)
-          } else if let factory4 = self?.factory4,
-            let vertexCount = self?.lines.last?.vertices.count,
-            (vertexCount - 1) % 3 == 0,
-            let grandPos = self?.grandPos,
-            let greatGrandPos = self?.greatGrandPos {
-            node = factory4(float4x3(greatGrandPos, grandPos, previousPos, currentPos))
+          if let vertices = self?.lines.last?.vertices,
+            let pen = self?.pen,
+            vertices.count >= pen.count,
+            let context = self?.context
+          {
+            let node = pen.apply(vertices: vertices, context: context)
+            NSLog(String(reflecting: node))
             self?.rootNode.addChildNode(node)
           }
-
-          self?.greatGrandPos = self?.grandPos
-          self?.grandPos = self?.previous
-          self?.previous = currentPos
         }
-
         // Repeat
         self?.drawPoint()
       }
@@ -257,7 +176,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   }
   
   /// Tracks whether the scene is currently being cleared (in case the user presses
-  /// the clear button multiple times in succession).
+  /// the clear button multiple times in s                           uccession).
   private var inMiddleOfClearing : Bool = false
   
   /**
@@ -284,8 +203,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   /// Clears the scene and model.
   public func clearScene() {
+    NSLog("Clearing scene")
     sceneView.scene = SCNScene()
-    lines = []
+    lines = [Polyline()]
   }
   
   override func viewDidLoad() {
@@ -297,8 +217,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // Show statistics such as fps and timing information
     sceneView.showsStatistics = true
     
-    factory2 = Geometry.cylinderGenerator(radius: lineRadius, color: lineColor)
-    factoryType = Brush.curve
+    lines.append(Polyline())
   }
   
   override func viewWillAppear(_ animated: Bool) {
