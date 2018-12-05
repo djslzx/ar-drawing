@@ -7,100 +7,60 @@ David J. Lee
 ![Demo.gif](https://github.com/deejayessel/ar-drawing/blob/master/flat_brush_test.gif)
 
 ## TODOs:
-- Drawing extensions:
-  - [ ] **Undo**
-   - Undo drawing of the last curve (or section of curve if it's a massive one)
-  - [ ] **Color adjustment**
-   - [ ] Provide good brush swatches (pastels? or lighter colors for better background contrast) 
-     instead of color wheel/picker
-  - [x] Thickness adjustment
- - [ ] **Depth of field (better z-sensing) mode/button**
-- Architecture:
-  - [ ] Swap from inputs like `(float3, float3)` to matrices (`float2x3`)
-  - [ ] Generalize `factoryX`
-  - [ ] Generalize brushes
-    - [ ] color closure instead of UIColor parameter
-     - Color class?
-   - Brush class?
-  - [ ] Output bezier with variable-grained discretization
-  - [ ] Polish `Input` enum
-   - Continuous v discrete tools:
-    - Continuous: brushes (flat, poly, bezier)
-    - Discrete/Seeding: straight-line-drawing, plane-drawing
-- [ ] Branching-geometry factories (trees, lightning)
-- Polylines
-  - [x] SCNCylinder line drawing
-   - [x] Get cylinders to line up correctly
-   - ~~NOTE: too pixellated~~ No longer pixellated, issue fixed
-  - [ ] SCNCylinder cleaning
+- [ ] **Save and load**: save vertex data and allow user to open saved copies of previous sessions
+  - Save vertex data into userdefaults
+- [ ] **Undo/Redo stacks**: Undo drawing of the last curve (or some fixed k most recent vertices), allow redo
+- [ ] **Color Picker**: Provide good swatches
+- [ ] **UI Changes**: master/detail layout of more detailed controls
+- [ ] **depth of field blur**: Better z-sensing
+- [ ] **Popups** when tracking quality is bad
+- [ ] Plane- and straight-line-drawing
+  - [ ] allow user to seed points and display as small SCNSpheres
+  - [ ] continually update view during straight-line drawing with a straight line from the start point to the current point
+- [ ] Polyline SCNCylinder cleaning
    - [ ] Remove intermediate points between parallel straight lines (lower angle bound)
    - [ ] Insert intermediate points between sharp turns (upper angle bound)
-  - [x] Cylinder mesh line drawing (all points have corresponding circular interfaces; all cylinders are directly connected)
-   - [x] mathematical model for getting vertices of circle faces
-   - [x] use SCNGeometryElement and SCNGeometrySource to construct
-   - [x] get everything working
-   - NOTE: not very good at handling sharp turns
+   
+## Lower-priority TODOs:
+- [ ] Branching-geometry factories (trees, lightning)
 - Splines
   - [ ] abstract implementation (Bezier)
   - [ ] conversion from polylines to splines and back
   - [ ] allow vector-drawing using Bezier in 3D
-- General drawing
-  - [ ] Undo mechanic
-  - [ ] User can customize their stroke color, thickness, and brush type
-- [ ] Plane-drawing
 - [ ] Shared environment
-- [ ] Export and import data
-  - [ ] export into appropriate format (JSON?)
-  - [ ] import from same format
-- [ ] User guide / popups when tracking quality is bad
-
-(Way down the line...)
-- Plane-drawing
-  - [ ] allow user to seed points and display as small SCNSpheres
-  - [ ] allow user to close a face path --> trigger plane generation
 
 ## Vision
 Users select a brush stroke and move their phones around in 3D space to draw 3D brush strokes.
 The resulting strokes are suspended in 3D space at a fixed location determined at the time of drawing,
 although the world space may be translated if the user desires.
 
-### Base Version
-The user can draw smooth lines in 3D space, adjusting simple characteristics like 
-- [ ] Color
-- [ ] Opacity
-- [ ] Stroke detail (polygon count)
-
 ### Extensions
 #### Drawing
 - Sculpting features
-  - User specifies points, algorithm run to get smallest prism containing points
-  - Vertices distorted with vertex-editing tools
-- Different brush sizes and colors
-- Undo/Redo options (History stack)
-
-#### Pictionary
-- The game is extended to n players, where n >= 2.  Drawing and guessing are randomly assigned 
-  roles that vary from round to round.
-- Additional game modes (e.g. drawing competition)
-  - Symmetry mode: all drawings have a fixed symmetry that can't be turned off and all subjects are asymmetric
-  - Chaos mode: brush size and color randomly change as the Drawer draws
-- **Online multiplayer**
+  - Allow user to warp existing vertices with vertex-editing tools (bulge and contract)
+- Symmetry mode: symmetry across a given fixed plane (fixed relative to phone or some arbitrary start point)
+- Chaos/Jackson-Pollock mode: brush size and color randomly change
+#### Online multiplayer
   - Players view a simple white room with player stand-ins tracked to iPhone motion
   - Guesses are submitted and checked via text input or voice recognition
 
 ## Feature List
 #### Drawing
 - User can draw strokes in their view
-  - [x] Drawing directly on the phone screen adds strokes at a fixed translation away from the user's current phone position
   - [x] Holding a finger on the phone screen and moving the phone in 3D space draws 3D strokes 
         where points along the curve correspond to the path of the phone
-- [ ] User can erase strokes in their view (same motion mechanic as the drawing case)
-- [ ] User can customize their stroke color, thickness, and brush type
-- [Extension] User can see markers that show where the Guessers are viewing the scene from
+- [x] User can customize their stroke color, thickness, and brush type
 
-## UI Sketches
+## UI Sketches (Deprecated)
 #### Drawing
 ![Drawing UI Sketches](https://github.com/deejayessel/ar-drawing/blob/master/20181114_214855-01-01.jpeg)
+
+## Test Plan
+Lots of UI/visual tests
+1.
+2.
+3.
+4.
 
 ## Key Use Cases
 #### Drawing a stroke
@@ -143,4 +103,4 @@ The user can draw smooth lines in 3D space, adjusting simple characteristics lik
 
 #### Controllers and Views
 - ARSCNView
-- `SCNVector3`s rendered as `SCNCylinder`s stored in the view; singleton class for `SCNCylinder` container (Canvas class)
+- `SCNVector3`s rendered as `SCNCylinder`s stored in the view
