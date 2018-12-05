@@ -145,16 +145,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Ensure that draw method should still be active and current position
         // is capturing correctly
         guard self?.touched ?? false, let currentPos = self?.currentPos else {
-          NSLog("Entered drawPoint guard, exiting drawPoint")
           return
         }
 
+        // Handle case where line is just starting to be drawn
         guard let previous = self?.lines.last?.vertices.last else {
           self?.lines.last?.add(vertex: currentPos)
           self?.drawPoint()
           return
         }
         
+        // Ensure that points aren't too close together
         if previous.distance(to: currentPos) >= Float(self!.context.lineRadius) {
           self?.lines.last?.add(vertex: currentPos)
           
@@ -163,7 +164,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             vertices.count >= pen.count,
             let context = self?.context
           {
-            NSLog("Drawing")
             let node = pen.apply(vertices: vertices, context: context)
             NSLog(String(reflecting: node))
             self?.rootNode.addChildNode(node)

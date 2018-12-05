@@ -38,6 +38,67 @@ public struct Context {
   }
 }
 
-public class ContextUpdater {
+/**
+ A protocol for context updates.
+ */
+protocol ContextUpdater {
+  func update(context: Context) -> Context
+}
+
+/**
+  A ContextUpdater that makes no changes to the input context.
+ 
+ */
+public class EmptyUpdater : ContextUpdater {
+  func update(context: Context) -> Context {
+    return context
+  }
+}
+
+/**
+  A ContextUpdater that changes the context's color every time update() is called.
+ 
+ */
+public class RainbowUpdater : ContextUpdater {
+
+  private var hue : CGFloat = 0
+
+  private func incrementHue() {
+    hue = (hue + 0.01).truncatingRemainder(dividingBy: 1)
+  }
+
+  func update(context: Context) -> Context {
+    incrementHue()
+    var newContext = context
+    newContext.color = UIColor(hue: self.hue, saturation: 0.5,
+                               brightness: 1, alpha: 1)
+    return newContext
+  }
+}
+
+/**
+  A ContextUPdater that changes the context's line radius every time
+  update() is called.
+ 
+ */
+public class PulseUpdater : ContextUpdater {
+
+  private var t : Double = 0
   
+  private func incrementTime() {
+    t += 0.01
+  }
+  
+  private func radius(time: Double, maxRadius: CGFloat, minRadius: CGFloat) -> CGFloat {
+    return CGFloat(pow(sin(time), 2)) * (maxRadius - minRadius) + minRadius
+  }
+
+  func update(context: Context) -> Context {
+    var newContext = context
+    newContext.lineRadius = radius(time: t,
+                                   maxRadius: context.lineRadius * 5,
+                                   minRadius: context.lineRadius * 0.5)
+    incrementTime()
+    return newContext
+  }
 }

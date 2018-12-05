@@ -207,20 +207,7 @@ public class Geometry {
       return generator(u, v, w, context)
     }
   }
-  
-//  public static func flatRainbowGenerator(width: CGFloat) -> (float3, float3, float3) -> SCNNode {
-//    var hue : CGFloat = 0
-//    func incrementHue() {
-//      hue = (hue + 0.01).truncatingRemainder(dividingBy: 1)
-//    }
-//    return { (u: float3, v: float3, w: float3) -> SCNNode in
-//      let color = UIColor(hue: hue, saturation: 0.5, brightness: 1, alpha: 1)
-//      let generator = flatBrushGenerator(width: width, color: color)
-//      incrementHue()
-//      return generator(u,v,w)
-//    }
-//  }
-  
+
   /**
    Returns a smoothed curve generator using Bezier curves.  Generator takes a 4x3 matrix,
    equivalent to 4 float3's.
@@ -237,7 +224,7 @@ public class Geometry {
 
     return { (m: [float3], context: Context) -> SCNNode in
       assert(m.count >= 4)
-      let matrix = float4x3(m.suffix(4).reversed()) * splineMatrix
+      let matrix = float4x3(Array(m.suffix(4))) * splineMatrix
       let parametrization = { (t: Float) -> float3 in
         let result = matrix * basis(t: t)
         return result
@@ -251,37 +238,6 @@ public class Geometry {
         parent.addChildNode(cylinderNode)
       }
       return parent
-    }
-  }
-  
-  /**
-   - Returns: A generator for cylinders that have pulsing radii.
-   
-   - Parameters:
-   - maxRadius: The maximum cylinder radius.
-   - minRadius: The minimum cylinder radius.
-   - color: The color of the brush.
-   */
-  public static func pulseBrushGenerator() -> ([float3], Context) -> SCNNode {
-    func calcRadius(time: Double, maxRadius: CGFloat, minRadius: CGFloat) -> CGFloat {
-      return CGFloat(pow(sin(time), 2)) * (maxRadius - minRadius) + minRadius
-    }
-
-    var t : Double = 0
-    func incrementTime(_ u: float3, _ v: float3) {
-      t += Double(u.distance(to: v) * 45) * Double.pi
-    }
-    
-    return { (m: [float3], context: Context) -> SCNNode in
-      assert(m.count >= 2)
-      let generator = cylinderGenerator()
-      let newContext = Context(color: context.color,
-                               lineRadius: calcRadius(time: t,
-                                                      maxRadius: context.lineRadius * 5,
-                                                      minRadius: context.lineRadius * 0.5),
-                               detail: context.detail)
-      incrementTime(m[0], m[1])
-      return generator(m, newContext)
     }
   }
   
