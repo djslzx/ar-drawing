@@ -20,7 +20,7 @@ public class Pen {
   }
 
   public func apply(vertices: [float3], context : Context) -> SCNNode {
-    return fn(Array(vertices.suffix(count)), context)
+    return fn(vertices, context)
   }
 }
 

@@ -33,7 +33,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     "Curve" : Pen(count: 2, Geometry.cylinderGenerator()),
     "Flat" : Pen(count: 3, Geometry.flatBrushGenerator()),
     "Bezier" : Pen(count: 4, Geometry.bezierCurveGenerator()),
-    "Pulse" : Pen(count: 2, Geometry.pulseBrushGenerator())
+    "Pulse" : Pen(count: 2, Geometry.pulseBrushGenerator()),
+    "Jointed" : Pen(count: 3, Geometry.jointedcylinderGenerator())
   ]
 
   /// Current pen being used
@@ -144,21 +145,30 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Ensure that draw method should still be active and current position
         // is capturing correctly
         guard self?.touched ?? false, let currentPos = self?.currentPos else {
+          NSLog("Entered drawPoint guard, exiting drawPoint")
           return
         }
 
-        self?.lines.last?.add(vertex: currentPos)
-
-        if let vertices = self?.lines.last?.vertices,
-          let pen = self?.pen,
-          vertices.count >= pen.count,
-          let context = self?.context
-        {
-          NSLog("Drawing")
-          let node = pen.apply(vertices: vertices, context: context)
-          self?.rootNode.addChildNode(node)
+        guard let previous = self?.lines.last?.vertices.last else {
+          self?.lines.last?.add(vertex: currentPos)
+          self?.drawPoint()
+          return
         }
-
+        
+        if previous.distance(to: currentPos) >= Float(self!.context.lineRadius) {
+          self?.lines.last?.add(vertex: currentPos)
+          
+          if let vertices = self?.lines.last?.vertices,
+            let pen = self?.pen,
+            vertices.count >= pen.count,
+            let context = self?.context
+          {
+            NSLog("Drawing")
+            let node = pen.apply(vertices: vertices, context: context)
+            NSLog(String(reflecting: node))
+            self?.rootNode.addChildNode(node)
+          }
+        }
         // Repeat
         self?.drawPoint()
       }

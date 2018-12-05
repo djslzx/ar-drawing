@@ -132,7 +132,7 @@ public class Geometry {
   public static func cylinderGenerator() -> ([float3], Context) -> SCNNode {
     return { (m: [float3], context: Context) -> SCNNode in
       assert(m.count >= 2)
-      let u = m[m.count-1], v = m[m.count-2]
+      let u = m[m.count-2], v = m[m.count-1]
       
       let cylinder = SCNCylinder(radius: context.lineRadius,
                                  height: CGFloat(u.distance(to: v)))
@@ -161,14 +161,16 @@ public class Geometry {
   public static func jointedcylinderGenerator() -> ([float3], Context) -> SCNNode {
     return { (m: [float3], context: Context) -> SCNNode in
       assert(m.count >= 3)
-      let u = m[m.count-1], v = m[m.count-2], w = m[m.count-3]
+      let u = m[m.count-3], v = m[m.count-2], w = m[m.count-1]
       
       let cylinderGenerator = self.cylinderGenerator()
       let cylinderNodes : [SCNNode] = [[u,v], [v,w]].map { cylinderGenerator($0,context) }
       
       // terminal face of first cylinder, initial face of second cylinder
       let firstTerminal : [float3] = rotatedFace(face: circleVertices(radius: Float(context.lineRadius)), v - u)
-      let secondInitial : [float3] = rotatedFace(face: circleVertices(radius: Float(context.lineRadius)), w - v)
+      let secondInitial : [float3] = rotatedFace(face: circleVertices(radius: Float(context.lineRadius)), w - v).map {
+        $0 + v - u
+      }
       
       // ankle joint
       let ankleGeometry = interleavedGeometry(face1: firstTerminal, face2: secondInitial)
@@ -177,7 +179,6 @@ public class Geometry {
       
       let parent = SCNNode()
       for node in cylinderNodes + [ankleNode] {
-        node.geometry?.firstMaterial?.diffuse.contents = context.color
         parent.addChildNode(node)
       }
       return parent
@@ -193,12 +194,17 @@ public class Geometry {
    */
   public static func flatBrushGenerator() -> ([float3], Context) -> SCNNode {
     return { (m: [float3], context: Context) -> SCNNode in
-      let w = Float(context.lineRadius)
+      assert(m.count >= 3)
+
+      let width = Float(context.lineRadius*2)
       let wideBrush : [float3] = [ // corner vertices
-        float3(-w, 0, 0),
-        float3(w, 0, 0)
+        float3(-width, 0, 0),
+        float3(width, 0, 0)
       ]
-      return smoothTubeGenerator(face: wideBrush)(m, context)
+
+      let generator = smoothTubeGenerator(face: wideBrush)
+      let u = m[m.count-3], v = m[m.count-2], w = m[m.count-1]
+      return generator(u, v, w, context)
     }
   }
   
@@ -231,7 +237,7 @@ public class Geometry {
 
     return { (m: [float3], context: Context) -> SCNNode in
       assert(m.count >= 4)
-      let matrix = float4x3(Array(m.suffix(4))) * splineMatrix
+      let matrix = float4x3(m.suffix(4).reversed()) * splineMatrix
       let parametrization = { (t: Float) -> float3 in
         let result = matrix * basis(t: t)
         return result
@@ -286,22 +292,18 @@ public class Geometry {
    - face: The face to be used in generating brush-prisms as defined in the x-z plane.
    - color: The color of the brush.
    */
-  private static func smoothTubeGenerator(face : [float3]) -> ([float3], Context) -> SCNNode {
+  private static func smoothTubeGenerator(face : [float3]) -> (float3, float3, float3, Context) -> SCNNode {
     assert(!face.isEmpty)
-    return { (m: [float3], context: Context) -> SCNNode in
-      NSLog("Entered smoothTubeGenerator")
-      assert(m.count >= 3)
-      let u = m[m.count-1], v = m[m.count-2], w = m[m.count-3]
-
+    return { (u: float3, v: float3, w: float3, context: Context) -> SCNNode in
       let firstFace : [float3] = rotatedFace(face: face, v - u)
       let secondFace : [float3] = rotatedFace(face: face, w - v).map { $0 + (v - u) }
       let pipe = interleavedGeometry(face1: firstFace, face2: secondFace)
       pipe.firstMaterial?.diffuse.contents = context.color
+      pipe.firstMaterial?.isDoubleSided = true
       
       // Add to SCNNode
       let node = SCNNode(geometry: pipe)
       node.simdPosition = u
-      NSLog(String(node.simdPosition.debugDescription))
       return node
     }
   }
