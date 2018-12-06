@@ -113,6 +113,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
+  /// Slider for adjusting hue
+  @IBOutlet weak var hueSlider: UISlider!
+  
+  /// Resets color to white upon button press
+  @IBAction func resetColorSlider(_ sender: UIButton) {
+    context.color = UIColor.white
+    hueSlider.tintColor = context.color
+    hueSlider.setValue((hueSlider.maximumValue + hueSlider.minimumValue)/2,
+                       animated: true)
+  }
+
   /**
    Matrix for camera transform that gives the position at which new points
    should be drawn.

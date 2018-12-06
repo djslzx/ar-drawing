@@ -51,23 +51,36 @@
                                     </segmentedControl>
                                 </subviews>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="BF0-jU-3jr" userLabel="Color and Thickness">
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="BF0-jU-3jr" userLabel="Color and Thickness">
                                 <rect key="frame" x="15" y="612" width="345" height="30"/>
                                 <subviews>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tgA-yq-HOu" userLabel="Color Slider">
-                                        <rect key="frame" x="-2" y="0.0" width="171.5" height="31"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aiN-Ap-CB6">
+                                        <rect key="frame" x="0.0" y="0.0" width="39" height="30"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Reset"/>
                                         <connections>
-                                            <action selector="hueSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="whF-CT-K1R"/>
+                                            <action selector="resetColorSlider:" destination="BV1-FR-VrT" eventType="touchUpInside" id="yga-kT-ppf"/>
                                         </connections>
-                                    </slider>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.75" minValue="-4.5" maxValue="-2.75" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P" userLabel="Thickness Slider">
-                                        <rect key="frame" x="175.5" y="0.0" width="171.5" height="31"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <connections>
-                                            <action selector="thicknessSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="lzd-mC-gar"/>
-                                        </connections>
-                                    </slider>
+                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="A6H-kI-ln4" userLabel="Sliders">
+                                        <rect key="frame" x="54" y="0.0" width="291" height="30"/>
+                                        <subviews>
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tgA-yq-HOu" userLabel="Color Slider">
+                                                <rect key="frame" x="-2" y="0.0" width="144.5" height="31"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <connections>
+                                                    <action selector="hueSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="whF-CT-K1R"/>
+                                                </connections>
+                                            </slider>
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.75" minValue="-4.5" maxValue="-2.75" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P" userLabel="Thickness Slider">
+                                                <rect key="frame" x="148.5" y="0.0" width="144.5" height="31"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <connections>
+                                                    <action selector="thicknessSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="lzd-mC-gar"/>
+                                                </connections>
+                                            </slider>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pnb-wa-pwq" customClass="ReticleView" customModule="AR_Pictionary" customModuleProvider="target">
@@ -108,6 +121,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="Sc4-Iy-n4o"/>
                     <connections>
+                        <outlet property="hueSlider" destination="tgA-yq-HOu" id="QtT-2e-Zwf"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
                     </connections>
                 </viewController>
