@@ -27,6 +27,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   private var rootNode : SCNNode {
     return sceneView.scene.rootNode
   }
+  
+  // - MARK: Reticle View
+  @IBOutlet weak var reticleView: ReticleView!
 
   // - MARK: Pens and contexts
   
@@ -43,16 +46,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     "Rainbow" : RainbowUpdater()
   ]
   
+  /// Pen defaults
+  private let defaultColor = UIColor.white
+  private let defaultLineRadius = CGFloat(powf(10, -3.75))
+  private let defaultDetail = 9
+  
   /// Current pen and context
   private var pen : Pen = Pen(count: 2, Geometry.cylinderGenerator())
   private var context : Context = Context(color: UIColor.white,
                                           lineRadius: CGFloat(powf(10, -3.75)),
                                           detail: 9) {
     didSet {
-      reticleView.updateCircleReticle(color: context.color.darker(by: 10)!,
-                                      radius: context.lineRadius * 1.4
-                                        / CGFloat(powf(10, -3.75)))
+      updateReticle()
     }
+  }
+  
+  private func updateReticle() {
+    reticleView.updateReticle(color: context.color.darker(by: 10)!,
+                                    radius: context.lineRadius * 1.4
+                                      / defaultLineRadius)
   }
 
   /// Stores current contextUpdater
@@ -125,7 +137,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   /// Resets color to white upon button press
   @IBAction func resetColorSlider(_ sender: UIButton) {
-    context.color = UIColor.white
+    context.color = defaultColor
     hueSlider.tintColor = context.color
     hueSlider.setValue((hueSlider.maximumValue + hueSlider.minimumValue)/2,
                        animated: true)
@@ -253,11 +265,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   // - MARK: Undo/Redo Stack
   
-  
-  // - MARK: Reticle View
-  
-  @IBOutlet weak var reticleView: ReticleView!
-
   // - MARK: Utilities
   
   override func viewDidLoad() {
@@ -268,6 +275,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // Show statistics such as fps and timing information
     sceneView.showsStatistics = true
+    
+    updateReticle()
   }
   
   override func viewWillAppear(_ animated: Bool) {
