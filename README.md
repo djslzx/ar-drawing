@@ -55,8 +55,13 @@ although the world space may be translated if the user desires.
 #### Drawing
 ![Drawing UI Sketches](https://github.com/deejayessel/ar-drawing/blob/master/20181114_214855-01-01.jpeg)
 
-## Test Plan
+## Testing
 Lots of UI/visual tests
+#### Cylinder-drawing
+- rotation of cylinders uses quaternion defined by angle phi and rotation axis vector w:
+  - ensure w is a unit vector
+  - ensure 
+
 1.
 2.
 3.
