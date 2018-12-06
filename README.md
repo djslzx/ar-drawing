@@ -57,29 +57,47 @@ although the world space may be translated if the user desires.
 
 ## Testing
 Lots of UI/visual tests
+
+#### Model-saving
+- add points to model by moving phone in 3d space while holding down finger on screen
+- verify point positions using NSLog and verify that motion along x,y,z axes produces expected data
+
 #### Cylinder-drawing
 - rotation of cylinders uses quaternion defined by angle phi and rotation axis vector w:
   - ensure w is a unit vector
-  - ensure 
+  - ensure w is oriented in the right direction (Pokeball test)
 
-1.
-2.
-3.
-4.
+####  Mesh-drawing
+- mesh line draws properly
+  - not invisible
+  - increases vertex and polygon counts within a reasonable bound (doesn't add nothing or too much)
+  - no obvious warping
+- place nodes with spheres (`pointNode`s) at each vertex and verify that vertices are in the right place
+
+#### Pen/Context/Sliders
+- try adjusting slider settings and verify that output works as expected (intuitive outputs)
+  - swapping settings doesn't break things
+  - try various combinations of swaps
+
+#### Main functionality checks
+- drawing line works
+  - line segments (cylinders) are oriented in the right direction
+- drawing flat curve works
+- different options don't conflict and behave as expected
+  - color and thickness meters harmonize; both harmonize with stroke type
+- clearing works without too much delay
+- view framerate doesn't drop with a small number of objects in view
+- polygon and vertex count stays constant when items in view do not change and no items are added
+  (check for addition of invisible geometries)
 
 ## Key Use Cases
 #### Drawing a stroke
 *Main Path*
-1. User draws a stroke on her phone screen while keeping her phone stable.
-2. The stroke is drawn onto a plane parallel to the user's phone orientation but at a short distance away. 
-3. The view overlays all existing strokes onto the live camera feed displayed as the background of the app.  
-
-*Alternate Path*
-1.1. User holds a finger on her phone screen while moving her phone in 3D space.
-2.1. The stroke is drawn in 3D space as a path of points that corresponds to the position of the user's
+1. User holds a finger on her phone screen while moving her phone in 3D space.
+2. The stroke is drawn in 3D space as a path of points that corresponds to the position of the user's
      iPhone through the duration of the held touch gesture.
-3.1. The user releases her finger from the phone screen.
-4.1. Return to Main Path at Step 3.
+3. The user releases her finger from the phone screen.
+(Continually) The view overlays all existing strokes onto the live camera feed displayed as the background of the app.  
 
 #### Viewing the scene
 *Main Path*
