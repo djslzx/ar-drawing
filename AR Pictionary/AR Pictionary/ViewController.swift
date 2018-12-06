@@ -275,7 +275,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
   private let defaults = UserDefaults.standard
 
-  private var saves : [SCNNode] = []
+  private var saves : [SceneSave] = []
 
   @IBAction func savePressed(_ sender: UIButton) {
     save()
@@ -283,14 +283,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
   /// Save current scene
   private func save() {
-    NSLog("Saving")
-    let newSave = SCNNode()
-    sceneView.scene.rootNode.enumerateChildNodes { (child, _) in
-      NSLog("Saving child")
-      child.simdPosition -= currentPos!
-      newSave.addChildNode(child)
-    }
-    saves.append(newSave)
+    saves.append(SceneSave(root: self.rootNode, center: currentPos!))
   }
   
   @IBAction func loadPressed(_ sender: UIButton) {
@@ -300,15 +293,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   /// Load previously saved scene
   private func load() {
     if let poppedSave = saves.popLast() {
-      NSLog("Loading")
-      poppedSave.enumerateChildNodes { (child, _) in
-        NSLog("Loading child")
-        child.simdPosition += currentPos!
-        rootNode.addChildNode(child)
-      }
+      let poppedNode = poppedSave.load(center: currentPos!)
+      self.rootNode.addChildNode(poppedNode)
     }
   }
-  
   
   // - MARK: Utilities
   
