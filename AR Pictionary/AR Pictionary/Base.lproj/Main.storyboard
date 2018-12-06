@@ -122,6 +122,7 @@
                     <navigationItem key="navigationItem" id="Sc4-Iy-n4o"/>
                     <connections>
                         <outlet property="hueSlider" destination="tgA-yq-HOu" id="QtT-2e-Zwf"/>
+                        <outlet property="reticleView" destination="Pnb-wa-pwq" id="wTS-Me-9vj"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
                     </connections>
                 </viewController>

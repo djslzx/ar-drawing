@@ -47,7 +47,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   private var pen : Pen = Pen(count: 2, Geometry.cylinderGenerator())
   private var context : Context = Context(color: UIColor.white,
                                           lineRadius: CGFloat(powf(10, -3.75)),
-                                          detail: 9)
+                                          detail: 9) {
+    didSet {
+      reticleView.updateCircleReticle(color: context.color.darker(by: 10)!,
+                                      radius: context.lineRadius * 1.4
+                                        / CGFloat(powf(10, -3.75)))
+    }
+  }
 
   /// Stores current contextUpdater
   private var updater : ContextUpdater = ContextUpdater()
@@ -134,8 +140,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   private let deviceToDrawpointTranslation : matrix_float4x4 =
     matrix_float4x4(rows:
       [
-        float4([1, 0, 0, 0.0025 * 0.6]), // compensate for x offset
-        float4([0, 1, 0, 0]),
+        float4([1, 0, 0, 0.001]), // compensate for x offset
+        float4([0, 1, 0, -0.00015]),
         float4([0, 0, 1, -0.06]), // z-offset draws objects a fixed distance away from device
         float4([0, 0, 0, 1])
       ])
@@ -248,7 +254,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   // - MARK: Undo/Redo Stack
   
   
+  // - MARK: Reticle View
   
+  @IBOutlet weak var reticleView: ReticleView!
+
   // - MARK: Utilities
   
   override func viewDidLoad() {
