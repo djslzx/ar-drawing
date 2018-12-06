@@ -11,25 +11,33 @@ import UIKit
 @IBDesignable
 class ReticleView: UIView {
 
-  @IBInspectable public var lineColor : UIColor = UIColor.lightGray
-  @IBInspectable public var lineWidth : CGFloat = 1
-  @IBInspectable public var radius : CGFloat = 10
+  /// Cross reticle properties
+  @IBInspectable public var lineThickness : CGFloat = 1
+  @IBInspectable public var crossLineColor : UIColor = UIColor.lightGray
+  @IBInspectable public var crossRadius : CGFloat = 15
 
   // Draws a reticle
   override func draw(_ rect: CGRect) {
-    stroke(from: CGPoint(x: self.center.x, y: self.center.y - radius/2),
-           to: CGPoint(x: self.center.x, y: self.center.y + radius/2))
-    stroke(from: CGPoint(x: self.center.x - radius/2, y: self.center.y),
-           to: CGPoint(x: self.center.x + radius/2, y: self.center.y))
+    stroke(from: CGPoint(x: self.center.x, y: self.center.y - crossRadius),
+           to: CGPoint(x: self.center.x, y: self.center.y + crossRadius))
+    stroke(from: CGPoint(x: self.center.x - crossRadius, y: self.center.y),
+           to: CGPoint(x: self.center.x + crossRadius, y: self.center.y))
   }
   
+  /// Draws a stroke from `src` to `dst`
   private func stroke(from src : CGPoint, to dst : CGPoint) {
     let path = UIBezierPath()
     path.move(to: src)
     path.addLine(to: dst)
-    path.lineWidth = lineWidth
-    lineColor.setStroke()
+    path.lineWidth = lineThickness
+    crossLineColor.setStroke()
     path.stroke()
   }
   
+  /// Updates predictive circle reticle using given circle radius
+  public func updateReticle(color: UIColor, radius: CGFloat) {
+    crossLineColor = color
+    crossRadius = radius
+    setNeedsDisplay()
+  }
 }

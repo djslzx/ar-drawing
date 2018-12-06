@@ -28,6 +28,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     return sceneView.scene.rootNode
   }
   
+  // - MARK: Reticle View
+  @IBOutlet weak var reticleView: ReticleView!
+
+  // - MARK: Pens and contexts
+  
   /// Dictionary of available Pens
   private let pens : [String : Pen] = [
     "Curve" : Pen(count: 2, Geometry.cylinderGenerator()),
@@ -41,11 +46,26 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     "Rainbow" : RainbowUpdater()
   ]
   
+  /// Pen defaults
+  private let defaultColor = UIColor.white
+  private let defaultLineRadius = CGFloat(powf(10, -3.75))
+  private let defaultDetail = 9
+  
   /// Current pen and context
   private var pen : Pen = Pen(count: 2, Geometry.cylinderGenerator())
   private var context : Context = Context(color: UIColor.white,
                                           lineRadius: CGFloat(powf(10, -3.75)),
-                                          detail: 9)
+                                          detail: 9) {
+    didSet {
+      updateReticle()
+    }
+  }
+  
+  private func updateReticle() {
+    reticleView.updateReticle(color: context.color.darker(by: 10)!,
+                                    radius: context.lineRadius * 1.4
+                                      / defaultLineRadius)
+  }
 
   /// Stores current contextUpdater
   private var updater : ContextUpdater = ContextUpdater()
@@ -62,8 +82,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       pens["Curve"]!
   }
   
+  /// Responds to user brush hue changes
+  @IBAction func hueSliderChanged(_ sender: UISlider) {
+    context.color = UIColor(hue: CGFloat(sender.value),
+                            saturation: 0.5,
+                            brightness: 1,
+                            alpha: 1)
+    sender.tintColor = context.color
+  }
+  
+  /// Updates the lineRadius when the user moves the slider
+  @IBAction func thicknessSliderChanged(_ sender: UISlider) {
+    context.lineRadius = CGFloat(powf(10, sender.value))
+  }
+  
   /// Model: collection of Polylines
-  private var lines : [Polyline] = []
+  private var lines : [Polyline] = [Polyline()]
   
   /// Tracks whether user currently has their finger on the phone screen
   /// (i.e. whether in active drawing state)
@@ -92,17 +126,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     case .ended:
       NSLog("Ended pressed")
       touched = false
-      lines.append(Polyline())
-    //TODO:
+      lines.append(Polyline()) //starts a new Polyline
     default:
       break
     }
   }
   
-  /// Updates the lineRadius when the user moves the slider
-  @IBAction func sliderMoved(_ sender: UISlider) {
-    context.lineRadius = CGFloat(powf(10, sender.value))
+  /// Slider outlets
+  @IBOutlet weak var hueSlider: UISlider!
+  @IBOutlet weak var thicknessSlider: UISlider!
+  
+  /// Resets color to white upon button press
+  @IBAction func resetSliders(_ sender: UIButton) {
+    context.color = defaultColor
+    context.lineRadius = defaultLineRadius
+    hueSlider.tintColor = context.color
+    hueSlider.setValue((hueSlider.maximumValue + hueSlider.minimumValue)/2,
+                       animated: true)
+    thicknessSlider.setValue((thicknessSlider.maximumValue + thicknessSlider.minimumValue)/2,
+                             animated: true)
   }
+
+  // - MARK: Camera/stroke positioning
   
   /**
    Matrix for camera transform that gives the position at which new points
@@ -111,8 +156,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   private let deviceToDrawpointTranslation : matrix_float4x4 =
     matrix_float4x4(rows:
       [
-        float4([1, 0, 0, 0.0025 * 0.6]), // compensate for x offset
-        float4([0, 1, 0, 0]),
+        float4([1, 0, 0, 0.001]), // compensate for x offset
+        float4([0, 1, 0, -0.00015]),
         float4([0, 0, 1, -0.06]), // z-offset draws objects a fixed distance away from device
         float4([0, 0, 0, 1])
       ])
@@ -129,6 +174,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
+  // - MARK: Drawing
+  
   /// The current position of the device, given as a 3-component vector
   private var currentPos : float3? {
     return deviceLocationTransform?.translation
@@ -138,15 +185,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     Draws a new point in the sceneView, extending the currently drawn line
     if one exists.
    
-   **Modifies**: previous, lines, sceneView
+   **Modifies**: lines, sceneView, context
    
    **Effects**:
-   - If the user is not actively drawing (touched is false), sets previous to nil
-      and quits.
-   - If this is the first vertex in the line being drawn (previous is nil),
-      sets previous to the current position and recurses.
-   - Otherwise, if the new point is far enough away from the last drawn point
-      (distance > lineRadius/2), then adds a point to the model and view.  Recurses.
+   - If the user is not actively drawing (touched is false), quits.
+   - If this is the first vertex in the line being drawn, adds a new point to
+      the model and recurses.
+   - Otherwise, if the new point is far enough away from the last drawn point,
+      and there are enough points such that a geometry can be generated by the pen,
+      then adds a point to the model and view.  Recurses.
    
    */
   private func drawPoint() {
@@ -220,6 +267,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     lines = [Polyline()]
   }
   
+  // - MARK: Undo/Redo Stack
+  
+  // - MARK: Utilities
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -229,7 +280,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // Show statistics such as fps and timing information
     sceneView.showsStatistics = true
     
-    lines.append(Polyline())
+    updateReticle()
   }
   
   override func viewWillAppear(_ animated: Bool) {
