@@ -132,15 +132,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
-  /// Slider for adjusting hue
+  /// Slider outlets
   @IBOutlet weak var hueSlider: UISlider!
+  @IBOutlet weak var thicknessSlider: UISlider!
   
   /// Resets color to white upon button press
-  @IBAction func resetColorSlider(_ sender: UIButton) {
+  @IBAction func resetSliders(_ sender: UIButton) {
     context.color = defaultColor
+    context.lineRadius = defaultLineRadius
     hueSlider.tintColor = context.color
     hueSlider.setValue((hueSlider.maximumValue + hueSlider.minimumValue)/2,
                        animated: true)
+    thicknessSlider.setValue((thicknessSlider.maximumValue + thicknessSlider.minimumValue)/2,
+                             animated: true)
   }
 
   // - MARK: Camera/stroke positioning

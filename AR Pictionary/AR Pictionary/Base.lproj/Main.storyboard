@@ -59,7 +59,7 @@
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Reset"/>
                                         <connections>
-                                            <action selector="resetColorSlider:" destination="BV1-FR-VrT" eventType="touchUpInside" id="yga-kT-ppf"/>
+                                            <action selector="resetSliders:" destination="BV1-FR-VrT" eventType="touchUpInside" id="yga-kT-ppf"/>
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="A6H-kI-ln4" userLabel="Sliders">
@@ -121,9 +121,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="Sc4-Iy-n4o"/>
                     <connections>
-                        <outlet property="hueSlider" destination="tgA-yq-HOu" id="QtT-2e-Zwf"/>
+                        <outlet property="hueSlider" destination="tgA-yq-HOu" id="lHl-Sn-O6g"/>
                         <outlet property="reticleView" destination="Pnb-wa-pwq" id="wTS-Me-9vj"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
+                        <outlet property="thicknessSlider" destination="8I4-qS-92P" id="eWp-CN-2Pd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
