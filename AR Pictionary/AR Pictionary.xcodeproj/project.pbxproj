@@ -126,6 +126,7 @@
 				731F57D421A356A70014A4C4 /* Main.storyboard */,
 				731F57D921A356A70014A4C4 /* LaunchScreen.storyboard */,
 				731F57D721A356A70014A4C4 /* Assets.xcassets */,
+				8BFDF43B21B8A829002B46FB /* assets */,
 				731F57D021A356A70014A4C4 /* art.scnassets */,
 				731F57DC21A356A70014A4C4 /* Info.plist */,
 			);
@@ -148,6 +149,13 @@
 				731F57F221A356A70014A4C4 /* Info.plist */,
 			);
 			path = "AR PictionaryUITests";
+			sourceTree = "<group>";
+		};
+		8BFDF43B21B8A829002B46FB /* assets */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

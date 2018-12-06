@@ -62,6 +62,20 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       pens["Curve"]!
   }
   
+  /// Responds to user brush hue changes
+  @IBAction func hueSliderChanged(_ sender: UISlider) {
+    context.color = UIColor(hue: CGFloat(sender.value),
+                            saturation: 0.5,
+                            brightness: 1,
+                            alpha: 1)
+    sender.tintColor = context.color
+  }
+  
+  /// Updates the lineRadius when the user moves the slider
+  @IBAction func thicknessSliderChanged(_ sender: UISlider) {
+    context.lineRadius = CGFloat(powf(10, sender.value))
+  }
+  
   /// Model: collection of Polylines
   private var lines : [Polyline] = []
   
@@ -97,11 +111,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     default:
       break
     }
-  }
-  
-  /// Updates the lineRadius when the user moves the slider
-  @IBAction func sliderMoved(_ sender: UISlider) {
-    context.lineRadius = CGFloat(powf(10, sender.value))
   }
   
   /**

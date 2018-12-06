@@ -25,58 +25,51 @@
                                     <outletCollection property="gestureRecognizers" destination="rXy-Kr-ZXn" appends="YES" id="mQ9-Lw-IAY"/>
                                 </connections>
                             </arscnView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT">
-                                <rect key="frame" x="15" y="25" width="38" height="29"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="29" id="4bq-pQ-MlX"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <state key="normal" title="Clear"/>
-                                <connections>
-                                    <action selector="clear" destination="MiC-FE-mti" eventType="touchUpInside" id="0GI-HQ-fhc"/>
-                                    <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="iA7-fz-VV6"/>
-                                </connections>
-                            </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
-                                <rect key="frame" x="140" y="25" width="220" height="29"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="220" id="a5u-Wj-bX7"/>
-                                    <constraint firstAttribute="height" constant="28" id="gDU-gg-uFk"/>
-                                </constraints>
-                                <segments>
-                                    <segment title="Curve"/>
-                                    <segment title="Flat"/>
-                                    <segment title="Bezier" enabled="NO"/>
-                                </segments>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <action selector="brushChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="MdV-4z-UPY"/>
-                                </connections>
-                            </segmentedControl>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="I5i-sC-Qu8">
-                                <rect key="frame" x="227" y="63" width="133" height="29"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="28" id="otd-Id-KUc"/>
-                                </constraints>
-                                <segments>
-                                    <segment title="Vanilla"/>
-                                    <segment title="Rainbow"/>
-                                </segments>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <action selector="contextUpdaterChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="q4d-qD-Qjw"/>
-                                </connections>
-                            </segmentedControl>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.75" minValue="-4.5" maxValue="-2.75" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P">
-                                <rect key="frame" x="128.5" y="597" width="118" height="31"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="114" id="36R-dv-3iq"/>
-                                </constraints>
-                                <connections>
-                                    <action selector="sliderMoved:" destination="BV1-FR-VrT" eventType="valueChanged" id="lzd-mC-gar"/>
-                                </connections>
-                            </slider>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="aGO-NQ-Btf" userLabel="Top options">
+                                <rect key="frame" x="25" y="25" width="325" height="32"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT">
+                                        <rect key="frame" x="0.0" y="0.0" width="53.5" height="32"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <state key="normal" title="Clear"/>
+                                        <connections>
+                                            <action selector="clear" destination="MiC-FE-mti" eventType="touchUpInside" id="0GI-HQ-fhc"/>
+                                            <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="iA7-fz-VV6"/>
+                                        </connections>
+                                    </button>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
+                                        <rect key="frame" x="103.5" y="0.0" width="221.5" height="33"/>
+                                        <segments>
+                                            <segment title="Curve"/>
+                                            <segment title="Flat"/>
+                                            <segment title="Bezier" enabled="NO"/>
+                                        </segments>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <action selector="brushChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="MdV-4z-UPY"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="BF0-jU-3jr" userLabel="Color and Thickness">
+                                <rect key="frame" x="15" y="612" width="345" height="30"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tgA-yq-HOu" userLabel="Color Slider">
+                                        <rect key="frame" x="-2" y="0.0" width="171.5" height="31"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <action selector="hueSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="whF-CT-K1R"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.75" minValue="-4.5" maxValue="-2.75" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P" userLabel="Thickness Slider">
+                                        <rect key="frame" x="175.5" y="0.0" width="171.5" height="31"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <action selector="thicknessSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="lzd-mC-gar"/>
+                                        </connections>
+                                    </slider>
+                                </subviews>
+                            </stackView>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pnb-wa-pwq" customClass="ReticleView" customModule="AR_Pictionary" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -95,25 +88,25 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="OpT-kM-KxR" secondAttribute="trailing" constant="15" id="2gA-9Q-Zv1"/>
-                            <constraint firstItem="I5i-sC-Qu8" firstAttribute="top" secondItem="OpT-kM-KxR" secondAttribute="bottom" constant="10" id="3et-wi-rpj"/>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="BrB-h1-WRS" secondAttribute="leading" id="5Yp-Hw-kMc"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="7Ze-rm-f5n"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="BF0-jU-3jr" secondAttribute="trailing" constant="15" id="Ewy-1G-HxS"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
-                            <constraint firstItem="pfE-gP-WbT" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="I4p-JY-dc9"/>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="KBY-5u-WJP"/>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="I5i-sC-Qu8" secondAttribute="trailing" constant="15" id="LEw-5n-ZcJ"/>
+                            <constraint firstItem="BF0-jU-3jr" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="T6U-TM-2kP"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
-                            <constraint firstItem="pfE-gP-WbT" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="hMe-LS-bny"/>
-                            <constraint firstItem="8I4-qS-92P" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="mWA-It-Dl2"/>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="Pnb-wa-pwq" secondAttribute="bottom" id="qLj-0w-RQH"/>
-                            <constraint firstItem="OpT-kM-KxR" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="qM7-CE-Ae3"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="aGO-NQ-Btf" secondAttribute="trailing" constant="25" id="Yf9-ig-pW0"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="YhQ-ss-dSy"/>
+                            <constraint firstItem="BF0-jU-3jr" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="eW2-TF-vgO"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="gVZ-qk-Y0h"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="BF0-jU-3jr" secondAttribute="bottom" constant="25" id="i0Z-T6-Qi4"/>
+                            <constraint firstItem="aGO-NQ-Btf" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="25" id="joH-Nu-7IW"/>
+                            <constraint firstItem="aGO-NQ-Btf" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="pTQ-WO-WpJ"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="BrB-h1-WRS" secondAttribute="top" id="sX9-76-ufZ"/>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="8I4-qS-92P" secondAttribute="bottom" constant="40" id="tOP-ri-mYp"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="xnK-x3-dZ9"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
+                    <navigationItem key="navigationItem" id="Sc4-Iy-n4o"/>
                     <connections>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
                     </connections>
@@ -126,7 +119,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="37.600000000000001" y="25.637181409295355"/>
+            <point key="canvasLocation" x="-594" y="302"/>
         </scene>
     </scenes>
 </document>
