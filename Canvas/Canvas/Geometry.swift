@@ -62,7 +62,7 @@ public class Geometry {
   // Rotate face to be perpendicular to vector v
   private static func rotatedFace(face : [float3], _ v : float3) -> [float3] {
     let (w,phi) = rotation(float3(), v)
-    let rotationTransform = float4x4(simd_quatf(angle: phi, axis: w))
+    let rotationTransform = float4x4(simd_quatf(angle: Float.pi - phi, axis: w))
     return face.map {
       let rotated = float4($0, 1) * rotationTransform
       return float3(rotated)
@@ -97,7 +97,10 @@ public class Geometry {
     let indices = (0...interleaved.count-3).map { UInt8($0) }
     let element = SCNGeometryElement(indices: indices,
                                      primitiveType: .triangleStrip)
-    return SCNGeometry(sources: [source], elements: [element])
+    let geometry = SCNGeometry(sources: [source], elements: [element])
+    geometry.firstMaterial?.isDoubleSided = true
+
+    return geometry
   }
   
   /**
@@ -158,19 +161,16 @@ public class Geometry {
    
    - Returns: A function that generates cylinder geometries between three points.
    */
-  public static func jointedcylinderGenerator() -> ([float3], Context) -> SCNNode {
+  public static func jointedCylinderGenerator() -> ([float3], Context) -> SCNNode {
     return { (m: [float3], context: Context) -> SCNNode in
       assert(m.count >= 3)
       let u = m[m.count-3], v = m[m.count-2], w = m[m.count-1]
       
-      let cylinderGenerator = self.cylinderGenerator()
-      let cylinderNodes : [SCNNode] = [[u,v], [v,w]].map { cylinderGenerator($0,context) }
+      let cylinderNode = self.cylinderGenerator()([u,v], context)
       
       // terminal face of first cylinder, initial face of second cylinder
       let firstTerminal : [float3] = rotatedFace(face: circleVertices(radius: Float(context.lineRadius)), v - u)
-      let secondInitial : [float3] = rotatedFace(face: circleVertices(radius: Float(context.lineRadius)), w - v).map {
-        $0 + v - u
-      }
+      let secondInitial : [float3] = rotatedFace(face: circleVertices(radius: Float(context.lineRadius)), w - v)
       
       // ankle joint
       let ankleGeometry = interleavedGeometry(face1: firstTerminal, face2: secondInitial)
@@ -178,7 +178,7 @@ public class Geometry {
       ankleNode.simdPosition = v
       
       let parent = SCNNode()
-      for node in cylinderNodes + [ankleNode] {
+      for node in [cylinderNode, ankleNode] {
         parent.addChildNode(node)
       }
       return parent
