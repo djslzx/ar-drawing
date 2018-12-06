@@ -269,6 +269,45 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   // - MARK: Undo/Redo Stack
   
+  // private var history : [SCNNode]  = []
+
+  // - MARK: Save/Load functionality
+
+  private let defaults = UserDefaults.standard
+
+  private var oldRoot : SCNNode?
+  
+  @IBAction func savePressed(_ sender: UIButton) {
+    save()
+  }
+
+  /// Save current scene
+  private func save() {
+    NSLog("Saving")
+    oldRoot = SCNNode()
+    sceneView.scene.rootNode.enumerateChildNodes { (child, _) in
+      NSLog("Saving child")
+      child.simdPosition -= currentPos!
+      oldRoot?.addChildNode(child)
+    }
+  }
+  
+  @IBAction func loadPressed(_ sender: UIButton) {
+    load()
+  }
+
+  /// Load previously saved scene
+  private func load() {
+    NSLog("Loading \(String(describing: oldRoot))")
+    oldRoot?.enumerateChildNodes { (child, _) in
+      child.simdPosition += currentPos!
+      NSLog("Loading child")
+      rootNode.addChildNode(child)
+    }
+    oldRoot = nil
+  }
+  
+  
   // - MARK: Utilities
   
   override func viewDidLoad() {

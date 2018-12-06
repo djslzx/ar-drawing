@@ -7,6 +7,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -25,24 +26,48 @@
                                     <outletCollection property="gestureRecognizers" destination="rXy-Kr-ZXn" appends="YES" id="mQ9-Lw-IAY"/>
                                 </connections>
                             </arscnView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="aGO-NQ-Btf" userLabel="Top options">
-                                <rect key="frame" x="25" y="25" width="325" height="32"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="aGO-NQ-Btf" userLabel="Top options">
+                                <rect key="frame" x="15" y="25" width="345" height="28"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT">
-                                        <rect key="frame" x="0.0" y="0.0" width="53.5" height="32"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <state key="normal" title="Clear"/>
-                                        <connections>
-                                            <action selector="clear" destination="MiC-FE-mti" eventType="touchUpInside" id="0GI-HQ-fhc"/>
-                                            <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="iA7-fz-VV6"/>
-                                        </connections>
-                                    </button>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
-                                        <rect key="frame" x="103.5" y="0.0" width="221.5" height="33"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Aj4-nQ-Hz0">
+                                        <rect key="frame" x="0.0" y="0.0" width="176.5" height="28"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="clip" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT">
+                                                <rect key="frame" x="0.0" y="0.0" width="55.5" height="28"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <state key="normal" title="Clear"/>
+                                                <connections>
+                                                    <action selector="clear" destination="MiC-FE-mti" eventType="touchUpInside" id="0GI-HQ-fhc"/>
+                                                    <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="iA7-fz-VV6"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oe4-F1-Jww">
+                                                <rect key="frame" x="60.5" y="0.0" width="55.5" height="28"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <state key="normal" title="Save">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="savePressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="sXs-Gf-czt"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sg0-6D-04T">
+                                                <rect key="frame" x="121" y="0.0" width="55.5" height="28"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <state key="normal" title="Load">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="loadPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="hEZ-Yj-yWc"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
+                                        <rect key="frame" x="184.5" y="0.0" width="160.5" height="29"/>
                                         <segments>
                                             <segment title="Curve"/>
                                             <segment title="Flat"/>
-                                            <segment title="Bezier" enabled="NO"/>
                                         </segments>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
@@ -107,12 +132,12 @@
                             <constraint firstItem="BF0-jU-3jr" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="T6U-TM-2kP"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="aGO-NQ-Btf" secondAttribute="trailing" constant="25" id="Yf9-ig-pW0"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="aGO-NQ-Btf" secondAttribute="trailing" constant="15" id="Yf9-ig-pW0"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="YhQ-ss-dSy"/>
                             <constraint firstItem="BF0-jU-3jr" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="eW2-TF-vgO"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="gVZ-qk-Y0h"/>
                             <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="BF0-jU-3jr" secondAttribute="bottom" constant="25" id="i0Z-T6-Qi4"/>
-                            <constraint firstItem="aGO-NQ-Btf" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="25" id="joH-Nu-7IW"/>
+                            <constraint firstItem="aGO-NQ-Btf" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="joH-Nu-7IW"/>
                             <constraint firstItem="aGO-NQ-Btf" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="pTQ-WO-WpJ"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="xnK-x3-dZ9"/>
