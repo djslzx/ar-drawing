@@ -26,15 +26,15 @@
                                     <outletCollection property="gestureRecognizers" destination="rXy-Kr-ZXn" appends="YES" id="mQ9-Lw-IAY"/>
                                 </connections>
                             </arscnView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="aGO-NQ-Btf" userLabel="Top bar">
-                                <rect key="frame" x="15" y="25" width="345" height="28"/>
+                            <stackView opaque="NO" contentMode="scaleAspectFit" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="aGO-NQ-Btf" userLabel="Top bar">
+                                <rect key="frame" x="15" y="25" width="345" height="30"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Aj4-nQ-Hz0">
-                                        <rect key="frame" x="0.0" y="0.0" width="204.5" height="28"/>
+                                    <stackView opaque="NO" contentMode="scaleAspectFit" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Aj4-nQ-Hz0">
+                                        <rect key="frame" x="0.0" y="0.0" width="209.5" height="30"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT">
-                                                <rect key="frame" x="0.0" y="0.0" width="47.5" height="28"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT" userLabel="Clear">
+                                                <rect key="frame" x="0.0" y="0.0" width="48.5" height="30"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" title="Clear">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
@@ -42,9 +42,9 @@
                                                     <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="AGO-jf-aBw"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oe4-F1-Jww">
-                                                <rect key="frame" x="52.5" y="0.0" width="47.5" height="28"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oe4-F1-Jww" userLabel="Save">
+                                                <rect key="frame" x="53.5" y="0.0" width="45.5" height="30"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" title="Save">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
@@ -52,9 +52,9 @@
                                                     <action selector="savePressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="sXs-Gf-czt"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sg0-6D-04T">
-                                                <rect key="frame" x="104.5" y="0.0" width="47.5" height="28"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sg0-6D-04T" userLabel="Open">
+                                                <rect key="frame" x="104" y="0.0" width="45.5" height="30"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" title="Load">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
@@ -62,9 +62,9 @@
                                                     <action selector="loadPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="hEZ-Yj-yWc"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rY1-Wi-OpA">
-                                                <rect key="frame" x="157" y="0.0" width="47.5" height="28"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rY1-Wi-OpA" userLabel="Undo">
+                                                <rect key="frame" x="154.5" y="0.0" width="55" height="30"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" title="Undo">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
@@ -75,7 +75,7 @@
                                         </subviews>
                                     </stackView>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
-                                        <rect key="frame" x="212.5" y="0.0" width="132.5" height="29"/>
+                                        <rect key="frame" x="217.5" y="0.0" width="127.5" height="31"/>
                                         <segments>
                                             <segment title="Curve"/>
                                             <segment title="Flat"/>
@@ -86,6 +86,9 @@
                                         </connections>
                                     </segmentedControl>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="T7G-tR-0MK"/>
+                                </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="BF0-jU-3jr" userLabel="Color and Thickness">
                                 <rect key="frame" x="15" y="612" width="345" height="30"/>
@@ -93,7 +96,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aiN-Ap-CB6">
                                         <rect key="frame" x="0.0" y="0.0" width="39" height="30"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <state key="normal" title="Reset"/>
+                                        <state key="normal" title="Reset">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
                                         <connections>
                                             <action selector="resetSliders:" destination="BV1-FR-VrT" eventType="touchUpInside" id="yga-kT-ppf"/>
                                         </connections>
@@ -122,6 +127,7 @@
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pnb-wa-pwq" customClass="ReticleView" customModule="AR_Pictionary" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="radius">
                                         <real key="value" value="25"/>
@@ -137,25 +143,25 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="7Ze-rm-f5n"/>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="BF0-jU-3jr" secondAttribute="trailing" constant="15" id="Ewy-1G-HxS"/>
-                            <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
-                            <constraint firstItem="BF0-jU-3jr" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="T6U-TM-2kP"/>
-                            <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
-                            <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="aGO-NQ-Btf" secondAttribute="trailing" constant="15" id="Yf9-ig-pW0"/>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="YhQ-ss-dSy"/>
-                            <constraint firstItem="BF0-jU-3jr" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="eW2-TF-vgO"/>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="gVZ-qk-Y0h"/>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="BF0-jU-3jr" secondAttribute="bottom" constant="25" id="i0Z-T6-Qi4"/>
-                            <constraint firstItem="aGO-NQ-Btf" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="joH-Nu-7IW"/>
-                            <constraint firstItem="aGO-NQ-Btf" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="pTQ-WO-WpJ"/>
-                            <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="xnK-x3-dZ9"/>
+                            <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="A9N-kA-XM7"/>
+                            <constraint firstItem="aGO-NQ-Btf" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="ECv-xK-Anl"/>
+                            <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leading" id="Hg2-n6-K8Z"/>
+                            <constraint firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="OCr-Za-gZa"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="BF0-jU-3jr" secondAttribute="trailing" constant="15" id="QnI-5n-iO9"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="BF0-jU-3jr" secondAttribute="bottom" constant="25" id="UFH-eY-WqD"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leading" id="W15-DV-iTB"/>
+                            <constraint firstItem="BF0-jU-3jr" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="XUA-QY-flV"/>
+                            <constraint firstAttribute="bottom" secondItem="BrB-h1-WRS" secondAttribute="bottom" id="aV3-2T-0rG"/>
+                            <constraint firstAttribute="trailing" secondItem="Pnb-wa-pwq" secondAttribute="trailing" id="ebd-kc-PoW"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="gmE-rp-lif"/>
+                            <constraint firstItem="aGO-NQ-Btf" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="lS1-bY-dej"/>
+                            <constraint firstAttribute="bottom" secondItem="Pnb-wa-pwq" secondAttribute="bottom" id="pTQ-vY-eDL"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="aGO-NQ-Btf" secondAttribute="trailing" constant="15" id="xY0-YO-Py3"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
-                    <navigationItem key="navigationItem" id="Sc4-Iy-n4o"/>
+                    <toolbarItems/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="hueSlider" destination="tgA-yq-HOu" id="lHl-Sn-O6g"/>
                         <outlet property="reticleView" destination="Pnb-wa-pwq" id="wTS-Me-9vj"/>
@@ -170,7 +176,33 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-594" y="302"/>
+            <point key="canvasLocation" x="254" y="302"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="3nl-nn-xgg">
+            <objects>
+                <viewController id="eGa-wq-YNC" customClass="SettingsViewController" customModule="AR_Pictionary" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ex2-Fe-Qqw">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
+                        <viewLayoutGuide key="safeArea" id="MVZ-hZ-Sig"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="irA-su-0Gd" appends="YES" id="Dez-RN-t3c"/>
+                        </connections>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="odq-6L-ZUW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="mXO-sB-95A" userLabel="Exit" sceneMemberID="exit"/>
+                <swipeGestureRecognizer direction="down" id="irA-su-0Gd">
+                    <connections>
+                        <action selector="unwindToThisViewControllerWithSegue:" destination="odq-6L-ZUW" id="a8q-3m-Fgf"/>
+                        <segue destination="mXO-sB-95A" kind="unwind" unwindAction="unwindToThisViewControllerWithSegue:" id="Jc0-J7-90W"/>
+                    </connections>
+                </swipeGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="1119" y="302"/>
         </scene>
     </scenes>
 </document>

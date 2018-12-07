@@ -20,6 +20,7 @@
 		73BF4F4821A784A60013CFCD /* Canvas.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 73BF4F4621A784A60013CFCD /* Canvas.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8B02552B21B9D83B001EA544 /* SceneSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B02552A21B9D83B001EA544 /* SceneSave.swift */; };
 		8B25ED7B21B8D821005ED772 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25ED7A21B8D821005ED772 /* UIColorExtension.swift */; };
+		8B71F3C921BB2E74005CDC6D /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B71F3C821BB2E74005CDC6D /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		73BF4F4621A784A60013CFCD /* Canvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Canvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B02552A21B9D83B001EA544 /* SceneSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSave.swift; sourceTree = "<group>"; };
 		8B25ED7A21B8D821005ED772 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		8B71F3C821BB2E74005CDC6D /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				731F57D221A356A70014A4C4 /* ViewController.swift */,
 				7313978F21AB802C00F7F01B /* ReticleView.swift */,
 				8B02552A21B9D83B001EA544 /* SceneSave.swift */,
+				8B71F3C821BB2E74005CDC6D /* SettingsViewController.swift */,
 				731F57D421A356A70014A4C4 /* Main.storyboard */,
 				731F57D921A356A70014A4C4 /* LaunchScreen.storyboard */,
 				8B25ED7A21B8D821005ED772 /* UIColorExtension.swift */,
@@ -294,6 +297,7 @@
 				7313979021AB802C00F7F01B /* ReticleView.swift in Sources */,
 				731F57CF21A356A70014A4C4 /* AppDelegate.swift in Sources */,
 				8B25ED7B21B8D821005ED772 /* UIColorExtension.swift in Sources */,
+				8B71F3C921BB2E74005CDC6D /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

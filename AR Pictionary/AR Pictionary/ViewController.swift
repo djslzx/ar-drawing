@@ -287,6 +287,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   // - MARK: Undo/Redo Stack
   
+  /// Stores all undone curves
+  private var redos : [SCNNode] = []
+  
   @IBAction func undoPressed(_ sender: UIButton) {
     NSLog("Undo press registered")
     undo()
@@ -364,6 +367,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // Pause the view's session
     sceneView.session.pause()
+  }
+  
+  // MARK: Unwind segue
+  
+  @IBAction func unwindToThisViewController(segue: UIStoryboardSegue) {
+    
   }
   
   // MARK: - ARSCNViewDelegate
