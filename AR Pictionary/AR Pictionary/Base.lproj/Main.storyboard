@@ -26,23 +26,24 @@
                                     <outletCollection property="gestureRecognizers" destination="rXy-Kr-ZXn" appends="YES" id="mQ9-Lw-IAY"/>
                                 </connections>
                             </arscnView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="aGO-NQ-Btf" userLabel="Top options">
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="aGO-NQ-Btf" userLabel="Top bar">
                                 <rect key="frame" x="15" y="25" width="345" height="28"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Aj4-nQ-Hz0">
-                                        <rect key="frame" x="0.0" y="0.0" width="176.5" height="28"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="204.5" height="28"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="clip" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT">
-                                                <rect key="frame" x="0.0" y="0.0" width="55.5" height="28"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT">
+                                                <rect key="frame" x="0.0" y="0.0" width="47.5" height="28"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                <state key="normal" title="Clear"/>
+                                                <state key="normal" title="Clear">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
                                                 <connections>
-                                                    <action selector="clear" destination="MiC-FE-mti" eventType="touchUpInside" id="0GI-HQ-fhc"/>
-                                                    <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="iA7-fz-VV6"/>
+                                                    <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="AGO-jf-aBw"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oe4-F1-Jww">
-                                                <rect key="frame" x="60.5" y="0.0" width="55.5" height="28"/>
+                                                <rect key="frame" x="52.5" y="0.0" width="47.5" height="28"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <state key="normal" title="Save">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -52,7 +53,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sg0-6D-04T">
-                                                <rect key="frame" x="121" y="0.0" width="55.5" height="28"/>
+                                                <rect key="frame" x="104.5" y="0.0" width="47.5" height="28"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <state key="normal" title="Load">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -61,10 +62,20 @@
                                                     <action selector="loadPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="hEZ-Yj-yWc"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rY1-Wi-OpA">
+                                                <rect key="frame" x="157" y="0.0" width="47.5" height="28"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <state key="normal" title="Undo">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="undoPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="sOL-h2-6eb"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                     </stackView>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
-                                        <rect key="frame" x="184.5" y="0.0" width="160.5" height="29"/>
+                                        <rect key="frame" x="212.5" y="0.0" width="132.5" height="29"/>
                                         <segments>
                                             <segment title="Curve"/>
                                             <segment title="Flat"/>
@@ -153,7 +164,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
-                <exit id="MiC-FE-mti" userLabel="Exit" sceneMemberID="exit"/>
                 <pongPressGestureRecognizer allowableMovement="0.0" minimumPressDuration="0.0" id="rXy-Kr-ZXn" userLabel="Press Recognizer">
                     <connections>
                         <action selector="pressed:" destination="BV1-FR-VrT" id="CEk-GF-oMk"/>

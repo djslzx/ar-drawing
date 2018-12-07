@@ -97,7 +97,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   }
   
   /// Model: collection of Polylines
-  private var lines : [Polyline] = [Polyline()]
+  private var lines : [Polyline] = []
   
   /// Tracks whether user currently has their finger on the phone screen
   /// (i.e. whether in active drawing state)
@@ -122,11 +122,21 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     case .began:
       touched = true
       NSLog("Began pressed")
+
+      // Add a new line to the model
+      lines.append(Polyline())
+
+      // Set up lineNode
+      self.lineNode = SCNNode()
+      self.lineNode!.name = String(lines.count)
+      NSLog(self.lineNode!.name!)
+      rootNode.addChildNode(lineNode!)
+
+      // Call drawPoint()
       drawPoint()
     case .ended:
       NSLog("Ended pressed")
       touched = false
-      lines.append(Polyline()) //starts a new Polyline
     default:
       break
     }
@@ -181,6 +191,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     return deviceLocationTransform?.translation
   }
   
+  /// The node representing a continuous line in the scene
+  private var lineNode : SCNNode?
+  
   /**
     Draws a new point in the sceneView, extending the currently drawn line
     if one exists.
@@ -201,6 +214,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       [weak self] in
       DispatchQueue.main.async {
 
+        NSLog("\(self!.rootNode.childNodes.count), \(self!.rootNode.childNodes.last!.childNodes.count)")
+        
         // Ensure that draw method should still be active and current position
         // is capturing correctly
         guard self?.touched ?? false, let currentPos = self?.currentPos else {
@@ -225,7 +240,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let context = self?.context
           {
             let node = pen.apply(vertices: vertices, context: context)
-            self?.rootNode.addChildNode(node)
+            self!.lineNode!.addChildNode(node)
           }
         }
         // Repeat
@@ -250,7 +265,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   @IBAction func clearPressed() {
     // Only clear if program isn't already in the middle of clearing
     // and there are lines to be cleared
-    if !inMiddleOfClearing, lines.count != 0 {
+    if !inMiddleOfClearing, !lines.isEmpty {
       DispatchQueue.global().async {
         [weak self] in
         self?.inMiddleOfClearing = true
@@ -263,13 +278,34 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   /// Clears the scene and model.
   public func clearScene() {
     NSLog("Clearing scene")
-    sceneView.scene = SCNScene()
-    lines = [Polyline()]
+    //sceneView.scene = SCNScene()
+    for child in sceneView.scene.rootNode.childNodes {
+      child.removeFromParentNode()
+    }
+    lines = []
   }
   
   // - MARK: Undo/Redo Stack
   
-  // private var history : [SCNNode]  = []
+  @IBAction func undoPressed(_ sender: UIButton) {
+    NSLog("Undo press registered")
+    undo()
+  }
+  
+  /// Remove the last drawn line from the scene
+  private func undo() {
+    removeLastNode()
+  }
+  
+  private func removeLastNode() {
+    if !lines.isEmpty {
+      let name = String(lines.count)
+      NSLog(name)
+      sceneView.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+      lines.removeLast()
+      NSLog("linecount: \(lines.count)")
+    }
+  }
 
   // - MARK: Save/Load functionality
 
@@ -283,6 +319,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
   /// Save current scene
   private func save() {
+    /// - TODO: use camera frustrums to define capture window
     saves.append(SceneSave(root: self.rootNode, center: currentPos!))
   }
   

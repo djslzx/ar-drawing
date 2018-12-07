@@ -24,6 +24,10 @@ public class Polyline : CustomDebugStringConvertible {
     return String(reflecting: vertices)
   }
   
+  public var count : Int {
+    return vertices.count
+  }
+  
   /**
    Initializes a new Polyline.
    
