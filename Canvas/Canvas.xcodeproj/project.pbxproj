@@ -81,13 +81,13 @@
 		73BF4F1C21A7764B0013CFCD /* Canvas */ = {
 			isa = PBXGroup;
 			children = (
+				8B45A47121BB55CF002EE58A /* Canvas.swift */,
 				73BF4F3421A7765A0013CFCD /* Polyline.swift */,
 				8BC92ACC21B58D0300402211 /* Geometry.swift */,
 				8B3122DE21B6DA3D00148964 /* Pen.swift */,
 				730ACFA521AF8D41005C2F59 /* MatrixExtensions.swift */,
 				73BF4F1E21A7764B0013CFCD /* Info.plist */,
 				73BF4F1D21A7764B0013CFCD /* Canvas.h */,
-				8B45A47121BB55CF002EE58A /* Canvas.swift */,
 			);
 			path = Canvas;
 			sourceTree = "<group>";

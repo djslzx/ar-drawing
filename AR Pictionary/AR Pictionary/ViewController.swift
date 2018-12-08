@@ -96,9 +96,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     context.lineRadius = CGFloat(powf(10, sender.value))
   }
   
-  /// Model: collection of Polylines
-  private var lines : [Polyline] = []
-  
+  /// MARK: Model
+  private var canvas : Canvas!
+
   /// Tracks whether user currently has their finger on the phone screen
   /// (i.e. whether in active drawing state)
   private var touched : Bool = false
@@ -122,21 +122,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     case .began:
       touched = true
       NSLog("Began pressed")
-
-      // Add a new line to the model
-      lines.append(Polyline())
-
-      // Set up lineNode
-      self.lineNode = SCNNode()
-      self.lineNode!.name = String(lines.count)
-      NSLog(self.lineNode!.name!)
-      rootNode.addChildNode(lineNode!)
-
-      // Call drawPoint()
+      canvas.startLine()
       drawPoint()
     case .ended:
       NSLog("Ended pressed")
       touched = false
+      canvas.endLine()
     default:
       break
     }
@@ -191,9 +182,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     return deviceLocationTransform?.translation
   }
   
-  /// The node representing a continuous line in the scene
-  private var lineNode : SCNNode?
-  
   /**
     Draws a new point in the sceneView, extending the currently drawn line
     if one exists.
@@ -213,36 +201,39 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     DispatchQueue.global().async {
       [weak self] in
       DispatchQueue.main.async {
-
-        NSLog("\(self!.rootNode.childNodes.count), \(self!.rootNode.childNodes.last!.childNodes.count)")
         
         // Ensure that draw method should still be active and current position
         // is capturing correctly
         guard self?.touched ?? false, let currentPos = self?.currentPos else {
-          return
-        }
-
-        // Handle case where line is just starting to be drawn
-        guard let previous = self?.lines.last?.vertices.last else {
-          self?.lines.last?.add(vertex: currentPos)
-          self?.drawPoint()
+          NSLog("[drawPoint] Failed basic check, exiting")
           return
         }
         
-        // Ensure that points aren't too close together
-        if previous.distance(to: currentPos) >= Float(self!.context.lineRadius) {
-          self?.lines.last?.add(vertex: currentPos)
-          self?.context = self!.updater.update(context: self!.context)
+        // If no points yet seeded, seed a point
+        guard self!.canvas.vertices.count > 0 else {
+          NSLog("[drawPoint] Seeding first point")
+          self!.canvas.addVertex(currentPos)
+          self!.drawPoint()
+          return
+        }
 
-          if let vertices = self?.lines.last?.vertices,
-            let pen = self?.pen,
-            vertices.count >= pen.count,
-            let context = self?.context
-          {
-            let node = pen.apply(vertices: vertices, context: context)
-            self!.lineNode!.addChildNode(node)
+        // Distance check
+        let prev = self!.canvas.vertices.last!
+        let dist = prev.distance(to: self!.currentPos!)
+        if dist >= 0.001 {
+          self!.canvas.addVertex(currentPos)
+
+          // Check that enough points are seeded for pen to be used
+          if self!.canvas.vertices.count >= self!.pen.count { // Use pen
+
+            // Update context, generate node
+            self!.context = self!.updater.update(context: self!.context)
+            let node = self!.pen.apply(vertices: self!.canvas.vertices,
+                                       context: self!.context)
+            self!.canvas.addNode(node)
           }
         }
+
         // Repeat
         self?.drawPoint()
       }
@@ -265,7 +256,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   @IBAction func clearPressed() {
     // Only clear if program isn't already in the middle of clearing
     // and there are lines to be cleared
-    if !inMiddleOfClearing, !lines.isEmpty {
+    if !inMiddleOfClearing {
       DispatchQueue.global().async {
         [weak self] in
         self?.inMiddleOfClearing = true
@@ -278,11 +269,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   /// Clears the scene and model.
   public func clearScene() {
     NSLog("Clearing scene")
-    //sceneView.scene = SCNScene()
-    for child in sceneView.scene.rootNode.childNodes {
-      child.removeFromParentNode()
-    }
-    lines = []
+    self.canvas.clear()
   }
   
   // - MARK: Undo/Redo Stack
@@ -292,22 +279,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   @IBAction func undoPressed(_ sender: UIButton) {
     NSLog("Undo press registered")
-    undo()
-  }
-  
-  /// Remove the last drawn line from the scene
-  private func undo() {
-    removeLastNode()
-  }
-  
-  private func removeLastNode() {
-    if !lines.isEmpty {
-      let name = String(lines.count)
-      NSLog(name)
-      sceneView.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
-      lines.removeLast()
-      NSLog("linecount: \(lines.count)")
-    }
+    let _ = canvas.removeLastLine()
   }
 
   // - MARK: Save/Load functionality
@@ -350,6 +322,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     sceneView.showsStatistics = true
     
     updateReticle()
+    
+    // Set up Canvas
+    canvas = Canvas(root: rootNode)
   }
   
   override func viewWillAppear(_ animated: Bool) {

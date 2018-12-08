@@ -13,24 +13,79 @@ import SceneKit
 public class Canvas {
 
   /// Pointer to shared rootNode
-  private let root : SCNNode
+  public let root : SCNNode
   
-  private var child : SCNNode
+  /// Node storing current line vertex hierarchy
+  public var line : SCNNode
+
+  public private(set) var vertices : [float3]
   
-  public init(rootNode: SCNNode) {
-    root = rootNode
-    child = SCNNode()
+  public var lineCount : Int {
+    return root.childNodes.count
+  }
+  
+  public var lineVertexCount : Int {
+    return line.childNodes.count
+  }
+  
+  public init(root: SCNNode) {
+    self.root = root
+    self.line = SCNNode()
+    self.vertices = []
   }
 
+  /**
+   Starts a new line in the Canvas.
+   */
   public func startLine() {
-    child = SCNNode()
+    line = SCNNode()
+    line.name = String(root.childNodes.count)
+    NSLog("Starting line named: \(line.name!)")
+    root.addChildNode(line)
+    vertices = []
   }
   
+  /**
+   Ends a line in the Canvas.
+   */
   public func endLine() {
-    
+    NSLog("Ending line")
+  }
+  
+  /**
+   Adds a new vertex node to the current line being built.
+   */
+  public func addNode(_ node: SCNNode) {
+    node.name = "\(line.name!), \(line.childNodes.count)"
+    NSLog("Adding node with name: \(node.name!), geometry \(node.geometry!)")
+    line.addChildNode(node)
   }
 
-  public func addVertexNode(node: SCNNode) {
-    child.addChildNode(node)
+  public func addVertex(_ position: float3) {
+    vertices.append(position)
+    NSLog("Adding vertex \(position); vertex count: \(vertices.count)")
   }
+  
+  public func removeLastLine() -> SCNNode {
+    NSLog("Removing last line; name: \(String(describing: line.name)); parent child count: \(root.childNodes.count)")
+    let last = line.clone()
+    line.removeFromParentNode()
+    line = SCNNode()
+    vertices = []
+    return last
+  }
+
+  /**
+   Clears the Canvas.
+   */
+  public func clear() {
+    NSLog("Clearing canvas")
+    for line in root.childNodes {
+      line.removeFromParentNode()
+    }
+    vertices = []
+    line = SCNNode()
+    NSLog("Canvas cleared")
+  }
+  
 }
