@@ -35,8 +35,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   /// Dictionary of available Pens
   private let pens : [String : Pen] = [
-    "Curve" : Pen(count: 2, Geometry.cylinderGenerator()),
-    "Flat" : Pen(count: 3, Geometry.flatBrushGenerator()),
+    "Pen" : Pen(count: 2, Geometry.cylinderGenerator()),
+    "Chisel" : Pen(count: 3, Geometry.flatBrushGenerator()),
     "Bezier" : Pen(count: 4, Geometry.bezierCurveGenerator()),
   ]
 
@@ -76,10 +76,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       contextUpdaters["Vanilla"]!
   }
 
-  /// Responds to user brush type changes
-  @IBAction func brushChanged(_ sender: UISegmentedControl) {
-    pen = pens[sender.titleForSegment(at: sender.selectedSegmentIndex)!] ??
-      pens["Curve"]!
+  /// Responds to user pen type changes
+  @IBAction func penChanged(_ sender: UIButton) {
+    NSLog(sender.titleLabel?.text ?? "")
+    pen = pens[sender.titleLabel?.text ?? "Pen"] ?? pens["Pen"]!
   }
   
   /// Responds to user brush hue changes
@@ -88,7 +88,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                             saturation: 0.5,
                             brightness: 1,
                             alpha: 1)
-    sender.tintColor = context.color
+    sender.minimumTrackTintColor = context.color
+    sender.maximumTrackTintColor = context.color
   }
   
   /// Updates the lineRadius when the user moves the slider
@@ -225,12 +226,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
           // Check that enough points are seeded for pen to be used
           if self!.canvas.vertices.count >= self!.pen.count { // Use pen
-
-            // Update context, generate node
-            self!.context = self!.updater.update(context: self!.context)
-            let node = self!.pen.apply(vertices: self!.canvas.vertices,
-                                       context: self!.context)
-            self!.canvas.addNode(node)
+            self!.drawNode()
           }
         }
 
@@ -238,6 +234,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self?.drawPoint()
       }
     }
+  }
+  
+  private func drawNode() {
+    context = updater.update(context: context)
+    let node = pen.apply(vertices: canvas.vertices,
+                         context: context)
+    canvas.addNode(node)
+    redos = []
   }
   
   /// Tracks whether the scene is currently being cleared (in case the user presses
@@ -270,21 +274,43 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   public func clearScene() {
     NSLog("Clearing scene")
     self.canvas.clear()
+    redos = []
   }
   
   // - MARK: Undo/Redo Stack
   
   /// Stores all undone curves
-  private var redos : [SCNNode] = []
+  private var redos : [SCNNode] = [] {
+    didSet {
+      // Only enable redos if the redo stack has items in it
+      NSLog("redos updated: \(redos.count)")
+      redoButton.isEnabled = !redos.isEmpty
+    }
+  }
   
+  /// Redo button outlet (used to toggle enabling)
+  @IBOutlet weak var redoButton: UIButton!
+  
+  /// Undoes a little bit
   @IBAction func undoPressed(_ sender: UIButton) {
     NSLog("Undo press registered")
-    let _ = canvas.removeLastLine()
+    if let undoneNode = canvas.removeLastLine() {
+      redos.append(undoneNode)
+      NSLog("Added to redo stack")
+    }
   }
-
+  
+  @IBAction func redoPressed(_ sender: UIButton) {
+    NSLog("Redo press registered")
+    if !redos.isEmpty {
+      let redoneNode = redos.removeLast()
+      canvas.addNodeToRoot(redoneNode)
+      NSLog("Redo performed")
+    }
+  }
+  
+  
   // - MARK: Save/Load functionality
-
-  private let defaults = UserDefaults.standard
 
   private var saves : [SceneSave] = []
 
@@ -306,7 +332,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   private func load() {
     if let poppedSave = saves.popLast() {
       let poppedNode = poppedSave.load(center: currentPos!)
-      self.rootNode.addChildNode(poppedNode)
+      canvas.addNode(poppedNode)
     }
   }
   

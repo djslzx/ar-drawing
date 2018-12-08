@@ -13,10 +13,10 @@ import SceneKit
 public class Canvas {
 
   /// Pointer to shared rootNode
-  public let root : SCNNode
+  private let root : SCNNode
   
   /// Node storing current line vertex hierarchy
-  public var line : SCNNode
+  private var line : SCNNode
 
   public private(set) var vertices : [float3]
   
@@ -49,7 +49,7 @@ public class Canvas {
    Ends a line in the Canvas.
    */
   public func endLine() {
-    NSLog("Ending line")
+    vertices = []
   }
   
   /**
@@ -59,6 +59,10 @@ public class Canvas {
     node.name = "\(line.name!), \(line.childNodes.count)"
     NSLog("Adding node with name: \(node.name!), geometry \(node.geometry!)")
     line.addChildNode(node)
+  }
+  
+  public func addNodeToRoot(_ node: SCNNode) {
+    root.addChildNode(node)
   }
 
   public func addVertex(_ position: float3) {
