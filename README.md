@@ -10,7 +10,8 @@ David J. Lee
 - [ ] **Save and load**: save vertex data and allow user to open saved copies of previous sessions
   - Save vertex data into userdefaults
 - [x] **Undo/Redo stacks**: Undo drawing of the last curve (or some fixed k most recent vertices), allow redo
-- [ ] **Color Picker**: Provide good swatches
+- [x] **Color Picker**: Hue slider
+  - [ ] Add preview color box? 
 - [ ] **Popups** when tracking quality is bad
 - [ ] Plane- and straight-line-drawing
   - [ ] allow user to seed points and display as small SCNSpheres
