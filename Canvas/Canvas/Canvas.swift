@@ -66,10 +66,11 @@ public class Canvas {
     NSLog("Adding vertex \(position); vertex count: \(vertices.count)")
   }
   
-  public func removeLastLine() -> SCNNode {
-    NSLog("Removing last line; name: \(String(describing: line.name)); parent child count: \(root.childNodes.count)")
-    let last = line.clone()
-    line.removeFromParentNode()
+  public func removeLastLine() -> SCNNode? {
+    let name = String(root.childNodes.count - 1)
+    NSLog("Removing last line: \(name)")
+    let last = root.childNode(withName: name, recursively: false)
+    last?.removeFromParentNode()
     line = SCNNode()
     vertices = []
     return last

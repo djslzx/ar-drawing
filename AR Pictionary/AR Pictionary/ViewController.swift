@@ -220,7 +220,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Distance check
         let prev = self!.canvas.vertices.last!
         let dist = prev.distance(to: self!.currentPos!)
-        if dist >= 0.001 {
+        if dist >= 0.001 { // TODO: swap to variable
           self!.canvas.addVertex(currentPos)
 
           // Check that enough points are seeded for pen to be used
