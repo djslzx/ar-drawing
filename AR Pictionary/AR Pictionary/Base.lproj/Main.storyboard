@@ -7,7 +7,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -26,56 +25,40 @@
                                     <outletCollection property="gestureRecognizers" destination="rXy-Kr-ZXn" appends="YES" id="mQ9-Lw-IAY"/>
                                 </connections>
                             </arscnView>
-                            <stackView opaque="NO" contentMode="scaleAspectFit" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="aGO-NQ-Btf" userLabel="Top bar">
-                                <rect key="frame" x="15" y="25" width="345" height="30"/>
+                            <stackView opaque="NO" contentMode="scaleAspectFit" distribution="equalSpacing" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="Aj4-nQ-Hz0" userLabel="Top Settings">
+                                <rect key="frame" x="17.5" y="25" width="340" height="32"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleAspectFit" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Aj4-nQ-Hz0">
-                                        <rect key="frame" x="0.0" y="0.0" width="209.5" height="30"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT" userLabel="Clear">
-                                                <rect key="frame" x="0.0" y="0.0" width="48.5" height="30"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <state key="normal" title="Clear">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="AGO-jf-aBw"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oe4-F1-Jww" userLabel="Save">
-                                                <rect key="frame" x="53.5" y="0.0" width="45.5" height="30"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <state key="normal" title="Save">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="savePressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="sXs-Gf-czt"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sg0-6D-04T" userLabel="Open">
-                                                <rect key="frame" x="104" y="0.0" width="45.5" height="30"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <state key="normal" title="Load">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="loadPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="hEZ-Yj-yWc"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rY1-Wi-OpA" userLabel="Undo">
-                                                <rect key="frame" x="154.5" y="0.0" width="55" height="30"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <state key="normal" title="Undo">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="undoPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="sOL-h2-6eb"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                    </stackView>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
-                                        <rect key="frame" x="217.5" y="0.0" width="127.5" height="31"/>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT" userLabel="Clear">
+                                        <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="32" id="YKM-wc-aNd"/>
+                                            <constraint firstAttribute="height" constant="32" id="r6R-GF-J6q"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" image="icons8-delete-50">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="clearPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="AGO-jf-aBw"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rY1-Wi-OpA" userLabel="Undo">
+                                        <rect key="frame" x="44" y="0.0" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="2lQ-d0-bv3"/>
+                                            <constraint firstAttribute="width" constant="32" id="kug-RS-T3N"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" image="icons8-undo-50"/>
+                                        <connections>
+                                            <action selector="undoPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="sOL-h2-6eb"/>
+                                        </connections>
+                                    </button>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OpT-kM-KxR">
+                                        <rect key="frame" x="88" y="0.0" width="120" height="33"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="120" id="W2X-6Q-Wn1"/>
+                                        </constraints>
                                         <segments>
                                             <segment title="Curve"/>
                                             <segment title="Flat"/>
@@ -85,10 +68,47 @@
                                             <action selector="brushChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="MdV-4z-UPY"/>
                                         </connections>
                                     </segmentedControl>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oe4-F1-Jww" userLabel="Save">
+                                        <rect key="frame" x="220" y="0.0" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="32" id="eka-o8-fjA"/>
+                                            <constraint firstAttribute="height" constant="32" id="jk3-tn-4Lp"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" title="Save" image="icons8-save-50">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="savePressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="sXs-Gf-czt"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sg0-6D-04T" userLabel="Load">
+                                        <rect key="frame" x="264" y="0.0" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="y4M-FH-17s"/>
+                                            <constraint firstAttribute="width" constant="32" id="yLR-Ox-8PC"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" title="Load" image="icons8-folder-50">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="loadPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="hEZ-Yj-yWc"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E3j-wU-Ohj" userLabel="Settings">
+                                        <rect key="frame" x="308" y="0.0" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="32" id="B5h-TQ-2en"/>
+                                            <constraint firstAttribute="height" constant="32" id="fKz-5s-ARY"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" image="icons8-settings-50"/>
+                                        <connections>
+                                            <segue destination="eGa-wq-YNC" kind="presentation" id="BXW-Ba-AHB"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="T7G-tR-0MK"/>
-                                </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="BF0-jU-3jr" userLabel="Color and Thickness">
                                 <rect key="frame" x="15" y="612" width="345" height="30"/>
@@ -143,20 +163,20 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="BF0-jU-3jr" secondAttribute="trailing" constant="15" id="1bX-oH-4bN"/>
+                            <constraint firstItem="BF0-jU-3jr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="6du-Xb-ZLH"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="A9N-kA-XM7"/>
-                            <constraint firstItem="aGO-NQ-Btf" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="ECv-xK-Anl"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leading" id="Hg2-n6-K8Z"/>
+                            <constraint firstItem="Aj4-nQ-Hz0" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="NSF-7r-eVJ"/>
                             <constraint firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="OCr-Za-gZa"/>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="BF0-jU-3jr" secondAttribute="trailing" constant="15" id="QnI-5n-iO9"/>
                             <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="BF0-jU-3jr" secondAttribute="bottom" constant="25" id="UFH-eY-WqD"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leading" id="W15-DV-iTB"/>
-                            <constraint firstItem="BF0-jU-3jr" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="XUA-QY-flV"/>
                             <constraint firstAttribute="bottom" secondItem="BrB-h1-WRS" secondAttribute="bottom" id="aV3-2T-0rG"/>
                             <constraint firstAttribute="trailing" secondItem="Pnb-wa-pwq" secondAttribute="trailing" id="ebd-kc-PoW"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="gmE-rp-lif"/>
-                            <constraint firstItem="aGO-NQ-Btf" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="lS1-bY-dej"/>
+                            <constraint firstItem="Aj4-nQ-Hz0" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="kvT-ha-f3U"/>
+                            <constraint firstItem="BF0-jU-3jr" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="nFP-Xd-OAz"/>
                             <constraint firstAttribute="bottom" secondItem="Pnb-wa-pwq" secondAttribute="bottom" id="pTQ-vY-eDL"/>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="aGO-NQ-Btf" secondAttribute="trailing" constant="15" id="xY0-YO-Py3"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
@@ -176,7 +196,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="254" y="302"/>
+            <point key="canvasLocation" x="253.59999999999999" y="301.79910044977515"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="3nl-nn-xgg">
@@ -205,4 +225,11 @@
             <point key="canvasLocation" x="1119" y="302"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="icons8-delete-50" width="50" height="50"/>
+        <image name="icons8-folder-50" width="50" height="50"/>
+        <image name="icons8-save-50" width="50" height="50"/>
+        <image name="icons8-settings-50" width="50" height="50"/>
+        <image name="icons8-undo-50" width="50" height="50"/>
+    </resources>
 </document>

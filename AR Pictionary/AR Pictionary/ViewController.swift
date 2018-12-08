@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  AR Pictionary
 //
-//  Created by 21djl5 on 11/19/18.
-//  Copyright © 2018 davidjlee. All rights reserved.
+//  Created by David J Lee on 11/19/18.
+//  Copyright © 2018 David J Lee. All rights reserved.
 //
 
 import UIKit
@@ -371,9 +371,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   // MARK: Unwind segue
   
-  @IBAction func unwindToThisViewController(segue: UIStoryboardSegue) {
-    
-  }
+  @IBAction func unwindToThisViewController(segue: UIStoryboardSegue) {}
   
   // MARK: - ARSCNViewDelegate
   
