@@ -21,6 +21,9 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrB-h1-WRS">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="rXy-Kr-ZXn" appends="YES" id="Lyl-9B-Qje"/>
+                                </connections>
                             </arscnView>
                             <stackView opaque="NO" contentMode="scaleAspectFit" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Aj4-nQ-Hz0" userLabel="Bar">
                                 <rect key="frame" x="54" y="25" width="267" height="32"/>
@@ -108,7 +111,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="BF0-jU-3jr" userLabel="Color and Thickness">
-                                <rect key="frame" x="21" y="610" width="333" height="32"/>
+                                <rect key="frame" x="21" y="625" width="333" height="32"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aiN-Ap-CB6">
                                         <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
@@ -127,30 +130,20 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="A6H-kI-ln4" userLabel="Sliders">
                                         <rect key="frame" x="52" y="6.5" width="281" height="19"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="dyV-vd-6ck">
-                                                <rect key="frame" x="0.0" y="0.0" width="135.5" height="19"/>
-                                                <subviews>
-                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tgA-yq-HOu" userLabel="Color Slider">
-                                                        <rect key="frame" x="-2" y="0.0" width="139.5" height="20"/>
-                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <connections>
-                                                            <action selector="hueSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="whF-CT-K1R"/>
-                                                        </connections>
-                                                    </slider>
-                                                </subviews>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="2sF-yl-34Q">
-                                                <rect key="frame" x="145.5" y="0.0" width="135.5" height="19"/>
-                                                <subviews>
-                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.25" minValue="-4" maxValue="-2.5" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P" userLabel="Thickness Slider">
-                                                        <rect key="frame" x="-2" y="0.0" width="139.5" height="20"/>
-                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <connections>
-                                                            <action selector="thicknessSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="lzd-mC-gar"/>
-                                                        </connections>
-                                                    </slider>
-                                                </subviews>
-                                            </stackView>
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tgA-yq-HOu" userLabel="Color Slider">
+                                                <rect key="frame" x="-2" y="0.0" width="139.5" height="20"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <connections>
+                                                    <action selector="hueSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="whF-CT-K1R"/>
+                                                </connections>
+                                            </slider>
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.25" minValue="-4" maxValue="-2.5" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P" userLabel="Thickness Slider">
+                                                <rect key="frame" x="143.5" y="0.0" width="139.5" height="20"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <connections>
+                                                    <action selector="thicknessSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="lzd-mC-gar"/>
+                                                </connections>
+                                            </slider>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="A6H-kI-ln4" secondAttribute="height" multiplier="15:1" id="O8H-Lv-qeK"/>
@@ -174,18 +167,10 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bkQ-v9-rVG" userLabel="Touch View Frame">
-                                <rect key="frame" x="0.0" y="66" width="375" height="535"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="rXy-Kr-ZXn" appends="YES" id="WMG-1a-swD"/>
-                                </connections>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="BF0-jU-3jr" secondAttribute="bottom" constant="25" id="5h8-25-Pw6"/>
+                            <constraint firstAttribute="bottom" secondItem="BF0-jU-3jr" secondAttribute="bottom" constant="10" id="5h8-25-Pw6"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="BrB-h1-WRS" secondAttribute="leading" id="8A8-CC-8tz"/>
                             <constraint firstItem="BF0-jU-3jr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="U0K-SW-4ec" secondAttribute="leading" constant="10" id="D9H-ZL-uX6"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="IaU-Pm-mxx"/>
@@ -205,6 +190,7 @@
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="KBb-sP-hEB"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="hueSlider" destination="tgA-yq-HOu" id="lHl-Sn-O6g"/>
@@ -221,7 +207,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="253.59999999999999" y="301.79910044977515"/>
+            <point key="canvasLocation" x="1192.8" y="301.79910044977515"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="s7V-Jt-Jq3">
@@ -469,7 +455,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KRw-Sh-QGc" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <swipeGestureRecognizer direction="down" id="irA-su-0Gd"/>
             </objects>
-            <point key="canvasLocation" x="1090" y="302"/>
+            <point key="canvasLocation" x="2028" y="301.79910044977515"/>
         </scene>
     </scenes>
     <resources>

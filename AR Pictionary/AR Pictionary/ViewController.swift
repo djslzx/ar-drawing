@@ -142,7 +142,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   @IBAction func resetSliders(_ sender: UIButton) {
     context.color = defaultColor
     context.lineRadius = defaultLineRadius
-    hueSlider.tintColor = context.color
+    hueSlider.minimumTrackTintColor = defaultColor
+    hueSlider.maximumTrackTintColor = defaultColor
     hueSlider.setValue((hueSlider.maximumValue + hueSlider.minimumValue)/2,
                        animated: true)
     thicknessSlider.setValue((thicknessSlider.maximumValue + thicknessSlider.minimumValue)/2,
@@ -342,7 +343,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     sceneView.delegate = self
     
     // Show statistics such as fps and timing information
-    sceneView.showsStatistics = true
+    sceneView.showsStatistics = false
     
     updateReticle()
     
