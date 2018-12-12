@@ -21,17 +21,15 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrB-h1-WRS">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="rXy-Kr-ZXn" appends="YES" id="mQ9-Lw-IAY"/>
-                                </connections>
                             </arscnView>
                             <stackView opaque="NO" contentMode="scaleAspectFit" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Aj4-nQ-Hz0" userLabel="Bar">
-                                <rect key="frame" x="19" y="25" width="337" height="35"/>
+                                <rect key="frame" x="54" y="25" width="267" height="32"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT" userLabel="Clear">
-                                        <rect key="frame" x="0.0" y="0.0" width="35" height="35"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="pfE-gP-WbT" secondAttribute="height" multiplier="1:1" id="qMH-jT-ElJ"/>
+                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="l2k-hP-Uzn"/>
+                                            <constraint firstAttribute="width" secondItem="pfE-gP-WbT" secondAttribute="height" multiplier="1:1" id="sfo-bW-2zU"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" image="icons8-delete-50">
@@ -42,10 +40,11 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rY1-Wi-OpA" userLabel="Undo">
-                                        <rect key="frame" x="60.5" y="0.0" width="35" height="35"/>
+                                        <rect key="frame" x="47" y="0.0" width="32" height="32"/>
                                         <gestureRecognizers/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="rY1-Wi-OpA" secondAttribute="height" multiplier="1:1" id="dDX-oR-YFY"/>
+                                            <constraint firstAttribute="width" secondItem="rY1-Wi-OpA" secondAttribute="height" multiplier="1:1" id="Lgu-39-0e9"/>
+                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="ikh-OM-O3X"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" image="icons8-undo-50"/>
@@ -54,10 +53,11 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eVC-fa-n25" userLabel="Redo">
-                                        <rect key="frame" x="121" y="0.0" width="35" height="35"/>
+                                        <rect key="frame" x="94" y="0.0" width="32" height="32"/>
                                         <gestureRecognizers/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="eVC-fa-n25" secondAttribute="height" multiplier="1:1" id="DfR-MH-6vB"/>
+                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="M3u-eB-38A"/>
+                                            <constraint firstAttribute="width" secondItem="eVC-fa-n25" secondAttribute="height" multiplier="1:1" id="h1Q-tX-OM8"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" image="icons8-redo-50"/>
@@ -66,10 +66,11 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hf3-oO-zcS" userLabel="Pen">
-                                        <rect key="frame" x="181" y="0.0" width="35" height="35"/>
+                                        <rect key="frame" x="141" y="0.0" width="32" height="32"/>
                                         <gestureRecognizers/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="Hf3-oO-zcS" secondAttribute="height" multiplier="1:1" id="7rz-mV-YdH"/>
+                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="kwQ-uW-kef"/>
+                                            <constraint firstAttribute="width" secondItem="Hf3-oO-zcS" secondAttribute="height" multiplier="1:1" id="yPN-6L-GWc"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" title="Pen" image="icons8-pen-50"/>
@@ -78,10 +79,11 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RmT-6t-7BQ" userLabel="Chisel">
-                                        <rect key="frame" x="241.5" y="0.0" width="35" height="35"/>
+                                        <rect key="frame" x="188" y="0.0" width="32" height="32"/>
                                         <gestureRecognizers/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="RmT-6t-7BQ" secondAttribute="height" multiplier="1:1" id="DOw-sv-KNP"/>
+                                            <constraint firstAttribute="width" secondItem="RmT-6t-7BQ" secondAttribute="height" multiplier="1:1" id="ElG-hh-qSQ"/>
+                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="ooN-XM-VOc"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" title="Chisel" image="icons8-chisel-tip-marker-50"/>
@@ -90,9 +92,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleAspectFit" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oe4-F1-Jww" userLabel="Save">
-                                        <rect key="frame" x="302" y="0.0" width="35" height="35"/>
+                                        <rect key="frame" x="235" y="0.0" width="32" height="32"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="Oe4-F1-Jww" secondAttribute="height" multiplier="1:1" id="JNJ-nv-clG"/>
+                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="6Ju-gi-SfA"/>
+                                            <constraint firstAttribute="width" secondItem="Oe4-F1-Jww" secondAttribute="height" multiplier="1:1" id="k1b-Ny-Fu6"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" title="Save" image="icons8-save-50">
@@ -103,43 +106,55 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstItem="eVC-fa-n25" firstAttribute="width" secondItem="eVC-fa-n25" secondAttribute="height" multiplier="1:1" id="Bw0-z1-N9s"/>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="35" id="HMj-TK-IL7"/>
-                                    <constraint firstAttribute="width" secondItem="Aj4-nQ-Hz0" secondAttribute="height" multiplier="77:8" id="Xg6-Jh-iVs"/>
-                                </constraints>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="BF0-jU-3jr" userLabel="Color and Thickness">
-                                <rect key="frame" x="15" y="612" width="345" height="30"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="BF0-jU-3jr" userLabel="Color and Thickness">
+                                <rect key="frame" x="21" y="610" width="333" height="32"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aiN-Ap-CB6">
-                                        <rect key="frame" x="0.0" y="0.0" width="39" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aiN-Ap-CB6">
+                                        <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="1qT-fd-LBz"/>
+                                            <constraint firstAttribute="width" secondItem="aiN-Ap-CB6" secondAttribute="height" multiplier="1:1" id="o7a-Gi-aym"/>
+                                        </constraints>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <state key="normal" title="Reset">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="icons8-reset-50">
+                                            <color key="titleColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                         </state>
                                         <connections>
                                             <action selector="resetSliders:" destination="BV1-FR-VrT" eventType="touchUpInside" id="yga-kT-ppf"/>
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="A6H-kI-ln4" userLabel="Sliders">
-                                        <rect key="frame" x="54" y="0.0" width="291" height="30"/>
+                                        <rect key="frame" x="52" y="6.5" width="281" height="19"/>
                                         <subviews>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tgA-yq-HOu" userLabel="Color Slider">
-                                                <rect key="frame" x="-2" y="0.0" width="144.5" height="31"/>
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <connections>
-                                                    <action selector="hueSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="whF-CT-K1R"/>
-                                                </connections>
-                                            </slider>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.25" minValue="-4" maxValue="-2.5" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P" userLabel="Thickness Slider">
-                                                <rect key="frame" x="148.5" y="0.0" width="144.5" height="31"/>
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <connections>
-                                                    <action selector="thicknessSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="lzd-mC-gar"/>
-                                                </connections>
-                                            </slider>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="dyV-vd-6ck">
+                                                <rect key="frame" x="0.0" y="0.0" width="135.5" height="19"/>
+                                                <subviews>
+                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tgA-yq-HOu" userLabel="Color Slider">
+                                                        <rect key="frame" x="-2" y="0.0" width="139.5" height="20"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <connections>
+                                                            <action selector="hueSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="whF-CT-K1R"/>
+                                                        </connections>
+                                                    </slider>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="2sF-yl-34Q">
+                                                <rect key="frame" x="145.5" y="0.0" width="135.5" height="19"/>
+                                                <subviews>
+                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.25" minValue="-4" maxValue="-2.5" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P" userLabel="Thickness Slider">
+                                                        <rect key="frame" x="-2" y="0.0" width="139.5" height="20"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <connections>
+                                                            <action selector="thicknessSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="lzd-mC-gar"/>
+                                                        </connections>
+                                                    </slider>
+                                                </subviews>
+                                            </stackView>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="A6H-kI-ln4" secondAttribute="height" multiplier="15:1" id="O8H-Lv-qeK"/>
+                                        </constraints>
                                     </stackView>
                                 </subviews>
                             </stackView>
@@ -159,25 +174,33 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bkQ-v9-rVG" userLabel="Touch View Frame">
+                                <rect key="frame" x="0.0" y="66" width="375" height="535"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="rXy-Kr-ZXn" appends="YES" id="WMG-1a-swD"/>
+                                </connections>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="BF0-jU-3jr" secondAttribute="trailing" constant="15" id="1bX-oH-4bN"/>
-                            <constraint firstItem="BF0-jU-3jr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="15" id="6du-Xb-ZLH"/>
-                            <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="A9N-kA-XM7"/>
-                            <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leading" id="Hg2-n6-K8Z"/>
-                            <constraint firstItem="Aj4-nQ-Hz0" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="10" id="IDR-Gr-yOD"/>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Aj4-nQ-Hz0" secondAttribute="trailing" constant="10" id="NDe-LB-3qv"/>
-                            <constraint firstItem="Aj4-nQ-Hz0" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="NSF-7r-eVJ"/>
-                            <constraint firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="OCr-Za-gZa"/>
-                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="BF0-jU-3jr" secondAttribute="bottom" constant="25" id="UFH-eY-WqD"/>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leading" id="W15-DV-iTB"/>
-                            <constraint firstAttribute="bottom" secondItem="BrB-h1-WRS" secondAttribute="bottom" id="aV3-2T-0rG"/>
-                            <constraint firstAttribute="trailing" secondItem="Pnb-wa-pwq" secondAttribute="trailing" id="ebd-kc-PoW"/>
-                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="gmE-rp-lif"/>
-                            <constraint firstItem="Aj4-nQ-Hz0" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="kvT-ha-f3U"/>
-                            <constraint firstItem="BF0-jU-3jr" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="nFP-Xd-OAz"/>
-                            <constraint firstAttribute="bottom" secondItem="Pnb-wa-pwq" secondAttribute="bottom" id="pTQ-vY-eDL"/>
+                            <constraint firstAttribute="bottom" secondItem="BF0-jU-3jr" secondAttribute="bottom" constant="25" id="5h8-25-Pw6"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="BrB-h1-WRS" secondAttribute="leading" id="8A8-CC-8tz"/>
+                            <constraint firstItem="BF0-jU-3jr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="U0K-SW-4ec" secondAttribute="leading" constant="10" id="D9H-ZL-uX6"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="IaU-Pm-mxx"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="BF0-jU-3jr" secondAttribute="trailing" constant="10" id="LPY-0B-NZt"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="OKx-cy-7aO"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Aj4-nQ-Hz0" secondAttribute="trailing" constant="5" id="Rff-0C-ePS"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="SSB-5y-gux"/>
+                            <constraint firstItem="Aj4-nQ-Hz0" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="Tvc-Gc-qP2"/>
+                            <constraint firstItem="Aj4-nQ-Hz0" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="U0K-SW-4ec" secondAttribute="leading" constant="5" id="VaZ-gi-09C"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="bottom" secondItem="BrB-h1-WRS" secondAttribute="bottom" id="bAm-Zk-woa"/>
+                            <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leading" id="bGK-IL-5xg"/>
+                            <constraint firstAttribute="trailing" secondItem="Pnb-wa-pwq" secondAttribute="trailing" id="hdd-aK-Rsn"/>
+                            <constraint firstItem="BF0-jU-3jr" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="idz-h6-Wn2"/>
+                            <constraint firstItem="Aj4-nQ-Hz0" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="jyZ-d2-hbZ"/>
+                            <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="BrB-h1-WRS" secondAttribute="top" id="k5S-4x-KiV"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
@@ -203,7 +226,6 @@
         <!--Table View Controller-->
         <scene sceneID="s7V-Jt-Jq3">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KRw-Sh-QGc" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="t99-gw-VNr" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="FiP-4c-CbW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -444,6 +466,7 @@
                         </connections>
                     </tableView>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KRw-Sh-QGc" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <swipeGestureRecognizer direction="down" id="irA-su-0Gd"/>
             </objects>
             <point key="canvasLocation" x="1090" y="302"/>
@@ -454,6 +477,7 @@
         <image name="icons8-delete-50" width="50" height="50"/>
         <image name="icons8-pen-50" width="50" height="50"/>
         <image name="icons8-redo-50" width="50" height="50"/>
+        <image name="icons8-reset-50" width="50" height="50"/>
         <image name="icons8-save-50" width="50" height="50"/>
         <image name="icons8-undo-50" width="50" height="50"/>
     </resources>

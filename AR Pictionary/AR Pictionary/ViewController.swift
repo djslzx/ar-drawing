@@ -261,12 +261,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // Only clear if program isn't already in the middle of clearing
     // and there are lines to be cleared
     if !inMiddleOfClearing {
-      DispatchQueue.global().async {
-        [weak self] in
-        self?.inMiddleOfClearing = true
-        self?.clearScene()
-        self?.inMiddleOfClearing = false
-      }
+      inMiddleOfClearing = true
+      clearScene()
+      inMiddleOfClearing = false
     }
   }
   
@@ -336,7 +333,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
-  // - MARK: Utilities
+  // MARK: Utilities
   
   override func viewDidLoad() {
     super.viewDidLoad()
