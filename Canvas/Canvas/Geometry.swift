@@ -61,7 +61,7 @@ public class Geometry {
   
   // Rotate face to be perpendicular to vector v
   private static func rotatedFace(face : [float3], _ v : float3) -> [float3] {
-    let (w,phi) = rotation(float3(), v)
+    let (w, phi) = rotation(float3(), v) //
     let rotationTransform = float4x4(simd_quatf(angle: Float.pi - phi, axis: w))
     return face.map {
       let rotated = float4($0, 1) * rotationTransform
@@ -137,11 +137,18 @@ public class Geometry {
       assert(m.count >= 2)
       let u = m[m.count-2], v = m[m.count-1]
       
+      return cylinder2Generator()(u, v, context)
+    }
+  }
+  
+  private static func cylinder2Generator() -> (float3, float3, Context) -> SCNNode {
+    return { (u: float3, v: float3, context: Context) -> SCNNode in
+
       let cylinder = SCNCylinder(radius: context.lineRadius,
                                  height: CGFloat(u.distance(to: v)))
       cylinder.heightSegmentCount = 1
       cylinder.firstMaterial?.diffuse.contents = context.color
-
+      
       // Get rotation axis and angle for the vector from u to v
       let (w, phi) = self.rotation(u, v)
       
@@ -166,7 +173,7 @@ public class Geometry {
       assert(m.count >= 3)
       let u = m[m.count-3], v = m[m.count-2], w = m[m.count-1]
       
-      let cylinderNode = self.cylinderGenerator()([u,v], context)
+      let cylinderNode = self.cylinder2Generator()(u, v, context)
       
       // terminal face of first cylinder, initial face of second cylinder
       let firstTerminal : [float3] = rotatedFace(face: circleVertices(radius: Float(context.lineRadius)), v - u)
@@ -190,11 +197,11 @@ public class Geometry {
    
    - Parameters:
    - width: The width of the brush face (x-y plane).
-   - color: The color of the brush.
    */
   public static func flatBrushGenerator() -> ([float3], Context) -> SCNNode {
     return { (m: [float3], context: Context) -> SCNNode in
-      assert(m.count >= 3)
+      assert(m.count >= 4)
+      //assert(m.count >= 3)
 
       let width = Float(context.lineRadius*2)
       let wideBrush : [float3] = [ // corner vertices
@@ -202,9 +209,9 @@ public class Geometry {
         float3(width, 0, 0)
       ]
 
-      let generator = smoothTubeGenerator(face: wideBrush)
-      let u = m[m.count-3], v = m[m.count-2], w = m[m.count-1]
-      return generator(u, v, w, context)
+      let generator = connectedTube4Generator(face: wideBrush)
+      //smoothTubeGenerator(face: wideBrush)
+      return generator(m[m.count-4], m[m.count-3], m[m.count-2], m[m.count-1], context)
     }
   }
 
@@ -232,9 +239,9 @@ public class Geometry {
       
       let parent = SCNNode()
       let vertices = stride(from: 0.0, to: Float(context.detail), by: 1.0).map(parametrization)
-      let cylinderGenerator = self.cylinderGenerator()
+      let generator = self.cylinder2Generator()
       for i in 0...vertices.count-2 {
-        let cylinderNode = cylinderGenerator(Array(vertices[i...i+1]), context)
+        let cylinderNode = generator(vertices[i], vertices[i+1], context)
         parent.addChildNode(cylinderNode)
       }
       return parent
@@ -246,7 +253,6 @@ public class Geometry {
    
    - Parameters:
    - face: The face to be used in generating brush-prisms as defined in the x-z plane.
-   - color: The color of the brush.
    */
   private static func smoothTubeGenerator(face : [float3]) -> (float3, float3, float3, Context) -> SCNNode {
     assert(!face.isEmpty)
@@ -264,4 +270,81 @@ public class Geometry {
     }
   }
   
+  /**
+   A primitive prism-generator that smooths connections between prisms with sharp turns.
+
+   Given a,b,c,d as vertices, the prism generated will have faces defined at b and c.
+   Face B corresponding to vertex b will be perpendicular to the vector from a to c;
+   face C corresponding to vertex c will be perpendicular to the vector from b to d.
+
+   - Returns: A generator for prisms where connecting face planes are perpendicular to
+    the vector connecting adjacent vertices.
+
+   - Parameters:
+   - face: The face to be used in generating brush-prisms as defined in the x-z plane.
+   */
+  private static func connectedTube4Generator(face: [float3]) -> (float3, float3, float3, float3, Context) -> SCNNode {
+    assert(face.count >= 3)
+    return {
+      (a: float3, b: float3, c: float3, d: float3, context: Context) -> SCNNode in
+      
+      let face1 = rotatedFace(face: face, c - a).map { $0 + (b - a) } //translate to b
+      let face2 = rotatedFace(face: face, d - b).map { $0 + (c - a) } //translate to c
+      let pipe = interleavedGeometry(face1: face1, face2: face2)
+      pipe.firstMaterial?.diffuse.contents = context.color
+      pipe.firstMaterial?.isDoubleSided = true
+      
+      let node = SCNNode(geometry: pipe)
+      node.simdPosition = a //Check
+      return node
+    }
+  }
+  
+  public static func connectedCylinderGenerator() -> ([float3], Context) -> SCNNode {
+    return {
+      (m: [float3], context: Context) -> SCNNode in
+      assert(m.count >= 4)
+      
+      let generator = connectedTube4Generator(face: circleVertices(radius: Float(context.lineRadius)))
+      return generator(m[m.count-4], m[m.count-3], m[m.count-2], m[m.count-1], context)
+    }
+  }
+
+  public static func correctedCylinderGenerator() -> ([float3], Context) -> SCNNode {
+    return {
+      (m: [float3], context: Context) -> SCNNode in
+      assert(m.count >= 3)
+      let u = m[m.count - 3], v = m[m.count - 2], w = m[m.count - 1]
+
+      let parent = SCNNode()
+      let generator = cylinder2Generator()
+      
+      let vertices = corrected3Points(u, v, w)
+      for i in 0..<vertices.count-1 {
+        let node = generator(vertices[i], vertices[i+1], context)
+        parent.addChildNode(node)
+      }
+
+      return parent
+    }
+  }
+  
+  private static func corrected3Points(_ a: float3, _ b: float3, _ c: float3) -> [float3] {
+    // angle btwn vector<b to a> and vector<b to c>
+    let angle = float3.angle(a - b, c - b)
+    
+    if angle.distance(to: 180) < 5 { // straighten straight
+      return [a, c]
+    } else if angle.distance(to: 0) < 30 { // smooth acute
+      // Add another segment from midpoint<a,b> to midpoint<b,c>
+      return [ a, a.midpoint(with: b), b.midpoint(with: c), c]
+    } else {
+      return [a,b,c]
+    }
+  }
+  
+//  public static func voxelBrush() -> ([float3], Context) -> SCNNode {
+//    assertionFailure()
+//
+//  }
 }

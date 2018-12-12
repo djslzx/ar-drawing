@@ -26,7 +26,7 @@
                                 </connections>
                             </arscnView>
                             <stackView opaque="NO" contentMode="scaleAspectFit" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Aj4-nQ-Hz0" userLabel="Bar">
-                                <rect key="frame" x="54" y="25" width="267" height="32"/>
+                                <rect key="frame" x="124.5" y="25" width="126" height="32"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT" userLabel="Clear">
                                         <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
@@ -68,48 +68,22 @@
                                             <action selector="redoPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="vbS-Yk-Ybp"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hf3-oO-zcS" userLabel="Pen">
-                                        <rect key="frame" x="141" y="0.0" width="32" height="32"/>
-                                        <gestureRecognizers/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="kwQ-uW-kef"/>
-                                            <constraint firstAttribute="width" secondItem="Hf3-oO-zcS" secondAttribute="height" multiplier="1:1" id="yPN-6L-GWc"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" title="Pen" image="icons8-pen-50"/>
-                                        <connections>
-                                            <action selector="penChanged:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Nwu-Tv-WWg"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RmT-6t-7BQ" userLabel="Chisel">
-                                        <rect key="frame" x="188" y="0.0" width="32" height="32"/>
-                                        <gestureRecognizers/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="RmT-6t-7BQ" secondAttribute="height" multiplier="1:1" id="ElG-hh-qSQ"/>
-                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="ooN-XM-VOc"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" title="Chisel" image="icons8-chisel-tip-marker-50"/>
-                                        <connections>
-                                            <action selector="penChanged:" destination="BV1-FR-VrT" eventType="touchUpInside" id="rX0-uo-fHn"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleAspectFit" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oe4-F1-Jww" userLabel="Save">
-                                        <rect key="frame" x="235" y="0.0" width="32" height="32"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="6Ju-gi-SfA"/>
-                                            <constraint firstAttribute="width" secondItem="Oe4-F1-Jww" secondAttribute="height" multiplier="1:1" id="k1b-Ny-Fu6"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" title="Save" image="icons8-save-50">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="savePressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="sXs-Gf-czt"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                             </stackView>
+                            <segmentedControl opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dk0-wh-XBM">
+                                <rect key="frame" x="36" y="67" width="303" height="29"/>
+                                <segments>
+                                    <segment title="Pen"/>
+                                    <segment title="Chisel"/>
+                                    <segment title="Bezier"/>
+                                    <segment title="Corrected"/>
+                                    <segment title="Connected"/>
+                                </segments>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="penChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="NKw-NN-Es4"/>
+                                </connections>
+                            </segmentedControl>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="BF0-jU-3jr" userLabel="Color and Thickness">
                                 <rect key="frame" x="21" y="625" width="333" height="32"/>
                                 <subviews>
@@ -171,8 +145,10 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="BF0-jU-3jr" secondAttribute="bottom" constant="10" id="5h8-25-Pw6"/>
+                            <constraint firstItem="dk0-wh-XBM" firstAttribute="top" secondItem="Aj4-nQ-Hz0" secondAttribute="bottom" constant="10" id="7c6-DJ-FTl"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="BrB-h1-WRS" secondAttribute="leading" id="8A8-CC-8tz"/>
                             <constraint firstItem="BF0-jU-3jr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="U0K-SW-4ec" secondAttribute="leading" constant="10" id="D9H-ZL-uX6"/>
+                            <constraint firstItem="dk0-wh-XBM" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="Hbt-tZ-XmS"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="IaU-Pm-mxx"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="BF0-jU-3jr" secondAttribute="trailing" constant="10" id="LPY-0B-NZt"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="OKx-cy-7aO"/>
@@ -459,12 +435,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="icons8-chisel-tip-marker-50" width="50" height="50"/>
         <image name="icons8-delete-50" width="50" height="50"/>
-        <image name="icons8-pen-50" width="50" height="50"/>
         <image name="icons8-redo-50" width="50" height="50"/>
         <image name="icons8-reset-50" width="50" height="50"/>
-        <image name="icons8-save-50" width="50" height="50"/>
         <image name="icons8-undo-50" width="50" height="50"/>
     </resources>
 </document>

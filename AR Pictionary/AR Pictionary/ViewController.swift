@@ -36,13 +36,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   /// Dictionary of available Pens
   private let pens : [String : Pen] = [
     "Pen" : Pen(count: 2, Geometry.cylinderGenerator()),
-    "Chisel" : Pen(count: 3, Geometry.flatBrushGenerator()),
+    "Chisel" : Pen(count: 4, Geometry.flatBrushGenerator()),
     "Bezier" : Pen(count: 4, Geometry.bezierCurveGenerator()),
+    "Corrected" : Pen(count: 3, Geometry.correctedCylinderGenerator()),
+    "Connected" : Pen(count: 4, Geometry.connectedCylinderGenerator()),
   ]
 
   /// Dictionary of available ContextUpdaters
   private let contextUpdaters : [String: ContextUpdater] = [
-    "Vanilla" : ContextUpdater(),
+    "Static" : ContextUpdater(),
     "Rainbow" : RainbowUpdater()
   ]
   
@@ -73,14 +75,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   /// Responds to user context changes
   @IBAction func contextUpdaterChanged(_ sender: UISegmentedControl) {
     updater = contextUpdaters[sender.titleForSegment(at: sender.selectedSegmentIndex)!] ??
-      contextUpdaters["Vanilla"]!
+      contextUpdaters["Static"]!
   }
 
-  /// Responds to user pen type changes
-  @IBAction func penChanged(_ sender: UIButton) {
-    NSLog(sender.titleLabel?.text ?? "")
-    pen = pens[sender.titleLabel?.text ?? "Pen"] ?? pens["Pen"]!
+  @IBAction func penChanged(_ sender: UISegmentedControl) {
+    pen = pens[sender.titleForSegment(at: sender.selectedSegmentIndex) ?? "Pen"] ?? pens["Pen"]!
   }
+  
+//  /// Responds to user pen type changes
+//  @IBAction func penChanged(_ sender: UIButton) {
+//    NSLog(sender.titleLabel?.text ?? "")
+//    pen = pens[sender.titleLabel?.text ?? "Pen"] ?? pens["Pen"]!
+//  }
   
   /// Responds to user brush hue changes
   @IBAction func hueSliderChanged(_ sender: UISlider) {

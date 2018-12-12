@@ -29,6 +29,10 @@ public extension float3 {
     return CGPoint(x: CGFloat(self.x), y: CGFloat(self.y))
   }
   
+  static func angle(_ a: float3, _ b: float3) -> Float {
+    return acos(simd_dot(a, b) / simd_length(a) / simd_length(b))
+  }
+  
   func rotated(x : Float, y : Float, z : Float) -> float3 {
     let matrices : [simd_float3x3] =
       [

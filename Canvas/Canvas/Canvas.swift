@@ -57,7 +57,7 @@ public class Canvas {
    */
   public func addNode(_ node: SCNNode) {
     node.name = "\(line.name!), \(line.childNodes.count)"
-    NSLog("Adding node with name: \(node.name!), geometry \(node.geometry!)")
+    NSLog("Adding node with name: \(node.name!), geometry \(node.geometry)")
     line.addChildNode(node)
   }
   
