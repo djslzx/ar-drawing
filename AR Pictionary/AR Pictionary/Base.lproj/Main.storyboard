@@ -26,7 +26,7 @@
                                 </connections>
                             </arscnView>
                             <stackView opaque="NO" contentMode="scaleAspectFit" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Aj4-nQ-Hz0" userLabel="Bar">
-                                <rect key="frame" x="124.5" y="25" width="126" height="32"/>
+                                <rect key="frame" x="77.5" y="25" width="220" height="32"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pfE-gP-WbT" userLabel="Clear">
                                         <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
@@ -35,7 +35,7 @@
                                             <constraint firstAttribute="width" secondItem="pfE-gP-WbT" secondAttribute="height" multiplier="1:1" id="sfo-bW-2zU"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" image="icons8-delete-50">
+                                        <state key="normal" image="icons8-delete-bin-90">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
@@ -50,7 +50,7 @@
                                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="ikh-OM-O3X"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" image="icons8-undo-50"/>
+                                        <state key="normal" image="icons8-undo-90"/>
                                         <connections>
                                             <action selector="undoPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="sOL-h2-6eb"/>
                                         </connections>
@@ -63,14 +63,42 @@
                                             <constraint firstAttribute="width" secondItem="eVC-fa-n25" secondAttribute="height" multiplier="1:1" id="h1Q-tX-OM8"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" image="icons8-redo-50"/>
+                                        <state key="normal" image="icons8-redo-90"/>
                                         <connections>
                                             <action selector="redoPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="vbS-Yk-Ybp"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zTM-kA-92W" userLabel="Draw">
+                                        <rect key="frame" x="141" y="0.0" width="32" height="32"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="zTM-kA-92W" secondAttribute="height" multiplier="1:1" id="d81-IC-uWA"/>
+                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="yJg-1t-bav"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" image="icons8-sign-up-90"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jm2-5n-ViC" userLabel="Move">
+                                        <rect key="frame" x="188" y="0.0" width="32" height="32"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="Jm2-5n-ViC" secondAttribute="height" multiplier="1:1" id="FQn-dC-ED8"/>
+                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="s4s-yG-SF2"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" image="icons8-move-90"/>
+                                    </button>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="Jm2-5n-ViC" firstAttribute="width" secondItem="Jm2-5n-ViC" secondAttribute="height" multiplier="1:1" id="5MK-S5-Y36"/>
+                                    <constraint firstItem="Jm2-5n-ViC" firstAttribute="width" secondItem="Jm2-5n-ViC" secondAttribute="height" multiplier="1:1" id="A1m-j7-CMx"/>
+                                    <constraint firstItem="zTM-kA-92W" firstAttribute="width" secondItem="zTM-kA-92W" secondAttribute="height" multiplier="1:1" id="AcS-DH-wLi"/>
+                                    <constraint firstItem="Jm2-5n-ViC" firstAttribute="width" secondItem="Jm2-5n-ViC" secondAttribute="height" multiplier="1:1" id="oge-Of-FlJ"/>
+                                    <constraint firstItem="Jm2-5n-ViC" firstAttribute="width" secondItem="Jm2-5n-ViC" secondAttribute="height" multiplier="1:1" id="r36-XU-q7d"/>
+                                    <constraint firstItem="zTM-kA-92W" firstAttribute="width" secondItem="zTM-kA-92W" secondAttribute="height" multiplier="1:1" id="y0i-cD-wGK"/>
+                                </constraints>
                             </stackView>
-                            <segmentedControl opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dk0-wh-XBM">
+                            <segmentedControl opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dk0-wh-XBM">
                                 <rect key="frame" x="42" y="67" width="291" height="29"/>
                                 <segments>
                                     <segment title="Pen"/>
@@ -87,14 +115,14 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="BF0-jU-3jr" userLabel="Color and Thickness">
                                 <rect key="frame" x="15" y="625" width="345" height="32"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aiN-Ap-CB6">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aiN-Ap-CB6" userLabel="Reset">
                                         <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="1qT-fd-LBz"/>
                                             <constraint firstAttribute="width" secondItem="aiN-Ap-CB6" secondAttribute="height" multiplier="1:1" id="o7a-Gi-aym"/>
                                         </constraints>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <state key="normal" image="icons8-reset-50">
+                                        <state key="normal" image="icons8-sync-90">
                                             <color key="titleColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                         </state>
                                         <connections>
@@ -102,17 +130,17 @@
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="A6H-kI-ln4" userLabel="Sliders">
-                                        <rect key="frame" x="42" y="2.5" width="244" height="27"/>
+                                        <rect key="frame" x="42" y="1" width="270" height="30"/>
                                         <subviews>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tgA-yq-HOu" userLabel="Color Slider">
-                                                <rect key="frame" x="-2" y="0.0" width="121" height="28"/>
+                                                <rect key="frame" x="-2" y="0.0" width="134" height="31"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
                                                     <action selector="hueSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="whF-CT-K1R"/>
                                                 </connections>
                                             </slider>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.25" minValue="-4" maxValue="-2.5" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P" userLabel="Thickness Slider">
-                                                <rect key="frame" x="125" y="0.0" width="121" height="28"/>
+                                                <rect key="frame" x="138" y="0.0" width="134" height="31"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
                                                     <action selector="thicknessSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="lzd-mC-gar"/>
@@ -124,7 +152,7 @@
                                         </constraints>
                                     </stackView>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="e38-oW-fGb">
-                                        <rect key="frame" x="296" y="0.5" width="51" height="31"/>
+                                        <rect key="frame" x="322" y="0.5" width="25" height="31"/>
                                         <connections>
                                             <action selector="rainbowSwitchChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="FIr-yw-Ebx"/>
                                         </connections>
@@ -442,9 +470,11 @@
         </scene>
     </scenes>
     <resources>
-        <image name="icons8-delete-50" width="50" height="50"/>
-        <image name="icons8-redo-50" width="50" height="50"/>
-        <image name="icons8-reset-50" width="50" height="50"/>
-        <image name="icons8-undo-50" width="50" height="50"/>
+        <image name="icons8-delete-bin-90" width="90" height="90"/>
+        <image name="icons8-move-90" width="90" height="90"/>
+        <image name="icons8-redo-90" width="90" height="90"/>
+        <image name="icons8-sign-up-90" width="90" height="90"/>
+        <image name="icons8-sync-90" width="90" height="90"/>
+        <image name="icons8-undo-90" width="90" height="90"/>
     </resources>
 </document>

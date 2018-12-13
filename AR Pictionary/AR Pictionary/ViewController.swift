@@ -28,10 +28,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     return sceneView.scene.rootNode
   }
   
-  // - MARK: Reticle View
+  // MARK: Reticle View
   @IBOutlet weak var reticleView: ReticleView!
 
-  // - MARK: Pens and contexts
+  // MARK: Pens and contexts
   
   /// Dictionary of available Pens
   private let pens : [String : Pen] = [
@@ -48,26 +48,21 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   ]
   
   /// Pen defaults
-  private let defaultColor = UIColor.white
-  private let defaultLineRadius = CGFloat(powf(10, -3.75))
-  private let defaultDetail = 9
+  private let defaultContext = Context(color: UIColor.white,
+                                       lineRadius: CGFloat(powf(10, -3.75)),
+                                       detail: 4)
+  private let defaultPen = Pen(count: 2, Geometry.cylinderGenerator())
   
   /// Current pen and context
-  private var pen : Pen = Pen(count: 2, Geometry.cylinderGenerator())
-  private var context : Context = Context(color: UIColor.white,
-                                          lineRadius: CGFloat(powf(10, -3.75)),
-                                          detail: 4) {
+  private var pen : Pen!
+  private var context : Context! {
     didSet {
-      updateReticle()
+      reticleView.updateReticle(color: context.color.darker(by: 10)!,
+                                radius: context.lineRadius * 1.4
+                                  / defaultContext.lineRadius)
       hueSlider.minimumTrackTintColor = context.color
       hueSlider.maximumTrackTintColor = context.color
     }
-  }
-  
-  private func updateReticle() {
-    reticleView.updateReticle(color: context.color.darker(by: 10)!,
-                                    radius: context.lineRadius * 1.4
-                                      / defaultLineRadius)
   }
 
   /// Stores current contextUpdater
@@ -104,12 +99,37 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     context.lineRadius = CGFloat(powf(10, sender.value))
   }
   
+  /// Slider outlets
+  @IBOutlet weak var hueSlider: UISlider!
+  @IBOutlet weak var thicknessSlider: UISlider!
+  
+  /// Resets color to white upon button press
+  @IBAction func resetSliders(_ sender: UIButton) {
+    context.color = defaultContext.color
+    context.lineRadius = defaultContext.lineRadius
+    hueSlider.setValue((hueSlider.maximumValue + hueSlider.minimumValue)/2,
+                       animated: true)
+    thicknessSlider.setValue((thicknessSlider.maximumValue + thicknessSlider.minimumValue)/2,
+                             animated: true)
+    rainbowSwitch.setOn(false, animated: true)
+  }
+  
   /// MARK: Model
   private var canvas : Canvas!
 
   /// Tracks whether user currently has their finger on the phone screen
   /// (i.e. whether in active drawing state)
   private var touched : Bool = false
+  
+  enum Tool {
+    case brush
+    case select
+    case move
+  }
+  
+  private var tool : Tool!
+  
+  private var selectStart : float3?
   
   /**
    Coordinates response to user screen presses.
@@ -129,11 +149,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     switch sender.state {
     case .began:
       touched = true
-      NSLog("Began pressed")
       canvas.startLine()
       drawPoint()
     case .ended:
-      NSLog("Ended pressed")
       touched = false
       canvas.endLine()
     default:
@@ -141,23 +159,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
-  /// Slider outlets
-  @IBOutlet weak var hueSlider: UISlider!
-  @IBOutlet weak var thicknessSlider: UISlider!
-  
-  /// Resets color to white upon button press
-  @IBAction func resetSliders(_ sender: UIButton) {
-    context.color = defaultColor
-    context.lineRadius = defaultLineRadius
-    hueSlider.minimumTrackTintColor = defaultColor
-    hueSlider.maximumTrackTintColor = defaultColor
-    hueSlider.setValue((hueSlider.maximumValue + hueSlider.minimumValue)/2,
-                       animated: true)
-    thicknessSlider.setValue((thicknessSlider.maximumValue + thicknessSlider.minimumValue)/2,
-                             animated: true)
-  }
+//  private func startResponse() {
+//    switch tool {
+//    case Tool.brush:
+//      canvas.startLine()
+//      drawPoint()
+//    case Tool.select: break
+//
+//    default:
+//      break
+//    }
+//  }
 
-  // - MARK: Camera/stroke positioning
+  // MARK: Camera/stroke positioning
   
   /**
    Matrix for camera transform that gives the position at which new points
@@ -244,6 +258,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
+  /// Draws a point
   private func drawNode() {
     context = updater.update(context: context)
     let node = pen.apply(vertices: canvas.vertices,
@@ -282,7 +297,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     redos = []
   }
   
-  // - MARK: Undo/Redo Stack
+  // MARK: Undo/Redo Stack
   
   /// Stores all undone curves
   private var redos : [SCNNode] = [] {
@@ -314,7 +329,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   }
   
   
-  // - MARK: Save/Load functionality
+  // MARK: Save/Load functionality
 
   private var saves : [SceneSave] = []
 
@@ -351,10 +366,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // Show statistics such as fps and timing information
     sceneView.showsStatistics = false
     
-    updateReticle()
-    
     // Set up Canvas
     canvas = Canvas(root: rootNode)
+    context = defaultContext
+    pen = defaultPen
   }
   
   override func viewWillAppear(_ animated: Bool) {
