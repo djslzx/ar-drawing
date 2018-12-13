@@ -36,9 +36,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   /// Dictionary of available Pens
   private let pens : [String : Pen] = [
     "Pen" : Pen(count: 2, Geometry.cylinderGenerator()),
-    "Chisel" : Pen(count: 4, Geometry.flatBrushGenerator()),
+    "Ribbon" : Pen(count: 4, Geometry.flatBrushGenerator()),
     "Bezier" : Pen(count: 4, Geometry.bezierCurveGenerator()),
-    "Connected" : Pen(count: 4, Geometry.connectedCylinderGenerator()),
+    "Midpoint" : Pen(count: 4, Geometry.connectedCylinderGenerator()),
   ]
 
   /// Dictionary of available ContextUpdaters
