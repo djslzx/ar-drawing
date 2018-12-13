@@ -40,4 +40,13 @@ extension UIColor {
       return nil
     }
   }
+  
+  var hue : CGFloat? {
+    var hue: CGFloat = 0
+    if self.getHue(&hue, saturation: nil, brightness: nil, alpha: nil) {
+      return hue
+    } else {
+      return nil
+    }
+  }
 }

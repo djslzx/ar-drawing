@@ -112,6 +112,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     thicknessSlider.setValue((thicknessSlider.maximumValue + thicknessSlider.minimumValue)/2,
                              animated: true)
     rainbowSwitch.setOn(false, animated: true)
+    updater = contextUpdaters["Static"]!
   }
   
   /// MARK: Model
