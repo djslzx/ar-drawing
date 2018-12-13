@@ -187,11 +187,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     switch sender.state {
     case .began:
       touched = true
-      NSLog("Started press")
       startResponse()
     case .ended:
       touched = false
-      NSLog("Ended press")
       endResponse()
     default:
       break
@@ -232,12 +230,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
    */
   private func endResponse() {
     switch tool {
-    case Tool.brush: canvas.endLine()
+    case Tool.brush:
       NSLog("Brush response ended")
-    case Tool.select: selectStart = nil
+      canvas.endLine()
+    case Tool.select:
       NSLog("Select response ended")
+      
+      // Mark all selected objects (currently, darkens color)
+      
+      let box = selectNode.geometry as! SCNBox
+      let half_diagonal = float3(Float(box.width/2), Float(box.height/2), Float(box.length/2))
+      let minBound = selectNode.simdPosition - half_diagonal
+      let maxBound = selectNode.simdPosition + half_diagonal
+      let children = rootNode.childNodes { (child, _) -> Bool in
+        child.inBound(minBound, maxBound)
+      }
+      for child in children {
+        child.geometry?.firstMaterial?.diffuse.contents = context.color.darker()?.changeAlpha(by: -30)
+      }
+      selectStart = nil
     }
   }
+    
   
   // MARK: Selection
   
@@ -262,6 +276,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       [weak self] in
       DispatchQueue.main.async {
         if let startPos = self?.selectStart, let endPos = self?.currentPos {
+
           let w = CGFloat(abs(endPos.x - startPos.x))
           let h = CGFloat(abs(endPos.y - startPos.y))
           let l = CGFloat(abs(endPos.z - startPos.z))
@@ -270,7 +285,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
           selectBox.firstMaterial?.diffuse.contents = self!.context.color.changeAlpha(by: -30)
           self?.selectNode.geometry = selectBox
           self?.selectNode.simdPosition = startPos.midpoint(with: endPos)
-          NSLog("Reset selection geometry")
           
           self?.selection()
         }

@@ -68,7 +68,7 @@
                                             <action selector="redoPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="vbS-Yk-Ybp"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zTM-kA-92W" userLabel="Draw">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zTM-kA-92W" userLabel="Draw">
                                         <rect key="frame" x="141" y="0.0" width="32" height="32"/>
                                         <gestureRecognizers/>
                                         <constraints>
@@ -80,7 +80,7 @@
                                             <action selector="toolButtonPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="0RK-SC-6E7"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jm2-5n-ViC" userLabel="Select">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jm2-5n-ViC" userLabel="Select">
                                         <rect key="frame" x="188" y="0.0" width="32" height="32"/>
                                         <gestureRecognizers/>
                                         <constraints>

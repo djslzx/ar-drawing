@@ -16,13 +16,13 @@ David J. Lee
 - [ ] Plane- and straight-line-drawing
   - [ ] allow user to seed points and display as small SCNSpheres
   - [ ] continually update view during straight-line drawing with a straight line from the start point to the current point
-- [ ] Polyline SCNCylinder cleaning
-   - [ ] Remove intermediate points between parallel straight lines (lower angle bound)
-   - [ ] Insert intermediate points between sharp turns (upper angle bound)
+- [x] Polyline SCNCylinder cleaning
+   - [x] Remove intermediate points between parallel straight lines (lower angle bound)
+   - [x] Insert intermediate points between sharp turns (upper angle bound)
    
 ## Lower-priority TODOs:
 - Splines
-  - [ ] abstract implementation (Bezier)
+  - [x] abstract implementation (Bezier)
   - [ ] conversion from polylines to splines and back
   - [ ] allow vector-drawing using Bezier in 3D
 - [ ] Shared environment
@@ -56,37 +56,50 @@ although the world space may be translated if the user desires.
 ## Testing
 Lots of UI/visual tests
 
-#### Model-saving
-- add points to model by moving phone in 3d space while holding down finger on screen
-- verify point positions using NSLog and verify that motion along x,y,z axes produces expected data
+#### Drawing
+- place finger on screen (hold down)
+- move phone around in 3D space while keeping finger held down
+- remove finger from screen
+- use the phone as a window into the AR scene
+- verify that points have been seeded in the appropriate positions relative to real space
+- verify that motion along x, y, and z axes produces expected data (NSLog)
 
 #### Cylinder-drawing
 - rotation of cylinders uses quaternion defined by angle phi and rotation axis vector w:
   - ensure w is a unit vector
-  - ensure w is oriented in the right direction (Pokeball test)
+  - ensure w is oriented in the right direction ('Pokeball' test: seed sphere geometries at the head and tail of w, differentiating the two by using different colors)
 
 ####  Mesh-drawing
-- mesh line draws properly
-  - not invisible
-  - increases vertex and polygon counts within a reasonable bound (doesn't add nothing or too much)
-  - no obvious warping
-- place nodes with spheres (`pointNode`s) at each vertex and verify that vertices are in the right place
+- Ensure the following:
+  - mesh line not invisible
+    - try making geometry's `isDoubleSided` property true and test again
+  - drawing increases vertex and polygon counts within a reasonable bound (doesn't add nothing or too much)
+  - no obvious warping effects
+- place nodes with spheres (`pointNode`s) at each vertex and verify that vertices are in the right place ('Atom' test)
 
 #### Pen/Context/Sliders
-- try adjusting slider settings and verify that output works as expected (intuitive outputs)
+- try adjusting slider settings and verify that output works appropriately (intuitive outputs)
   - swapping settings doesn't break things
   - try various combinations of swaps
 
 #### Main functionality checks
 - drawing line works
   - line segments (cylinders) are oriented in the right direction
+  - no obvious gaps
 - drawing flat curve works
+  - no obvious gaps
 - different options don't conflict and behave as expected
   - color and thickness meters harmonize; both harmonize with stroke type
 - clearing works without too much delay
 - view framerate doesn't drop with a small number of objects in view
 - polygon and vertex count stays constant when items in view do not change and no items are added
   (check for addition of invisible geometries)
+
+#### Selection bound-drawing checks
+1. hold finger on phone screen
+2. move phone to a different location in 3D space
+3. lift finger off screen
+4. verify that a transparent box has been drawn spanning the starting and ending positions
 
 ## Key Use Cases
 #### Drawing a stroke
