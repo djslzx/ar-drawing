@@ -9,7 +9,7 @@
 import Foundation
 import SceneKit
 
-/// Represents a saved scene
+/// Represents a saved scene; a convenient wrapper class
 public class SceneSave {
   private let root : SCNNode
 

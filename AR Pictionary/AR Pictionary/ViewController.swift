@@ -38,7 +38,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     "Pen" : Pen(count: 2, Geometry.cylinderGenerator()),
     "Chisel" : Pen(count: 4, Geometry.flatBrushGenerator()),
     "Bezier" : Pen(count: 4, Geometry.bezierCurveGenerator()),
-    "Corrected" : Pen(count: 3, Geometry.correctedCylinderGenerator()),
     "Connected" : Pen(count: 4, Geometry.connectedCylinderGenerator()),
   ]
 
@@ -57,9 +56,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   private var pen : Pen = Pen(count: 2, Geometry.cylinderGenerator())
   private var context : Context = Context(color: UIColor.white,
                                           lineRadius: CGFloat(powf(10, -3.75)),
-                                          detail: 9) {
+                                          detail: 4) {
     didSet {
       updateReticle()
+      hueSlider.minimumTrackTintColor = context.color
+      hueSlider.maximumTrackTintColor = context.color
     }
   }
   
@@ -78,15 +79,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       contextUpdaters["Static"]!
   }
 
+  /// Switch controlling whether or not to rainbow
+  @IBOutlet weak var rainbowSwitch: UISwitch!
+  
+  /// Responds to change in rainbowSwitch
+  @IBAction func rainbowSwitchChanged(_ sender: UISwitch) {
+    updater = contextUpdaters[sender.isOn ? "Rainbow" : "Static"]!
+  }
+  
   @IBAction func penChanged(_ sender: UISegmentedControl) {
     pen = pens[sender.titleForSegment(at: sender.selectedSegmentIndex) ?? "Pen"] ?? pens["Pen"]!
   }
-  
-//  /// Responds to user pen type changes
-//  @IBAction func penChanged(_ sender: UIButton) {
-//    NSLog(sender.titleLabel?.text ?? "")
-//    pen = pens[sender.titleLabel?.text ?? "Pen"] ?? pens["Pen"]!
-//  }
   
   /// Responds to user brush hue changes
   @IBAction func hueSliderChanged(_ sender: UISlider) {
@@ -94,8 +97,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                             saturation: 0.5,
                             brightness: 1,
                             alpha: 1)
-    sender.minimumTrackTintColor = context.color
-    sender.maximumTrackTintColor = context.color
   }
   
   /// Updates the lineRadius when the user moves the slider
@@ -287,7 +288,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   private var redos : [SCNNode] = [] {
     didSet {
       // Only enable redos if the redo stack has items in it
-      NSLog("redos updated: \(redos.count)")
       redoButton.isEnabled = !redos.isEmpty
     }
   }

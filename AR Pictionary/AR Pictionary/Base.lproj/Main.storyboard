@@ -71,21 +71,21 @@
                                 </subviews>
                             </stackView>
                             <segmentedControl opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dk0-wh-XBM">
-                                <rect key="frame" x="36" y="67" width="303" height="29"/>
+                                <rect key="frame" x="42" y="67" width="291" height="29"/>
                                 <segments>
                                     <segment title="Pen"/>
                                     <segment title="Chisel"/>
                                     <segment title="Bezier"/>
-                                    <segment title="Corrected"/>
-                                    <segment title="Connected"/>
+                                    <segment title="Smoothed"/>
+                                    <segment title="Midpoint"/>
                                 </segments>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <action selector="penChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="NKw-NN-Es4"/>
                                 </connections>
                             </segmentedControl>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="BF0-jU-3jr" userLabel="Color and Thickness">
-                                <rect key="frame" x="21" y="625" width="333" height="32"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="BF0-jU-3jr" userLabel="Color and Thickness">
+                                <rect key="frame" x="15" y="625" width="345" height="32"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aiN-Ap-CB6">
                                         <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
@@ -102,17 +102,17 @@
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="A6H-kI-ln4" userLabel="Sliders">
-                                        <rect key="frame" x="52" y="6.5" width="281" height="19"/>
+                                        <rect key="frame" x="42" y="2.5" width="244" height="27"/>
                                         <subviews>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tgA-yq-HOu" userLabel="Color Slider">
-                                                <rect key="frame" x="-2" y="0.0" width="139.5" height="20"/>
+                                                <rect key="frame" x="-2" y="0.0" width="121" height="28"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
                                                     <action selector="hueSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="whF-CT-K1R"/>
                                                 </connections>
                                             </slider>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-3.25" minValue="-4" maxValue="-2.5" translatesAutoresizingMaskIntoConstraints="NO" id="8I4-qS-92P" userLabel="Thickness Slider">
-                                                <rect key="frame" x="143.5" y="0.0" width="139.5" height="20"/>
+                                                <rect key="frame" x="125" y="0.0" width="121" height="28"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
                                                     <action selector="thicknessSliderChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="lzd-mC-gar"/>
@@ -120,9 +120,15 @@
                                             </slider>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="A6H-kI-ln4" secondAttribute="height" multiplier="15:1" id="O8H-Lv-qeK"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" secondItem="A6H-kI-ln4" secondAttribute="height" multiplier="9:1" id="O8H-Lv-qeK"/>
                                         </constraints>
                                     </stackView>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="e38-oW-fGb">
+                                        <rect key="frame" x="296" y="0.5" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="rainbowSwitchChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="FIr-yw-Ebx"/>
+                                        </connections>
+                                    </switch>
                                 </subviews>
                             </stackView>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pnb-wa-pwq" customClass="ReticleView" customModule="AR_Pictionary" customModuleProvider="target">
@@ -147,10 +153,8 @@
                             <constraint firstAttribute="bottom" secondItem="BF0-jU-3jr" secondAttribute="bottom" constant="10" id="5h8-25-Pw6"/>
                             <constraint firstItem="dk0-wh-XBM" firstAttribute="top" secondItem="Aj4-nQ-Hz0" secondAttribute="bottom" constant="10" id="7c6-DJ-FTl"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="leading" secondItem="BrB-h1-WRS" secondAttribute="leading" id="8A8-CC-8tz"/>
-                            <constraint firstItem="BF0-jU-3jr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="U0K-SW-4ec" secondAttribute="leading" constant="10" id="D9H-ZL-uX6"/>
                             <constraint firstItem="dk0-wh-XBM" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="Hbt-tZ-XmS"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="IaU-Pm-mxx"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="BF0-jU-3jr" secondAttribute="trailing" constant="10" id="LPY-0B-NZt"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="OKx-cy-7aO"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Aj4-nQ-Hz0" secondAttribute="trailing" constant="5" id="Rff-0C-ePS"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="SSB-5y-gux"/>
@@ -162,6 +166,8 @@
                             <constraint firstItem="BF0-jU-3jr" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="idz-h6-Wn2"/>
                             <constraint firstItem="Aj4-nQ-Hz0" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="5" id="jyZ-d2-hbZ"/>
                             <constraint firstItem="Pnb-wa-pwq" firstAttribute="top" secondItem="BrB-h1-WRS" secondAttribute="top" id="k5S-4x-KiV"/>
+                            <constraint firstItem="BF0-jU-3jr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="U0K-SW-4ec" secondAttribute="leading" constant="15" id="nrU-gI-0AG"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="BF0-jU-3jr" secondAttribute="trailing" constant="15" id="sh3-ex-ijh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
@@ -170,6 +176,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="hueSlider" destination="tgA-yq-HOu" id="lHl-Sn-O6g"/>
+                        <outlet property="rainbowSwitch" destination="e38-oW-fGb" id="7rl-rz-x8r"/>
                         <outlet property="redoButton" destination="eVC-fa-n25" id="LRL-Zq-fM5"/>
                         <outlet property="reticleView" destination="Pnb-wa-pwq" id="wTS-Me-9vj"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>

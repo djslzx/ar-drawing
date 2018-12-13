@@ -8,8 +8,8 @@
 
 import UIKit
 
-@IBDesignable
-class ReticleView: UIView {
+/// Reticle overlay
+@IBDesignable class ReticleView: UIView {
 
   /// Cross reticle properties
   @IBInspectable public var lineThickness : CGFloat = 1

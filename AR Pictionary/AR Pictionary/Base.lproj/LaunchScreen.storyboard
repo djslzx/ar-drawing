@@ -17,42 +17,7 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Augmented Reality Drawing" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NYp-Ct-jKH">
-                                <rect key="frame" x="40" y="127" width="295" height="216"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="50"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="David J. Lee 2018" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1ps-eO-IbO">
-                                <rect key="frame" x="117" y="488" width="141" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="r99-A4-si0"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icons8-autograph-100" translatesAutoresizingMaskIntoConstraints="NO" id="xe4-TN-dLb">
-                                <rect key="frame" x="99" y="366" width="177" height="82"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="82" id="9hU-AR-FdP"/>
-                                </constraints>
-                            </imageView>
-                        </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
-                        <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="1ps-eO-IbO" secondAttribute="bottom" constant="158" id="06r-Zu-058"/>
-                            <constraint firstItem="xe4-TN-dLb" firstAttribute="centerX" secondItem="1ps-eO-IbO" secondAttribute="centerX" id="9PU-GJ-oFq"/>
-                            <constraint firstItem="1ps-eO-IbO" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="117" id="9QC-9t-epj"/>
-                            <constraint firstItem="NYp-Ct-jKH" firstAttribute="centerX" secondItem="xe4-TN-dLb" secondAttribute="centerX" id="Dqz-qY-wim"/>
-                            <constraint firstItem="xe4-TN-dLb" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="99" id="Hn6-sg-fs6"/>
-                            <constraint firstItem="1ps-eO-IbO" firstAttribute="top" secondItem="xe4-TN-dLb" secondAttribute="bottom" constant="40" id="MoP-ZW-Us2"/>
-                            <constraint firstItem="NYp-Ct-jKH" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="PpI-bK-NiE"/>
-                            <constraint firstItem="xe4-TN-dLb" firstAttribute="top" secondItem="NYp-Ct-jKH" secondAttribute="bottom" constant="23" id="eDl-cP-Qht"/>
-                            <constraint firstItem="NYp-Ct-jKH" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="107" id="n1I-kn-mVG"/>
-                            <constraint firstItem="NYp-Ct-jKH" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="yiB-Wf-cJO"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
@@ -61,7 +26,4 @@
             <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="icons8-autograph-100" width="100" height="100"/>
-    </resources>
 </document>

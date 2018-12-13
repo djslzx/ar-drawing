@@ -11,7 +11,6 @@
 		73BF4F2421A7764B0013CFCD /* Canvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73BF4F1A21A7764B0013CFCD /* Canvas.framework */; };
 		73BF4F2921A7764B0013CFCD /* CanvasTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73BF4F2821A7764B0013CFCD /* CanvasTests.swift */; };
 		73BF4F2B21A7764B0013CFCD /* Canvas.h in Headers */ = {isa = PBXBuildFile; fileRef = 73BF4F1D21A7764B0013CFCD /* Canvas.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		73BF4F3521A7765A0013CFCD /* Polyline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73BF4F3421A7765A0013CFCD /* Polyline.swift */; };
 		8B3122DF21B6DA3D00148964 /* Pen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3122DE21B6DA3D00148964 /* Pen.swift */; };
 		8B45A47221BB55CF002EE58A /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B45A47121BB55CF002EE58A /* Canvas.swift */; };
 		8BC92ACD21B58D0300402211 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC92ACC21B58D0300402211 /* Geometry.swift */; };
@@ -35,7 +34,6 @@
 		73BF4F2321A7764B0013CFCD /* CanvasTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CanvasTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		73BF4F2821A7764B0013CFCD /* CanvasTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasTests.swift; sourceTree = "<group>"; };
 		73BF4F2A21A7764B0013CFCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		73BF4F3421A7765A0013CFCD /* Polyline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polyline.swift; sourceTree = "<group>"; };
 		8B3122DE21B6DA3D00148964 /* Pen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pen.swift; sourceTree = "<group>"; };
 		8B45A47121BB55CF002EE58A /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		8BC92ACC21B58D0300402211 /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
@@ -82,7 +80,6 @@
 			isa = PBXGroup;
 			children = (
 				8B45A47121BB55CF002EE58A /* Canvas.swift */,
-				73BF4F3421A7765A0013CFCD /* Polyline.swift */,
 				8BC92ACC21B58D0300402211 /* Geometry.swift */,
 				8B3122DE21B6DA3D00148964 /* Pen.swift */,
 				730ACFA521AF8D41005C2F59 /* MatrixExtensions.swift */,
@@ -212,7 +209,6 @@
 			files = (
 				730ACFA621AF8D41005C2F59 /* MatrixExtensions.swift in Sources */,
 				8BC92ACD21B58D0300402211 /* Geometry.swift in Sources */,
-				73BF4F3521A7765A0013CFCD /* Polyline.swift in Sources */,
 				8B45A47221BB55CF002EE58A /* Canvas.swift in Sources */,
 				8B3122DF21B6DA3D00148964 /* Pen.swift in Sources */,
 			);
