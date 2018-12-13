@@ -169,12 +169,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     NSLog("Tool type set to: \(tool)")
   }
   
-  /// Stores the first point of a selection; nil if no on-going selection
-  private var selectStart : float3?
-  
-  /// SCNNode storing the bounding box being drawn for the selection
-  private var selectNode: SCNNode = SCNNode()
-  
   /**
    Coordinates response to user screen presses.
    
@@ -204,6 +198,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
   
+  /**
+   Responds to beginning of screen press.
+   
+   **Modifies**: rootNode/canvas, selectNode, selectStart
+   
+   **Effects**: Begins the drawing or selecting process by
+    making the appropriate modifications to canvas and selection
+    parameters.
+   
+   */
   private func startResponse() {
     NSLog("Starting response")
     switch tool {
@@ -216,6 +220,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
   }
 
+  /**
+   Responds to end of screen press.
+
+   **Modifies**: canvas, selectStart
+   
+   **Effects**: When ending brush behavior, modifies the canvas
+   to mark that line-drawing has ended.  When ending selection behavior,
+   modifies selectStart to mark that selection has ended.
+   
+   */
   private func endResponse() {
     switch tool {
     case Tool.brush: canvas.endLine()
@@ -227,6 +241,21 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   // MARK: Selection
   
+  /// Stores the first point of a selection; nil if no on-going selection
+  private var selectStart : float3?
+  
+  /// SCNNode storing the bounding box being drawn for the selection
+  private var selectNode: SCNNode = SCNNode()
+  
+  /**
+   Draws and updates a selection SCNBox in the view.
+   
+   **Modifies**: selectNode, rootNode
+   
+   **Effects**: Modifies selectNode's attached geometry to display a
+    selection bounding box.
+   
+   */
   private func selection() {
     NSLog("Entered selection")
     DispatchQueue.global().async {
