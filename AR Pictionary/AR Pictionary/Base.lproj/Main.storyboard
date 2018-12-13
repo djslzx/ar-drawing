@@ -72,28 +72,28 @@
                                         <rect key="frame" x="141" y="0.0" width="32" height="32"/>
                                         <gestureRecognizers/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="zTM-kA-92W" secondAttribute="height" multiplier="1:1" id="d81-IC-uWA"/>
                                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="yJg-1t-bav"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" image="icons8-sign-up-90"/>
+                                        <state key="normal" title="Draw" image="icons8-sign-up-90"/>
+                                        <connections>
+                                            <action selector="toolButtonPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="0RK-SC-6E7"/>
+                                        </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jm2-5n-ViC" userLabel="Move">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jm2-5n-ViC" userLabel="Select">
                                         <rect key="frame" x="188" y="0.0" width="32" height="32"/>
                                         <gestureRecognizers/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="Jm2-5n-ViC" secondAttribute="height" multiplier="1:1" id="FQn-dC-ED8"/>
                                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="32" id="s4s-yG-SF2"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" image="icons8-move-90"/>
+                                        <state key="normal" title="Select" image="icons8-hand-90"/>
+                                        <connections>
+                                            <action selector="toolButtonPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="vb4-Ky-qT4"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="Jm2-5n-ViC" firstAttribute="width" secondItem="Jm2-5n-ViC" secondAttribute="height" multiplier="1:1" id="5MK-S5-Y36"/>
-                                    <constraint firstItem="Jm2-5n-ViC" firstAttribute="width" secondItem="Jm2-5n-ViC" secondAttribute="height" multiplier="1:1" id="A1m-j7-CMx"/>
-                                    <constraint firstItem="zTM-kA-92W" firstAttribute="width" secondItem="zTM-kA-92W" secondAttribute="height" multiplier="1:1" id="AcS-DH-wLi"/>
-                                    <constraint firstItem="Jm2-5n-ViC" firstAttribute="width" secondItem="Jm2-5n-ViC" secondAttribute="height" multiplier="1:1" id="oge-Of-FlJ"/>
                                     <constraint firstItem="Jm2-5n-ViC" firstAttribute="width" secondItem="Jm2-5n-ViC" secondAttribute="height" multiplier="1:1" id="r36-XU-q7d"/>
                                     <constraint firstItem="zTM-kA-92W" firstAttribute="width" secondItem="zTM-kA-92W" secondAttribute="height" multiplier="1:1" id="y0i-cD-wGK"/>
                                 </constraints>
@@ -471,7 +471,7 @@
     </scenes>
     <resources>
         <image name="icons8-delete-bin-90" width="90" height="90"/>
-        <image name="icons8-move-90" width="90" height="90"/>
+        <image name="icons8-hand-90" width="90" height="90"/>
         <image name="icons8-redo-90" width="90" height="90"/>
         <image name="icons8-sign-up-90" width="90" height="90"/>
         <image name="icons8-sync-90" width="90" height="90"/>

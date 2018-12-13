@@ -117,6 +117,35 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   /// MARK: Model
   private var canvas : Canvas!
 
+  // MARK: Camera/stroke positioning
+  
+  /**
+   Matrix for camera transform that gives the position at which new points
+   should be drawn.
+   */
+  private let deviceToDrawpointTranslation : matrix_float4x4 =
+    matrix_float4x4(rows:
+      [
+        float4([1, 0, 0, 0.001]), // compensate for x offset
+        float4([0, 1, 0, -0.00015]),
+        float4([0, 0, 1, -0.06]), // z-offset draws objects a fixed distance away from device
+        float4([0, 0, 0, 1])
+      ])
+  
+  /**
+   - Returns: The position of the device, offset by deviceToDrawpointTranslation,
+   given as a 4x4 matrix.
+   */
+  private var deviceLocationTransform : simd_float4x4? {
+    if let cameraTransform = sceneView.session.currentFrame?.camera.transform {
+      return cameraTransform * deviceToDrawpointTranslation
+    } else {
+      return nil
+    }
+  }
+  
+  // MARK: Tools
+  
   /// Tracks whether user currently has their finger on the phone screen
   /// (i.e. whether in active drawing state)
   private var touched : Bool = false
@@ -124,12 +153,27 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   enum Tool {
     case brush
     case select
-    case move
   }
   
-  private var tool : Tool!
+  /// Stores current tool type
+  private var tool : Tool = .brush
   
+  /// Responds to user updates of tool type
+  @IBAction func toolButtonPressed(_ sender: UIButton) {
+    switch sender.titleLabel?.text {
+    case "Draw": tool = .brush
+    case "Select": tool = .select
+    default: tool = .brush
+      NSLog("Default tool chosen")
+    }
+    NSLog("Tool type set to: \(tool)")
+  }
+  
+  /// Stores the first point of a selection; nil if no on-going selection
   private var selectStart : float3?
+  
+  /// SCNNode storing the bounding box being drawn for the selection
+  private var selectNode: SCNNode = SCNNode()
   
   /**
    Coordinates response to user screen presses.
@@ -149,56 +193,63 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     switch sender.state {
     case .began:
       touched = true
-      canvas.startLine()
-      drawPoint()
+      NSLog("Started press")
+      startResponse()
     case .ended:
       touched = false
-      canvas.endLine()
+      NSLog("Ended press")
+      endResponse()
     default:
       break
     }
   }
   
-//  private func startResponse() {
-//    switch tool {
-//    case Tool.brush:
-//      canvas.startLine()
-//      drawPoint()
-//    case Tool.select: break
-//
-//    default:
-//      break
-//    }
-//  }
+  private func startResponse() {
+    NSLog("Starting response")
+    switch tool {
+    case Tool.brush: NSLog("Brush response started")
+      canvas.startLine()
+      drawPoint()
+    case Tool.select: NSLog("Select response started")
+      selectStart = currentPos
+      selection()
+    }
+  }
 
-  // MARK: Camera/stroke positioning
-  
-  /**
-   Matrix for camera transform that gives the position at which new points
-   should be drawn.
-  */
-  private let deviceToDrawpointTranslation : matrix_float4x4 =
-    matrix_float4x4(rows:
-      [
-        float4([1, 0, 0, 0.001]), // compensate for x offset
-        float4([0, 1, 0, -0.00015]),
-        float4([0, 0, 1, -0.06]), // z-offset draws objects a fixed distance away from device
-        float4([0, 0, 0, 1])
-      ])
-  
-  /**
-   - Returns: The position of the device, offset by deviceToDrawpointTranslation,
-      given as a 4x4 matrix.
-   */
-  private var deviceLocationTransform : simd_float4x4? {
-    if let cameraTransform = sceneView.session.currentFrame?.camera.transform {
-      return cameraTransform * deviceToDrawpointTranslation
-    } else {
-      return nil
+  private func endResponse() {
+    switch tool {
+    case Tool.brush: canvas.endLine()
+      NSLog("Brush response ended")
+    case Tool.select: selectStart = nil
+      NSLog("Select response ended")
     }
   }
   
-  // - MARK: Drawing
+  // MARK: Selection
+  
+  private func selection() {
+    NSLog("Entered selection")
+    DispatchQueue.global().async {
+      [weak self] in
+      DispatchQueue.main.async {
+        if let startPos = self?.selectStart, let endPos = self?.currentPos {
+          let w = CGFloat(abs(endPos.x - startPos.x))
+          let h = CGFloat(abs(endPos.y - startPos.y))
+          let l = CGFloat(abs(endPos.z - startPos.z))
+          
+          let selectBox = SCNBox(width: w, height: h, length: l, chamferRadius: 0)
+          selectBox.firstMaterial?.diffuse.contents = self!.context.color.changeAlpha(by: -30)
+          self?.selectNode.geometry = selectBox
+          self?.selectNode.simdPosition = startPos.midpoint(with: endPos)
+          NSLog("Reset selection geometry")
+          
+          self?.selection()
+        }
+      }
+    }
+  }
+  
+  // MARK: Drawing
   
   /// The current position of the device, given as a 3-component vector
   private var currentPos : float3? {
@@ -293,8 +344,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   /// Clears the scene and model.
   public func clearScene() {
     NSLog("Clearing scene")
-    self.canvas.clear()
+    canvas.clear()
     redos = []
+    canvas.addNodeToRoot(selectNode)
+    selectNode.geometry = nil
   }
   
   // MARK: Undo/Redo Stack
@@ -370,6 +423,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     canvas = Canvas(root: rootNode)
     context = defaultContext
     pen = defaultPen
+    rootNode.addChildNode(selectNode)
   }
   
   override func viewWillAppear(_ animated: Bool) {

@@ -30,4 +30,14 @@ extension UIColor {
       return nil
     }
   }
+  
+  func changeAlpha(by percentage: CGFloat = 30) -> UIColor? {
+    var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
+    if self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
+      return UIColor(red: red, green: green, blue: blue,
+                     alpha: min(alpha + percentage/100, 1.0))
+    } else {
+      return nil
+    }
+  }
 }
